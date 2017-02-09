@@ -4,7 +4,18 @@ apply plugin: 'eclipse'
 sourceSets {
   main {
     java {
-		srcDir 'src'
+		srcDirs = ['src/main/java']
+    }
+     resources {
+        srcDirs = ['src/main/resources']
+    }
+  }
+  test {
+    java {
+		srcDirs = ['src/test/java']
+    }
+     resources {
+        srcDirs = ['src/test/resources']
     }
   }
 }
