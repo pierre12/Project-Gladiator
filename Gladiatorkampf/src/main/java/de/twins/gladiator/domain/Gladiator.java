@@ -29,7 +29,9 @@ public class Gladiator {
 		if(hp.compareTo(BigDecimal.ZERO) <= 0){
 		this.hp = BigDecimal.ZERO;
 		}
-		this.hp = hp;
+		else{
+			this.hp = hp;
+		}
 	}
 	public BigDecimal getAttack() {
 		return attack;
