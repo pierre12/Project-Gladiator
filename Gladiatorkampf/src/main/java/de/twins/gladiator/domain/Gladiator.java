@@ -45,24 +45,19 @@ public class Gladiator {
 	}
 
 
-	private void updateStats() {
-		totalHealthPoints = baseHealthPoints != null ? baseHealthPoints : totalHealthPoints;
-		totalAttack = baseAttack != null ? baseAttack : totalAttack;
-		totalDefense = baseDefense != null ? baseDefense : totalDefense;
-		equipments.forEach((k, v) -> {
-			totalHealthPoints = totalHealthPoints.add(v.getHealthPoints());
-			totalAttack = totalAttack.add(v.getAttack());
-			totalDefense = totalDefense.add(v.getDefense());
-		});
-		// if current Health is bigger after calculated total HealthPoints.
-		if (currentHealthPoints.compareTo(totalHealthPoints) >= 0) {
-			currentHealthPoints = totalHealthPoints;
-		}
-	}
-
 	public void addOrReplaceEquipment(Equipment equipment) {
 		equipments.put(equipment.getBodyPart(), equipment);
 		updateStats();
+	}
+
+	protected void checkIfNullOrNegativeValue(BigDecimal value) {
+		if (value == null) {
+			throw new RuntimeException("value must not be null");
+		}
+		if (value.signum() == -1) {
+			throw new RuntimeException("value must not be negative");
+		}
+
 	}
 
 	/**
@@ -79,12 +74,28 @@ public class Gladiator {
 		}
 	}
 
+	public BigDecimal getBaseAttack() {
+		return baseAttack;
+	}
+
+	public BigDecimal getBaseDefense() {
+		return baseDefense;
+	}
+
 	public BigDecimal getBaseHealthPoints() {
 		return baseHealthPoints;
 	}
 
-	public BigDecimal getTotalHealthPoints() {
-		return totalHealthPoints;
+	public BigDecimal getCurrentHealthPoints() {
+		return currentHealthPoints;
+	}
+
+	public Map<BodyPart, Equipment> getEquipments() {
+		return equipments;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public BigDecimal getTotalAttack() {
@@ -95,24 +106,13 @@ public class Gladiator {
 		return totalDefense;
 	}
 
-	public BigDecimal getBaseAttack() {
-		return baseAttack;
+	public BigDecimal getTotalHealthPoints() {
+		return totalHealthPoints;
 	}
 
-	public BigDecimal getBaseDefense() {
-		return baseDefense;
-	}
-
-	public Map<BodyPart, Equipment> getEquipments() {
-		return equipments;
-	}
-
-	public BigDecimal getCurrentHealthPoints() {
-		return currentHealthPoints;
-	}
-
-	public String getName() {
-		return name;
+	public void removeEquipment(Equipment equipment) {
+		equipments.remove(equipment.getBodyPart());
+		updateStats();
 	}
 
 	public void setBaseAttack(BigDecimal baseAttack) {
@@ -127,6 +127,12 @@ public class Gladiator {
 		updateStats();
 	}
 
+	public void setBaseHealthPoints(BigDecimal healthPoints) {
+		checkIfNullOrNegativeValue(healthPoints);
+		this.baseHealthPoints = healthPoints;
+		updateStats();
+	}
+
 	public void setCurrentHealthPoints(BigDecimal hp) {
 		if (hp.compareTo(BigDecimal.ZERO) <= 0) {
 			this.currentHealthPoints = BigDecimal.ZERO;
@@ -135,28 +141,23 @@ public class Gladiator {
 		}
 	}
 
-	public void setBaseHealthPoints(BigDecimal healthPoints) {
-		checkIfNullOrNegativeValue(healthPoints);
-		this.baseHealthPoints = healthPoints;
-		updateStats();
-	}
-
-	public void removeEquipment(Equipment equipment) {
-		equipments.remove(equipment.getBodyPart());
-		updateStats();
-	}
-
-	private void checkIfNullOrNegativeValue(BigDecimal value) {
-		if (value == null) {
-			throw new RuntimeException("value must not be null");
-		}
-		if (value.signum() == -1) {
-			throw new RuntimeException("value must not be negative");
-		}
-
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	protected void updateStats() {
+		totalHealthPoints = baseHealthPoints != null ? baseHealthPoints : totalHealthPoints;
+		totalAttack = baseAttack != null ? baseAttack : totalAttack;
+		totalDefense = baseDefense != null ? baseDefense : totalDefense;
+		equipments.forEach((k, v) -> {
+			totalHealthPoints = totalHealthPoints.add(v.getHealthPoints());
+			totalAttack = totalAttack.add(v.getAttack());
+			totalDefense = totalDefense.add(v.getDefense());
+		});
+		// if current Health is bigger after calculated total HealthPoints.
+		if (currentHealthPoints.compareTo(totalHealthPoints) >= 0) {
+			currentHealthPoints = totalHealthPoints;
+		}
+	}
+	
 }
