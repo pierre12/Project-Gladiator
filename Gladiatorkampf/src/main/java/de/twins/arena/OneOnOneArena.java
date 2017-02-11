@@ -1,8 +1,8 @@
 package de.twins.arena;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import de.twins.gladiator.domain.Gladiator;
@@ -14,49 +14,99 @@ import de.twins.gladiator.domain.Gladiator;
  *
  */
 public class OneOnOneArena implements Arena {
-
+	private Gladiator firstGladiator;
+	private Gladiator secondGladiator;
+	private Map<ArenaResult, Integer> resultForFirstGladiator;
+	private Map<ArenaResult, Integer> resultForSecondGladiator;
 	private Set<Gladiator> gladiators;
+	private int rounds;
 
 	public OneOnOneArena() {
 		gladiators = new HashSet();
+		resultForFirstGladiator = new HashMap<ArenaResult, Integer>();
+		resultForSecondGladiator = new HashMap<ArenaResult, Integer>();
 	}
 
-	public OneOnOneArena(Set<Gladiator> gladiators) {
+	public OneOnOneArena(Set<Gladiator> gladiators, int rounds) {
+		super();
 		this.gladiators = gladiators;
 
 	}
 
 	@Override
 	public void announceWinner() {
-		for (Gladiator gladiator : gladiators) {
-			if (gladiator.isAlive()) {
-				System.out.println("Gladiator" + gladiator.getName() + "won the fight.");
-			}
+		String winnerMessage = "Gladiator {0} won the fight.With {1} round win(s)";
+		String tiedMessage = "Both gladiators won {0}  round.";
+		if (resultForFirstGladiator.get(ArenaResult.WIN) > resultForSecondGladiator.get(ArenaResult.WIN)) {
+			System.out.println(String.format(winnerMessage, firstGladiator.getName(),
+					resultForFirstGladiator.get(ArenaResult.WIN)));
+		} else if (resultForFirstGladiator.get(ArenaResult.WIN) == resultForSecondGladiator.get(ArenaResult.WIN)) {
+			System.out.println(String.format(tiedMessage, resultForFirstGladiator.get(ArenaResult.WIN)));
+		} else {
+			System.out.println(String.format(winnerMessage, secondGladiator.getName(),
+					resultForSecondGladiator.get(ArenaResult.WIN)));
 		}
 
 	}
 
 	@Override
 	public void startFight() {
-		// TODO Auto-generated method stub
-
+		firstGladiator = gladiators.iterator().next();
+		secondGladiator = gladiators.iterator().next();
+		for (int i = 1; i <= rounds; i++) {
+			startRound();
+		}
+		endFight();
 	}
 
 	@Override
 	public void startRound() {
-		// TODO Auto-generated method stub
-
+		boolean bothAlive = true;
+		while (bothAlive) {
+			firstGladiator.defend(secondGladiator.getTotalAttack());
+			secondGladiator.defend(firstGladiator.getTotalAttack());
+			bothAlive = firstGladiator.isAlive() && secondGladiator.isAlive();
+		}
+		endRound();
 	}
 
 	@Override
 	public void endRound() {
-		// TODO Auto-generated method stub
+		if (firstGladiator.isAlive() && !secondGladiator.isAlive()) {
+			setResults(ArenaResult.WIN, ArenaResult.LOSE);
+		}
 
+		else if (!firstGladiator.isAlive() && secondGladiator.isAlive()) {
+			setResults(ArenaResult.LOSE, ArenaResult.WIN);
+		} else {
+			setResults(ArenaResult.TIED, ArenaResult.TIED);
+		}
+		restoreHealthOfGladiators();
+
+	}
+
+	private void restoreHealthOfGladiators() {
+		gladiators.forEach(gladiator -> gladiator.setCurrentHealthPoints(gladiator.getTotalHealthPoints()));
+	}
+
+	/**
+	 * Sets result for both gladiators
+	 * 
+	 * @param result
+	 *            result of the first gladiator
+	 * @param result
+	 *            result of the second gladiator
+	 */
+	private void setResults(ArenaResult resultOfFirst, ArenaResult resultOfSecond) {
+		resultForFirstGladiator.put(resultOfFirst, resultForFirstGladiator.get(resultOfFirst) + 1);
+		resultForSecondGladiator.put(resultOfSecond, resultForSecondGladiator.get(resultOfSecond) + 1);
 	}
 
 	@Override
 	public void endFight() {
-
+		announceWinner();
+		resultForFirstGladiator.clear();
+		resultForSecondGladiator.clear();
 	}
 
 	@Override
@@ -99,6 +149,11 @@ public class OneOnOneArena implements Arena {
 			this.gladiators.remove(gladiator);
 		}
 
+	}
+
+	@Override
+	public void setRounds(int rounds) {
+		this.rounds = rounds;
 	}
 
 }

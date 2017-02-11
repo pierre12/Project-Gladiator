@@ -27,6 +27,14 @@ public interface Arena {
 	void startRound();
 
 	/**
+	 * Determines the number of rounds
+	 * 
+	 * @param rounds
+	 *            number of rounds which should be fight
+	 */
+	void setRounds(int rounds);
+
+	/**
 	 * Ends a round.
 	 */
 	void endRound();
@@ -59,6 +67,7 @@ public interface Arena {
 	 *            gladiator which should be removed from the arena.
 	 */
 	void removeGladiator(Gladiator gladiator);
+
 	/**
 	 * Removes a set of gladiators from the arena.
 	 * 
