@@ -52,10 +52,10 @@ public class Gladiator {
 
 	protected void checkIfNullOrNegativeValue(BigDecimal value) {
 		if (value == null) {
-			throw new RuntimeException("value must not be null");
+			throw new GladiatorException("value must not be null");
 		}
 		if (value.signum() == -1) {
-			throw new RuntimeException("value must not be negative");
+			throw new GladiatorException("value must not be negative");
 		}
 
 	}

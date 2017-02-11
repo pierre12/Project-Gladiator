@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.activity.InvalidActivityException;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -169,13 +171,13 @@ public class GladiatorTest {
 	}
 	@Test
 	public void shouldThrowExceptionIfBaseAttributeIsNegative(){
-		expectedException.expect(RuntimeException.class);
+		expectedException.expect(GladiatorException.class);
 		expectedException.expectMessage("value must not be null");
 		testee.setBaseAttack(null);
 	}
 	@Test
 	public void shouldThrowExceptionIfBaseDefenseIsNull() {
-		expectedException.expect(RuntimeException.class);
+		expectedException.expect(GladiatorException.class);
 		expectedException.expectMessage("value must not be negative");
 		testee.setBaseDefense(new BigDecimal(-100));
 	}
