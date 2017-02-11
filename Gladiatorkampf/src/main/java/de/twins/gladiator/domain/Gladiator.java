@@ -1,64 +1,23 @@
 package de.twins.gladiator.domain;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
+/**
+ * Gladiator interface which is used to create a diversity of gladiators,
+ * Gladiators are designed to fight against each other in arenas.
+ * @author Pierre
+ *
+ */
+public interface Gladiator {
 
-public class Gladiator {
-
-	// base stats from character
-	private String name;
-	private BigDecimal baseHealthPoints;
-	private BigDecimal baseAttack;
-	private BigDecimal baseDefense;
-
-	// stats combined from all sources
-	private BigDecimal totalHealthPoints;
-	private BigDecimal currentHealthPoints;
-	private BigDecimal totalAttack;
-	private BigDecimal totalDefense;
-
-	private Map<BodyPart, Equipment> equipments;
-
-	public Gladiator(String name, BigDecimal healthPoints, BigDecimal attack, BigDecimal defense,
-			Map<BodyPart, Equipment> equipments) {
-		checkIfNullOrNegativeValue(attack);
-		checkIfNullOrNegativeValue(defense);
-		checkIfNullOrNegativeValue(healthPoints);
-		this.name = name;
-		totalHealthPoints = BigDecimal.ZERO;
-		totalAttack = BigDecimal.ZERO;
-		totalDefense = BigDecimal.ZERO;
-		this.currentHealthPoints = BigDecimal.ZERO;
-		this.baseAttack = attack;
-		this.baseDefense = defense;
-		this.baseHealthPoints = healthPoints;
-
-		if (equipments != null) {
-			this.equipments = equipments;
-		} else {
-			this.equipments = new HashMap<>();
-		}
-		updateStats();
-		currentHealthPoints = totalHealthPoints;
-	}
-
-
-	public void addOrReplaceEquipment(Equipment equipment) {
-		equipments.put(equipment.getBodyPart(), equipment);
-		updateStats();
-	}
-
-	protected void checkIfNullOrNegativeValue(BigDecimal value) {
-		if (value == null) {
-			throw new GladiatorException("value must not be null");
-		}
-		if (value.signum() == -1) {
-			throw new GladiatorException("value must not be negative");
-		}
-
-	}
+	/**
+	 * Adds equipment to the gladiator.If equipment position already is
+	 * allocated it will be replaced with the given equipment
+	 * 
+	 * @param equipment
+	 *            equipment which should be equipped.
+	 */
+	void addOrReplaceEquipment(Equipment equipment);
 
 	/**
 	 * Reduces enemy attack power by own defense value. The reduced attack power
@@ -67,97 +26,111 @@ public class Gladiator {
 	 * @param attack
 	 *            The attack power which reduces the hp.
 	 */
-	public void defend(BigDecimal attack) {
-		BigDecimal dmg = attack.subtract(totalDefense);
-		if (dmg.compareTo(BigDecimal.ZERO) > 0) {
-			setCurrentHealthPoints(getCurrentHealthPoints().subtract(dmg));
-		}
-	}
+	void defend(BigDecimal attack);
 
-	public BigDecimal getBaseAttack() {
-		return baseAttack;
-	}
+	/**
+	 * Returns the base attack which is originated from the gladiator.
+	 * 
+	 * @return the base attack which is originated from the gladiator.
+	 */
+	BigDecimal getBaseAttack();
 
-	public BigDecimal getBaseDefense() {
-		return baseDefense;
-	}
+	/**
+	 * Returns the base defense which is originated from the gladiator.
+	 * 
+	 * @return the base defense which is originated from the gladiator.
+	 */
+	BigDecimal getBaseDefense();
 
-	public BigDecimal getBaseHealthPoints() {
-		return baseHealthPoints;
-	}
+	/**
+	 * Returns the base health points which is originated from the gladiator.
+	 * 
+	 * @return the base health points which is originated from the gladiator.
+	 */
+	BigDecimal getBaseHealthPoints();
 
-	public BigDecimal getCurrentHealthPoints() {
-		return currentHealthPoints;
-	}
+	/**
+	 * Returns the current health points of the gladiator.
+	 * 
+	 * @return the current health points of the gladiator.
+	 */
+	BigDecimal getCurrentHealthPoints();
 
-	public Map<BodyPart, Equipment> getEquipments() {
-		return equipments;
-	}
+	/**
+	 * Return the equipments which is currently allocated to the gladiator.
+	 * 
+	 * @return the equipments which is currently allocated to the gladiator.
+	 */
+	Map<BodyPart, Equipment> getEquipments();
 
-	public String getName() {
-		return name;
-	}
+	/**
+	 * Returns the name of the gladiator.
+	 * 
+	 * @return the name of the gladiator.
+	 */
+	String getName();
 
-	public BigDecimal getTotalAttack() {
-		return totalAttack;
-	}
+	/**
+	 * Return the total attack of the gladiator.Which is the sum of the
+	 * equipment and base attack.
+	 * 
+	 * @return the total attack of the gladiator.
+	 */
+	BigDecimal getTotalAttack();
 
-	public BigDecimal getTotalDefense() {
-		return totalDefense;
-	}
+	/**
+	 * Return the total attack of the gladiator.Which is the sum of the
+	 * equipment and base defense.
+	 * 
+	 * @return the total attack of the gladiator.
+	 */
+	BigDecimal getTotalDefense();
 
-	public BigDecimal getTotalHealthPoints() {
-		return totalHealthPoints;
-	}
+	/**
+	 * Return the total attack of the gladiator.Which is the sum of the
+	 * equipment and base health points.
+	 * 
+	 * @return the total attack of the gladiator.
+	 */
+	BigDecimal getTotalHealthPoints();
 
-	public void removeEquipment(Equipment equipment) {
-		equipments.remove(equipment.getBodyPart());
-		updateStats();
-	}
+	/**
+	 * removes equipment
+	 * 
+	 * @param equipment
+	 *            equipment which should be removed
+	 */
+	void removeEquipment(Equipment equipment);
 
-	public void setBaseAttack(BigDecimal baseAttack) {
-		checkIfNullOrNegativeValue(baseAttack);
-		this.baseAttack = baseAttack;
-		updateStats();
-	}
+	/**
+	 * Sets the base attack of the gladiator.
+	 * @param baseAttack base attack which should be set.
+	 */
+	void setBaseAttack(BigDecimal baseAttack);
+	/**
+	 * Sets the base attack of the gladiator.
+	 * @param baseAttack base attack which should be set.
+	 */
+	void setBaseDefense(BigDecimal baseDefense);
+	/**
+	 * Sets the base health points of the gladiator.
+	 * @param healthPoints base health points which should be set.
+	 */
+	void setBaseHealthPoints(BigDecimal healthPoints);
+	/**
+	 * Sets the base attack of the gladiator
+	 * @param healthPoints current health points which should be set.
+	 */
+	void setCurrentHealthPoints(BigDecimal healthPoints);
+	/**
+	 * Sets the name of the gladiator
+	 * @param name name which should be set.
+	 */
+	void setName(String name);
+	/**
+	 * Returns true if gladiator is alive.
+	 * @return true if gladiator is alive.
+	 */
+	boolean isAlive();
 
-	public void setBaseDefense(BigDecimal baseDefense) {
-		checkIfNullOrNegativeValue(baseDefense);
-		this.baseDefense = baseDefense;
-		updateStats();
-	}
-
-	public void setBaseHealthPoints(BigDecimal healthPoints) {
-		checkIfNullOrNegativeValue(healthPoints);
-		this.baseHealthPoints = healthPoints;
-		updateStats();
-	}
-
-	public void setCurrentHealthPoints(BigDecimal hp) {
-		if (hp.compareTo(BigDecimal.ZERO) <= 0) {
-			this.currentHealthPoints = BigDecimal.ZERO;
-		} else {
-			this.currentHealthPoints = hp;
-		}
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	protected void updateStats() {
-		totalHealthPoints = baseHealthPoints != null ? baseHealthPoints : totalHealthPoints;
-		totalAttack = baseAttack != null ? baseAttack : totalAttack;
-		totalDefense = baseDefense != null ? baseDefense : totalDefense;
-		equipments.forEach((k, v) -> {
-			totalHealthPoints = totalHealthPoints.add(v.getHealthPoints());
-			totalAttack = totalAttack.add(v.getAttack());
-			totalDefense = totalDefense.add(v.getDefense());
-		});
-		// if current Health is bigger after calculated total HealthPoints.
-		if (currentHealthPoints.compareTo(totalHealthPoints) >= 0) {
-			currentHealthPoints = totalHealthPoints;
-		}
-	}
-	
 }

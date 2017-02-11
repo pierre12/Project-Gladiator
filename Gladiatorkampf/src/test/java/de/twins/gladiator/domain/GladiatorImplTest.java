@@ -21,9 +21,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
-public class GladiatorTest {
+public class GladiatorImplTest {
 
-	private Gladiator testee;
+	private GladiatorImpl testee;
 	@Mock
 	private Equipment equipmentMock1;
 	@Mock
@@ -36,7 +36,7 @@ public class GladiatorTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		testee = new Gladiator("testee", new BigDecimal(100), BigDecimal.TEN, BigDecimal.TEN, null);
+		testee = new GladiatorImpl("testee", new BigDecimal(100), BigDecimal.TEN, BigDecimal.TEN, null);
 		when(equipmentMock1.getBodyPart()).thenReturn(BodyPart.HEAD);
 		when(equipmentMock1.getAttack()).thenReturn(BigDecimal.TEN);
 		when(equipmentMock1.getDefense()).thenReturn(BigDecimal.TEN);
@@ -66,7 +66,7 @@ public class GladiatorTest {
 		Map<BodyPart, Equipment> equipmentsMock = new HashMap<>();
 		equipmentsMock.put(equipmentMock1.getBodyPart(), equipmentMock1);
 		equipmentsMock.put(equipmentMock2.getBodyPart(), equipmentMock2);
-		testee = new Gladiator("testee", new BigDecimal(100), new BigDecimal(10), new BigDecimal(10), equipmentsMock);
+		testee = new GladiatorImpl("testee", new BigDecimal(100), new BigDecimal(10), new BigDecimal(10), equipmentsMock);
 		assertThat(testee.getTotalAttack(), is(new BigDecimal(30)));
 		assertThat(testee.getTotalDefense(), is(new BigDecimal(30)));
 		assertThat(testee.getTotalHealthPoints(), is(new BigDecimal(300)));
@@ -140,7 +140,7 @@ public class GladiatorTest {
 
 	@Test
 	public void shouldUpdateStatsIfBaseStatOrEquipmentIsChanged() {
-		Gladiator spy = spy(testee);
+		GladiatorImpl spy = spy(testee);
 		spy.setBaseAttack(BigDecimal.ONE);
 		verify(spy, times(1)).updateStats();
 		spy.setBaseDefense(BigDecimal.ONE);
@@ -155,7 +155,7 @@ public class GladiatorTest {
 
 	@Test
 	public void shouldTestNullOrNegativeWhenSettingBaseAttributes() {
-		Gladiator spy = spy(testee);
+		GladiatorImpl spy = spy(testee);
 		spy.setBaseAttack(BigDecimal.ONE);
 		verify(spy, times(1)).checkIfNullOrNegativeValue(BigDecimal.ONE);
 		spy.setBaseDefense(BigDecimal.ONE);
@@ -180,5 +180,15 @@ public class GladiatorTest {
 		expectedException.expect(GladiatorException.class);
 		expectedException.expectMessage("value must not be negative");
 		testee.setBaseDefense(new BigDecimal(-100));
+	}
+	
+	@Test
+	public void shouldBeAliveWhenCurrentHealthIsGreaterZero(){
+		assertThat(testee.isAlive(), is(true));
+	}
+	@Test
+	public void shouldBeDeadWhenCurrentHealthEqualsZero(){
+		testee.defend(new BigDecimal(200));
+		assertThat(testee.isAlive(), is(false));
 	}
 }
