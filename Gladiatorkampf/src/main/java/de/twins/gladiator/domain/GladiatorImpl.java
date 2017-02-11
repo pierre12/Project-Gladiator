@@ -147,6 +147,11 @@ public class GladiatorImpl implements Gladiator {
 		return totalHealthPoints;
 	}
 
+	@Override
+	public boolean isAlive() {
+		return currentHealthPoints.compareTo(BigDecimal.ZERO) > 0;
+	}
+
 	/* (non-Javadoc)
 	 * @see de.twins.gladiator.domain.Gladiator#removeEquipment(de.twins.gladiator.domain.Equipment)
 	 */
@@ -206,6 +211,7 @@ public class GladiatorImpl implements Gladiator {
 		this.name = name;
 	}
 
+
 	protected void updateStats() {
 		totalHealthPoints = baseHealthPoints != null ? baseHealthPoints : totalHealthPoints;
 		totalAttack = baseAttack != null ? baseAttack : totalAttack;
@@ -219,12 +225,6 @@ public class GladiatorImpl implements Gladiator {
 		if (currentHealthPoints.compareTo(totalHealthPoints) >= 0) {
 			currentHealthPoints = totalHealthPoints;
 		}
-	}
-
-
-	@Override
-	public boolean isAlive() {
-		return currentHealthPoints.compareTo(BigDecimal.ZERO) > 0;
 	}
 	
 }

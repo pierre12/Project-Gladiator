@@ -95,13 +95,18 @@ public interface Gladiator {
 	BigDecimal getTotalHealthPoints();
 
 	/**
+	 * Returns true if gladiator is alive.
+	 * @return true if gladiator is alive.
+	 */
+	boolean isAlive();
+
+	/**
 	 * removes equipment
 	 * 
 	 * @param equipment
 	 *            equipment which should be removed
 	 */
 	void removeEquipment(Equipment equipment);
-
 	/**
 	 * Sets the base attack of the gladiator.
 	 * @param baseAttack base attack which should be set.
@@ -127,10 +132,5 @@ public interface Gladiator {
 	 * @param name name which should be set.
 	 */
 	void setName(String name);
-	/**
-	 * Returns true if gladiator is alive.
-	 * @return true if gladiator is alive.
-	 */
-	boolean isAlive();
 
 }

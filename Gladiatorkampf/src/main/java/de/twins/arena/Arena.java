@@ -12,39 +12,6 @@ import de.twins.gladiator.domain.Gladiator;
  */
 public interface Arena {
 	/**
-	 * Announce the winner of the fight.
-	 */
-	void announceWinner();
-
-	/**
-	 * Starts the fight. A fight is a collection of multiple rounds.
-	 */
-	void startFight();
-
-	/**
-	 * Starts a round.
-	 */
-	void startRound();
-
-	/**
-	 * Determines the number of rounds
-	 * 
-	 * @param rounds
-	 *            number of rounds which should be fight
-	 */
-	void setRounds(int rounds);
-
-	/**
-	 * Ends a round.
-	 */
-	void endRound();
-
-	/**
-	 * Ends a fight.
-	 */
-	void endFight();
-
-	/**
 	 * Adds a gladiator to the arena.
 	 * 
 	 * @param gladiator
@@ -61,6 +28,21 @@ public interface Arena {
 	void addGladiators(Set<Gladiator> gladiators);
 
 	/**
+	 * Announce the winner of the fight.
+	 */
+	void announceWinner();
+
+	/**
+	 * Ends a fight.
+	 */
+	void endFight();
+
+	/**
+	 * Ends a round.
+	 */
+	void endRound();
+
+	/**
 	 * Removes a gladiator from the arena.
 	 * 
 	 * @param gladiator
@@ -75,4 +57,22 @@ public interface Arena {
 	 *            gladiators which should be removed from the arena.
 	 */
 	void removeGladiators(Set<Gladiator> gladiators);
+
+	/**
+	 * Determines the number of rounds
+	 * 
+	 * @param rounds
+	 *            number of rounds which should be fight
+	 */
+	void setRounds(int rounds);
+
+	/**
+	 * Starts the fight. A fight is a collection of multiple rounds.
+	 */
+	void startFight();
+
+	/**
+	 * Starts a round.
+	 */
+	void startRound();
 }
