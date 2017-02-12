@@ -4,10 +4,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.math.BigDecimal;
-import java.util.Formatter.BigDecimalLayoutForm;
 
-import org.junit.Before;
 import org.junit.Test;
+
+import de.twins.gladiator.domain.Equipment.BodyPart;
 
 public class EquipmentTest {
 	private Equipment testee;

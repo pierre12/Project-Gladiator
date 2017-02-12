@@ -3,7 +3,8 @@ package de.twins.gladiator.domain;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
+
+import de.twins.gladiator.domain.Equipment.BodyPart;
 
 public class GladiatorImpl implements Gladiator {
 

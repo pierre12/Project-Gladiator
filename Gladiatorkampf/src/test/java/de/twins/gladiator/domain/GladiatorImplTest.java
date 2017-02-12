@@ -11,15 +11,14 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.activity.InvalidActivityException;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
+
+import de.twins.gladiator.domain.Equipment.BodyPart;
 
 public class GladiatorImplTest {
 

@@ -2,6 +2,8 @@ package de.twins.gladiator.domain;
 
 import java.math.BigDecimal;
 import java.util.Map;
+
+import de.twins.gladiator.domain.Equipment.BodyPart;
 /**
  * Gladiator interface which is used to create a diversity of gladiators,
  * Gladiators are designed to fight against each other in arenas.
