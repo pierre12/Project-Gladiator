@@ -1,5 +1,6 @@
 package de.twins.arena;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -82,30 +83,16 @@ public class OneOnOneArena implements Arena {
 
 	@Override
 	public void announceWinner() {
-		// String winnerMessage = "Gladiator {0} won the fight.With {1} round
-		// win(s)";
-		// String tiedMessage = "Both gladiators won {0} round.";
+		String winnerMessage = "Gladiator %s won the fight.With %d round win(s)";
+		String tiedMessage = "Both gladiators won %d round.";
 		Integer wonRoundsFirstGladiator = resultForFirstGladiator.get(ArenaResult.WIN);
 		Integer wonRoundsSecondGladiator = resultForSecondGladiator.get(ArenaResult.WIN);
 		if (wonRoundsFirstGladiator > wonRoundsSecondGladiator) {
-			// hat nicht funktioniert bei mir
-			// System.out.println(String.format(winnerMessage,
-			// firstGladiator.getName(),
-			// wonRoundsGladiatorOne));
-			System.out
-					.println("Gladiator " + firstGladiator.getName() + " won the fight.With " + wonRoundsFirstGladiator
-					+ " round win(s)");
+			System.out.println(String.format(winnerMessage, firstGladiator.getName(), wonRoundsFirstGladiator));
 		} else if (wonRoundsFirstGladiator == wonRoundsSecondGladiator) {
-			// System.out.println(String.format(tiedMessage,
-			// wonRoundsGladiatorOne));
-			System.out.println("Both gladiators won " + wonRoundsFirstGladiator + "   round.");
+			System.out.println(String.format(tiedMessage, wonRoundsFirstGladiator));
 		} else {
-			// System.out.println(String.format(winnerMessage,
-			// secondGladiator.getName(),
-			// wonRoundsGladiatorSecond));
-			System.out.println("Gladiator " + secondGladiator.getName() + " won the fight.With "
-					+ wonRoundsSecondGladiator
-					+ " round win(s)");
+			System.out.println(String.format(winnerMessage, secondGladiator.getName(), wonRoundsSecondGladiator));
 		}
 
 	}
@@ -152,8 +139,19 @@ public class OneOnOneArena implements Arena {
 
 	}
 
+	// heals dead gladiator by 100% and living gladiator by 25%
 	private void restoreHealthOfGladiators() {
-		gladiators.forEach(gladiator -> gladiator.setCurrentHealthPoints(gladiator.getTotalHealthPoints()));
+		gladiators.forEach(gladiator -> {
+			if (gladiator.isAlive()) {
+				gladiator.setCurrentHealthPoints(gladiator.getCurrentHealthPoints()
+						.add(gladiator.getTotalHealthPoints().divide(new BigDecimal(4))));
+				if (gladiator.getCurrentHealthPoints().compareTo(gladiator.getTotalHealthPoints()) == 1) {
+					gladiator.setCurrentHealthPoints(gladiator.getTotalHealthPoints());
+				}
+			} else {
+				gladiator.setCurrentHealthPoints(gladiator.getTotalHealthPoints());
+			}
+		});
 	}
 
 	/**
