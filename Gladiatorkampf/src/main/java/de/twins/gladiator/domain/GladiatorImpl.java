@@ -228,4 +228,19 @@ public class GladiatorImpl implements Gladiator {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[ ");
+		sb.append("CurrentHP:");
+		sb.append(this.getCurrentHealthPoints());
+		sb.append(",");
+		sb.append("Attack:");
+		sb.append(this.getTotalAttack());
+		sb.append(",");
+		sb.append("Defense:");
+		sb.append(this.getTotalDefense());
+		sb.append(" ]");
+		return sb.toString();
+	}
 }

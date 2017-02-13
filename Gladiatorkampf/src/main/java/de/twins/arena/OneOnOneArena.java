@@ -2,8 +2,11 @@ package de.twins.arena;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import org.springframework.stereotype.Component;
 
 import de.twins.gladiator.domain.Gladiator;
 
@@ -13,7 +16,9 @@ import de.twins.gladiator.domain.Gladiator;
  * @author Pierre
  *
  */
+@Component
 public class OneOnOneArena implements Arena {
+
 	private Gladiator firstGladiator;
 	private Gladiator secondGladiator;
 	private Map<ArenaResult, Integer> resultForFirstGladiator;
@@ -22,11 +27,23 @@ public class OneOnOneArena implements Arena {
 	private Set<Gladiator> gladiators;
 
 	private int rounds;
+
 	public OneOnOneArena() {
 		gladiators = new HashSet<>();
+		resetResults();
+		rounds = 500;
+	}
+
+	private void resetResults() {
 		resultForFirstGladiator = new HashMap<ArenaResult, Integer>();
 		resultForSecondGladiator = new HashMap<ArenaResult, Integer>();
+		for (ArenaResult resultPossibility : ArenaResult.values()) {
+			resultForFirstGladiator.put(resultPossibility, 0);
+			resultForSecondGladiator.put(resultPossibility, 0);
+		}
+
 	}
+
 	public OneOnOneArena(Set<Gladiator> gladiators, int rounds) {
 		super();
 		this.gladiators = gladiators;
@@ -65,16 +82,30 @@ public class OneOnOneArena implements Arena {
 
 	@Override
 	public void announceWinner() {
-		String winnerMessage = "Gladiator {0} won the fight.With {1} round win(s)";
-		String tiedMessage = "Both gladiators won {0}  round.";
-		if (resultForFirstGladiator.get(ArenaResult.WIN) > resultForSecondGladiator.get(ArenaResult.WIN)) {
-			System.out.println(String.format(winnerMessage, firstGladiator.getName(),
-					resultForFirstGladiator.get(ArenaResult.WIN)));
-		} else if (resultForFirstGladiator.get(ArenaResult.WIN) == resultForSecondGladiator.get(ArenaResult.WIN)) {
-			System.out.println(String.format(tiedMessage, resultForFirstGladiator.get(ArenaResult.WIN)));
+		// String winnerMessage = "Gladiator {0} won the fight.With {1} round
+		// win(s)";
+		// String tiedMessage = "Both gladiators won {0} round.";
+		Integer wonRoundsFirstGladiator = resultForFirstGladiator.get(ArenaResult.WIN);
+		Integer wonRoundsSecondGladiator = resultForSecondGladiator.get(ArenaResult.WIN);
+		if (wonRoundsFirstGladiator > wonRoundsSecondGladiator) {
+			// hat nicht funktioniert bei mir
+			// System.out.println(String.format(winnerMessage,
+			// firstGladiator.getName(),
+			// wonRoundsGladiatorOne));
+			System.out
+					.println("Gladiator " + firstGladiator.getName() + " won the fight.With " + wonRoundsFirstGladiator
+					+ " round win(s)");
+		} else if (wonRoundsFirstGladiator == wonRoundsSecondGladiator) {
+			// System.out.println(String.format(tiedMessage,
+			// wonRoundsGladiatorOne));
+			System.out.println("Both gladiators won " + wonRoundsFirstGladiator + "   round.");
 		} else {
-			System.out.println(String.format(winnerMessage, secondGladiator.getName(),
-					resultForSecondGladiator.get(ArenaResult.WIN)));
+			// System.out.println(String.format(winnerMessage,
+			// secondGladiator.getName(),
+			// wonRoundsGladiatorSecond));
+			System.out.println("Gladiator " + secondGladiator.getName() + " won the fight.With "
+					+ wonRoundsSecondGladiator
+					+ " round win(s)");
 		}
 
 	}
@@ -82,8 +113,7 @@ public class OneOnOneArena implements Arena {
 	@Override
 	public void endFight() {
 		announceWinner();
-		resultForFirstGladiator.clear();
-		resultForSecondGladiator.clear();
+		resetResults();
 	}
 
 	@Override
@@ -146,8 +176,9 @@ public class OneOnOneArena implements Arena {
 
 	@Override
 	public void startFight() {
-		firstGladiator = gladiators.iterator().next();
-		secondGladiator = gladiators.iterator().next();
+		Iterator<Gladiator> iterator = gladiators.iterator();
+		firstGladiator = iterator.next();
+		secondGladiator = iterator.next();
 		for (int i = 1; i <= rounds; i++) {
 			startRound();
 		}

@@ -1,33 +1,43 @@
 package de.twins.gladiator.process;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
 
 import de.twins.gladiator.domain.Equipment;
 import de.twins.gladiator.domain.Equipment.BodyPart;
 import de.twins.gladiator.domain.Equipment.Rarity;
 
+@Component
 public class SimpleEquipFactoryImpl implements EquipmentFactory {
 
 	@Override
 	public Equipment createRandomEquipment(){
 		BodyPart rdBodyPart = getRandomBodyPart();
+		return createRandomEquipmentFor(rdBodyPart);
+	}
+	
+	@Override
+	public Equipment createRandomEquipmentFor(BodyPart bodypart) {
 		Rarity rdRarity = getRandomRarity();
 		switch (rdRarity) {
 		case COMMON:
-			return createRandomCommonEquipmentFor(rdBodyPart);
+			return createRandomCommonEquipmentFor(bodypart);
 		case UNCOMMON:
-			return createRandomUncommonEquipmentFor(rdBodyPart);
+			return createRandomUncommonEquipmentFor(bodypart);
 		case EPIC:
-			return createRandomEpicEquipmentFor(rdBodyPart);
+			return createRandomEpicEquipmentFor(bodypart);
 		case LEGENDARY:
-			return createRandomLegendaryEquipmentFor(rdBodyPart);
+			return createRandomLegendaryEquipmentFor(bodypart);
 		case MAGIC:
-			return createRandomMagicEquipmentFor(rdBodyPart);
+			return createRandomMagicEquipmentFor(bodypart);
 		default:
-			return new Equipment(rdBodyPart, new BigDecimal("1"), new BigDecimal("1"), new BigDecimal("1"));
+			return new Equipment(bodypart, new BigDecimal("1"), new BigDecimal("1"), new BigDecimal("1"));
 		}
 	}
-	
+
 	private BodyPart getRandomBodyPart() {
 		BodyPart[] values = BodyPart.values();
 		return values[(int) (Math.random() * values.length)];
@@ -145,5 +155,14 @@ public class SimpleEquipFactoryImpl implements EquipmentFactory {
 		}
 		double hp = Math.random() * maxHp + 1;
 		return new BigDecimal(String.valueOf(hp));
+	}
+
+	public Map<BodyPart, Equipment> randomFullSet() {
+		Map<BodyPart, Equipment> equipmentSet = new HashMap<>();
+		for (BodyPart bodyPart : BodyPart.values()) {
+			Equipment randomPart = createRandomEquipmentFor(bodyPart);
+			equipmentSet.put(bodyPart, randomPart);
+		}
+		return equipmentSet;
 	}
 }
