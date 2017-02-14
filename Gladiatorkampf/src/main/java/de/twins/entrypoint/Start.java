@@ -7,7 +7,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import de.twins.arena.Arena;
 import de.twins.context.SpringConfig;
-import de.twins.gladiator.domain.Gladiator;
+import de.twins.enemy.Minion;
+import de.twins.gladiator.domain.Fightable;
 import de.twins.gladiator.domain.GladiatorImpl;
 import de.twins.gladiator.process.EquipmentFactory;
 
@@ -18,13 +19,12 @@ public class Start {
 
 		EquipmentFactory equipmentFactory = context.getBean(EquipmentFactory.class);
 		Arena arena = context.getBean(Arena.class);
-		Gladiator g1 = new GladiatorImpl("Rene", new BigDecimal("10"), new BigDecimal("10"), new BigDecimal("10"),
+		Fightable g1 = new GladiatorImpl("Rene", new BigDecimal("10"), new BigDecimal("10"), new BigDecimal("10"),
 				equipmentFactory.randomFullSet());
-		Gladiator g2 = new GladiatorImpl("Pierre", new BigDecimal("10"), new BigDecimal("10"), new BigDecimal("10"),
-				equipmentFactory.randomFullSet());
+		Fightable g2 = new Minion("Broly", new BigDecimal("10000"), new BigDecimal("10000"), new BigDecimal("10000"));
 
-		arena.addGladiator(g1);
-		arena.addGladiator(g2);
+		arena.addFighter(g1);
+		arena.addFighter(g2);
 		arena.startFight();
 		System.out.println("end");
 	}

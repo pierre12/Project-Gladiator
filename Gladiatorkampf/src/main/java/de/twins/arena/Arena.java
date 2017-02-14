@@ -2,7 +2,7 @@ package de.twins.arena;
 
 import java.util.Set;
 
-import de.twins.gladiator.domain.Gladiator;
+import de.twins.gladiator.domain.Fightable;
 
 /**
  * Arena is the place where <tt>Gladiator<tt> can fight against each other.
@@ -12,20 +12,20 @@ import de.twins.gladiator.domain.Gladiator;
  */
 public interface Arena {
 	/**
-	 * Adds a gladiator to the arena.
+	 * Adds a {@link Fightable} to the arena.
 	 * 
 	 * @param gladiator
-	 *            {@link Gladiator} which is added to the arena.
+	 *            {@link Fightable} which is added to the arena.
 	 */
-	void addGladiator(Gladiator gladiator);
+	void addFighter(Fightable gladiator);
 
 	/**
-	 * Adds a set of gladiators to the arena.
+	 * Adds a set of {@link Fightable} to the arena.
 	 * 
 	 * @param gladiators
-	 *            gladiators which should be added to the arena.
+	 *            {@link Fightable} which should be added to the arena.
 	 */
-	void addGladiators(Set<Gladiator> gladiators);
+	void addFighters(Set<Fightable> gladiators);
 
 	/**
 	 * Announce the winner of the fight.
@@ -43,20 +43,20 @@ public interface Arena {
 	void endRound();
 
 	/**
-	 * Removes a gladiator from the arena.
+	 * Removes a {@link Fightable} from the arena.
 	 * 
-	 * @param gladiator
-	 *            gladiator which should be removed from the arena.
+	 * @param fighter
+	 *            {@link Fightable} which should be removed from the arena.
 	 */
-	void removeGladiator(Gladiator gladiator);
+	void removeFighter(Fightable fighter);
 
 	/**
-	 * Removes a set of gladiators from the arena.
+	 * Removes a set of {@link Fightable} from the arena.
 	 * 
-	 * @param gladiators
-	 *            gladiators which should be removed from the arena.
+	 * @param fighter
+	 *            {@link Fightable} which should be removed from the arena.
 	 */
-	void removeGladiators(Set<Gladiator> gladiators);
+	void removeFighters(Set<Fightable> fighter);
 
 	/**
 	 * Determines the number of rounds

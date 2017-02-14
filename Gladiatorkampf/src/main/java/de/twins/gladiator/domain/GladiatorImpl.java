@@ -6,36 +6,21 @@ import java.util.Map;
 
 import de.twins.gladiator.domain.Equipment.BodyPart;
 
-public class GladiatorImpl implements Gladiator {
+public class GladiatorImpl extends AbstractFighter implements Gladiator {
 
-	// base stats from character
-	private String name;
-	private BigDecimal baseHealthPoints;
-	private BigDecimal baseAttack;
-	private BigDecimal baseDefense;
-
-	// stats combined from all sources
-	private BigDecimal totalHealthPoints;
-	private BigDecimal currentHealthPoints;
-	private BigDecimal totalAttack;
-	private BigDecimal totalDefense;
 
 	private Map<BodyPart, Equipment> equipments;
 
 	public GladiatorImpl(String name, BigDecimal healthPoints, BigDecimal attack, BigDecimal defense,
 			Map<BodyPart, Equipment> equipments) {
+		super(name, healthPoints, attack, defense);
 		checkIfNullOrNegativeValue(attack);
 		checkIfNullOrNegativeValue(defense);
 		checkIfNullOrNegativeValue(healthPoints);
-		this.name = name;
 		totalHealthPoints = BigDecimal.ZERO;
 		totalAttack = BigDecimal.ZERO;
 		totalDefense = BigDecimal.ZERO;
 		this.currentHealthPoints = BigDecimal.ZERO;
-		this.baseAttack = attack;
-		this.baseDefense = defense;
-		this.baseHealthPoints = healthPoints;
-
 		if (equipments != null) {
 			this.equipments = equipments;
 		} else {
@@ -69,14 +54,16 @@ public class GladiatorImpl implements Gladiator {
 	 * @see de.twins.gladiator.domain.Gladiator#defend(java.math.BigDecimal)
 	 */
 	@Override
-	public void defend(BigDecimal attack) {
+	public boolean defend(BigDecimal attack) {
 		BigDecimal dmg = attack.subtract(totalDefense);
 		if (dmg.compareTo(BigDecimal.ZERO) > 0) {
 			setCurrentHealthPoints(getCurrentHealthPoints().subtract(dmg));
+			return true;
 		}
+		return false;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#getBaseAttack()
 	 */
 	@Override
@@ -84,7 +71,7 @@ public class GladiatorImpl implements Gladiator {
 		return baseAttack;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#getBaseDefense()
 	 */
 	@Override
@@ -92,7 +79,7 @@ public class GladiatorImpl implements Gladiator {
 		return baseDefense;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#getBaseHealthPoints()
 	 */
 	@Override
@@ -100,7 +87,7 @@ public class GladiatorImpl implements Gladiator {
 		return baseHealthPoints;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#getCurrentHealthPoints()
 	 */
 	@Override
@@ -108,7 +95,8 @@ public class GladiatorImpl implements Gladiator {
 		return currentHealthPoints;
 	}
 
-	/* (non-Javadoc)
+
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#getEquipments()
 	 */
 	@Override
@@ -116,7 +104,7 @@ public class GladiatorImpl implements Gladiator {
 		return equipments;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#getName()
 	 */
 	@Override
@@ -124,7 +112,7 @@ public class GladiatorImpl implements Gladiator {
 		return name;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#getTotalAttack()
 	 */
 	@Override
@@ -132,7 +120,7 @@ public class GladiatorImpl implements Gladiator {
 		return totalAttack;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#getTotalDefense()
 	 */
 	@Override
@@ -140,7 +128,7 @@ public class GladiatorImpl implements Gladiator {
 		return totalDefense;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#getTotalHealthPoints()
 	 */
 	@Override
@@ -148,12 +136,15 @@ public class GladiatorImpl implements Gladiator {
 		return totalHealthPoints;
 	}
 
+	/**
+	 * @see de.twins.gladiator.domain.AbstractFighter#isAlive()
+	 */
 	@Override
 	public boolean isAlive() {
 		return currentHealthPoints.compareTo(BigDecimal.ZERO) > 0;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#removeEquipment(de.twins.gladiator.domain.Equipment)
 	 */
 	@Override
@@ -162,7 +153,7 @@ public class GladiatorImpl implements Gladiator {
 		updateStats();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#setBaseAttack(java.math.BigDecimal)
 	 */
 	@Override
@@ -172,7 +163,7 @@ public class GladiatorImpl implements Gladiator {
 		updateStats();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#setBaseDefense(java.math.BigDecimal)
 	 */
 	@Override
@@ -182,7 +173,7 @@ public class GladiatorImpl implements Gladiator {
 		updateStats();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#setBaseHealthPoints(java.math.BigDecimal)
 	 */
 	@Override
@@ -192,7 +183,7 @@ public class GladiatorImpl implements Gladiator {
 		updateStats();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#setCurrentHealthPoints(java.math.BigDecimal)
 	 */
 	@Override
@@ -204,7 +195,7 @@ public class GladiatorImpl implements Gladiator {
 		}
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#setName(java.lang.String)
 	 */
 	@Override

@@ -9,7 +9,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
-import de.twins.gladiator.domain.Gladiator;
+import de.twins.gladiator.domain.Fightable;
 
 /**
  * Arena limited for two gladiators which fight 1 vs 1 against each other.
@@ -20,17 +20,17 @@ import de.twins.gladiator.domain.Gladiator;
 @Component
 public class OneOnOneArena implements Arena {
 
-	private Gladiator firstGladiator;
-	private Gladiator secondGladiator;
+	private Fightable fighter1;
+	private Fightable fighter2;
 	private Map<ArenaResult, Integer> resultForFirstGladiator;
 	private Map<ArenaResult, Integer> resultForSecondGladiator;
 
-	private Set<Gladiator> gladiators;
+	private Set<Fightable> fighters;
 
 	private int rounds;
 
 	public OneOnOneArena() {
-		gladiators = new HashSet<>();
+		fighters = new HashSet<>();
 		resetResults();
 		rounds = 500;
 	}
@@ -45,38 +45,40 @@ public class OneOnOneArena implements Arena {
 
 	}
 
-	public OneOnOneArena(Set<Gladiator> gladiators, int rounds) {
+	public OneOnOneArena(Set<Fightable> gladiators, int rounds) {
 		super();
-		this.gladiators = gladiators;
+		this.fighters = gladiators;
 		this.rounds = rounds;
 
 	}
 
 	@Override
-	public void addGladiator(Gladiator gladiator) {
+	public void addFighter(Fightable gladiator) {
 		if (gladiator == null) {
 			throw new ArenaException("Gladiator set must not be null");
-		} else if (gladiators.size() == 2) {
+		} else if (fighters.size() == 2) {
 			throw new ArenaException(
 					"Arena does only allows two Gladiators but it was tried to increase the number of gladiators to "
 							+ 3);
 		} else {
-			gladiators.add(gladiator);
+			fighters.add(gladiator);
 		}
 
 	}
 
 	@Override
-	public void addGladiators(Set<Gladiator> gladiators) {
-		if (gladiators == null) {
+	public void addFighters(Set<Fightable> fighter) {
+		if (fighter == null) {
 			throw new ArenaException("Gladiators set must not be null");
 		}
-		if ((this.gladiators.size() + gladiators.size()) >= 2) {
+		if ((this.fighters.size() + fighter.size()) >= 2) {
 			throw new ArenaException(
 					"Arena does only allows two Gladiators but it was tried to increase the number of gladiators to "
-							+ this.gladiators.size() + gladiators.size());
+							+ this.fighters.size() + fighter.size());
 		} else {
-			gladiators.forEach((gladiator) -> gladiators.add(gladiator));
+			for (Fightable fightable : fighter) {
+				this.fighters.add(fightable);
+			}
 		}
 
 	}
@@ -88,11 +90,11 @@ public class OneOnOneArena implements Arena {
 		Integer wonRoundsFirstGladiator = resultForFirstGladiator.get(ArenaResult.WIN);
 		Integer wonRoundsSecondGladiator = resultForSecondGladiator.get(ArenaResult.WIN);
 		if (wonRoundsFirstGladiator > wonRoundsSecondGladiator) {
-			System.out.println(String.format(winnerMessage, firstGladiator.getName(), wonRoundsFirstGladiator));
+			System.out.println(String.format(winnerMessage, fighter1.getName(), wonRoundsFirstGladiator));
 		} else if (wonRoundsFirstGladiator == wonRoundsSecondGladiator) {
 			System.out.println(String.format(tiedMessage, wonRoundsFirstGladiator));
 		} else {
-			System.out.println(String.format(winnerMessage, secondGladiator.getName(), wonRoundsSecondGladiator));
+			System.out.println(String.format(winnerMessage, fighter2.getName(), wonRoundsSecondGladiator));
 		}
 
 	}
@@ -105,11 +107,11 @@ public class OneOnOneArena implements Arena {
 
 	@Override
 	public void endRound() {
-		if (firstGladiator.isAlive() && !secondGladiator.isAlive()) {
+		if (fighter1.isAlive() && !fighter2.isAlive()) {
 			setResults(ArenaResult.WIN, ArenaResult.LOSE);
 		}
 
-		else if (!firstGladiator.isAlive() && secondGladiator.isAlive()) {
+		else if (!fighter1.isAlive() && fighter2.isAlive()) {
 			setResults(ArenaResult.LOSE, ArenaResult.WIN);
 		} else {
 			setResults(ArenaResult.TIED, ArenaResult.TIED);
@@ -127,21 +129,21 @@ public class OneOnOneArena implements Arena {
 	}
 
 	@Override
-	public void removeGladiator(Gladiator gladiator) {
-		gladiators.remove(gladiator);
+	public void removeFighter(Fightable gladiator) {
+		fighters.remove(gladiator);
 	}
 
 	@Override
-	public void removeGladiators(Set<Gladiator> gladiators) {
-		for (Gladiator gladiator : gladiators) {
-			this.gladiators.remove(gladiator);
+	public void removeFighters(Set<Fightable> gladiators) {
+		for (Fightable gladiator : gladiators) {
+			this.fighters.remove(gladiator);
 		}
 
 	}
 
 	// heals dead gladiator by 100% and living gladiator by 25%
 	private void restoreHealthOfGladiators() {
-		gladiators.forEach(gladiator -> {
+		fighters.forEach(gladiator -> {
 			if (gladiator.isAlive()) {
 				gladiator.setCurrentHealthPoints(gladiator.getCurrentHealthPoints()
 						.add(gladiator.getTotalHealthPoints().divide(new BigDecimal(4))));
@@ -174,10 +176,11 @@ public class OneOnOneArena implements Arena {
 
 	@Override
 	public void startFight() {
-		Iterator<Gladiator> iterator = gladiators.iterator();
-		firstGladiator = iterator.next();
-		secondGladiator = iterator.next();
+		Iterator<Fightable> iterator = fighters.iterator();
+		fighter1 = iterator.next();
+		fighter2 = iterator.next();
 		for (int i = 1; i <= rounds; i++) {
+			System.out.println("Round " + i);
 			startRound();
 		}
 		endFight();
@@ -186,10 +189,12 @@ public class OneOnOneArena implements Arena {
 	@Override
 	public void startRound() {
 		boolean bothAlive = true;
-		while (bothAlive) {
-			firstGladiator.defend(secondGladiator.getTotalAttack());
-			secondGladiator.defend(firstGladiator.getTotalAttack());
-			bothAlive = firstGladiator.isAlive() && secondGladiator.isAlive();
+		boolean endlessFight = false;
+		while (bothAlive && !endlessFight) {
+			boolean gotDmg = fighter1.defend(fighter2.getTotalAttack());
+			boolean gotDmg2 = fighter2.defend(fighter1.getTotalAttack());
+			bothAlive = fighter1.isAlive() && fighter2.isAlive();
+			endlessFight = !gotDmg && !gotDmg2;
 		}
 		endRound();
 	}
