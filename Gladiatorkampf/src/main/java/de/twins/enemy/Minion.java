@@ -15,8 +15,9 @@ public class Minion extends AbstractFighter {
 	}
 
 	@Override
-	public boolean defend(BigDecimal attack) {
-		return false;
+	public BigDecimal defend(BigDecimal attack) {
+		// Invincible
+		return BigDecimal.ZERO;
 	}
 
 }

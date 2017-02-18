@@ -1,4 +1,4 @@
-package de.twins.arena;
+package de.twins.arena.exception;
 
 public class ArenaException extends RuntimeException {
 	public ArenaException(String message) {

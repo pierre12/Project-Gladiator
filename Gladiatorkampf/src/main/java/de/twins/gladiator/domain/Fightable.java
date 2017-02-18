@@ -13,7 +13,7 @@ public interface Fightable {
 	 * 
 	 * @return true falls der Schaden durchkam
 	 */
-	boolean defend(BigDecimal attack);
+	BigDecimal defend(BigDecimal attack);
 
 	/**
 	 * Returns the current health points of the {@link Fightable}.

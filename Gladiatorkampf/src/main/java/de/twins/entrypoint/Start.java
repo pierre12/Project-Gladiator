@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import de.twins.arena.Arena;
+import de.twins.arena.process.Arena;
 import de.twins.context.SpringConfig;
 import de.twins.enemy.Minion;
 import de.twins.gladiator.domain.Fightable;

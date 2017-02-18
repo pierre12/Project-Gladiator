@@ -1,14 +1,17 @@
-package de.twins.arena;
+package de.twins.arena.process;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
+import de.twins.arena.domain.ArenaResult;
+import de.twins.arena.domain.ArenaResult.Result;
+import de.twins.arena.domain.FightRecord;
+import de.twins.arena.exception.ArenaException;
 import de.twins.gladiator.domain.Fightable;
 
 /**
@@ -21,28 +24,22 @@ import de.twins.gladiator.domain.Fightable;
 public class OneOnOneArena implements Arena {
 
 	private Fightable fighter1;
+	private FightRecord recordOfFighter1;
 	private Fightable fighter2;
-	private Map<ArenaResult, Integer> resultForFirstGladiator;
-	private Map<ArenaResult, Integer> resultForSecondGladiator;
-
+	private FightRecord recordOfFighter2;
+	private ArenaResult result;
 	private Set<Fightable> fighters;
 
 	private int rounds;
 
 	public OneOnOneArena() {
 		fighters = new HashSet<>();
-		resetResults();
-		rounds = 500;
+		result = new ArenaResult();
+		rounds = 20;
 	}
 
 	private void resetResults() {
-		resultForFirstGladiator = new HashMap<ArenaResult, Integer>();
-		resultForSecondGladiator = new HashMap<ArenaResult, Integer>();
-		for (ArenaResult resultPossibility : ArenaResult.values()) {
-			resultForFirstGladiator.put(resultPossibility, 0);
-			resultForSecondGladiator.put(resultPossibility, 0);
-		}
-
+		result.resetResults();
 	}
 
 	public OneOnOneArena(Set<Fightable> gladiators, int rounds) {
@@ -87,8 +84,8 @@ public class OneOnOneArena implements Arena {
 	public void announceWinner() {
 		String winnerMessage = "Gladiator %s won the fight.With %d round win(s)";
 		String tiedMessage = "Both gladiators won %d round.";
-		Integer wonRoundsFirstGladiator = resultForFirstGladiator.get(ArenaResult.WIN);
-		Integer wonRoundsSecondGladiator = resultForSecondGladiator.get(ArenaResult.WIN);
+		Integer wonRoundsFirstGladiator = result.getWonRound(fighter1);
+		Integer wonRoundsSecondGladiator = result.getWonRound(fighter2);
 		if (wonRoundsFirstGladiator > wonRoundsSecondGladiator) {
 			System.out.println(String.format(winnerMessage, fighter1.getName(), wonRoundsFirstGladiator));
 		} else if (wonRoundsFirstGladiator == wonRoundsSecondGladiator) {
@@ -101,31 +98,51 @@ public class OneOnOneArena implements Arena {
 
 	@Override
 	public void endFight() {
+		BigDecimal dmgGotFighter1 = calculateDmgInflicted(fighter1);
+		BigDecimal dmgGotFighter2 = calculateDmgInflicted(fighter2);
+		BigDecimal dmgMadeFighter1 = calculateDmgIncome(fighter1);
+		BigDecimal dmgMadeFighter2 = calculateDmgIncome(fighter2);
+		System.out.println(
+				"Fighter1 made " + dmgMadeFighter1.toString() + " dmg and got " + dmgGotFighter1.toString() + " dmg.");
+		System.out.println(
+				"Fighter2 made " + dmgMadeFighter2.toString() + " dmg and got " + dmgGotFighter2.toString() + " dmg.");
 		announceWinner();
 		resetResults();
+	}
+
+	private BigDecimal calculateDmgIncome(Fightable fighter) {
+		List<FightRecord> records = this.result.getFightRecordsByFightable(fighter);
+		BigDecimal dmgIncome = BigDecimal.ZERO;
+		for (FightRecord fightRecord : records) {
+			dmgIncome = dmgIncome.add(fightRecord.getDmgTaken());
+		}
+		return dmgIncome;
+	}
+
+	private BigDecimal calculateDmgInflicted(Fightable fighter) {
+		List<FightRecord> records = this.result.getFightRecordsByFightable(fighter);
+		BigDecimal dmgInflicted = BigDecimal.ZERO;
+		for (FightRecord fightRecord : records) {
+			dmgInflicted = dmgInflicted.add(fightRecord.getDmgTaken());
+		}
+		return dmgInflicted;
 	}
 
 	@Override
 	public void endRound() {
 		if (fighter1.isAlive() && !fighter2.isAlive()) {
-			setResults(ArenaResult.WIN, ArenaResult.LOSE);
-		}
-
-		else if (!fighter1.isAlive() && fighter2.isAlive()) {
-			setResults(ArenaResult.LOSE, ArenaResult.WIN);
+			setResults(Result.WIN, Result.LOSE);
+		} else if (!fighter1.isAlive() && fighter2.isAlive()) {
+			setResults(Result.LOSE, Result.WIN);
 		} else {
-			setResults(ArenaResult.TIED, ArenaResult.TIED);
+			setResults(Result.DRAW, Result.DRAW);
 		}
+		this.result.addRecord(recordOfFighter1);
+		this.result.addRecord(recordOfFighter2);
+		recordOfFighter1 = new FightRecord(this.fighter1);
+		recordOfFighter2 = new FightRecord(this.fighter2);
 		restoreHealthOfGladiators();
 
-	}
-
-	public Map<ArenaResult, Integer> getResultForFirstGladiator() {
-		return new HashMap<>(resultForFirstGladiator);
-	}
-
-	public Map<ArenaResult, Integer> getResultForSecondGladiator() {
-		return new HashMap<>(resultForSecondGladiator);
 	}
 
 	@Override
@@ -164,9 +181,9 @@ public class OneOnOneArena implements Arena {
 	 * @param result
 	 *            result of the second gladiator
 	 */
-	private void setResults(ArenaResult resultOfFirst, ArenaResult resultOfSecond) {
-		resultForFirstGladiator.put(resultOfFirst, resultForFirstGladiator.get(resultOfFirst) + 1);
-		resultForSecondGladiator.put(resultOfSecond, resultForSecondGladiator.get(resultOfSecond) + 1);
+	private void setResults(Result resultOfFirst, Result resultOfSecond) {
+		this.recordOfFighter1.setResult(resultOfFirst);
+		this.recordOfFighter2.setResult(resultOfSecond);
 	}
 
 	@Override
@@ -179,11 +196,18 @@ public class OneOnOneArena implements Arena {
 		Iterator<Fightable> iterator = fighters.iterator();
 		fighter1 = iterator.next();
 		fighter2 = iterator.next();
+		createOrResetFightRecordsForNewRound();
 		for (int i = 1; i <= rounds; i++) {
 			System.out.println("Round " + i);
 			startRound();
 		}
+
 		endFight();
+	}
+
+	private void createOrResetFightRecordsForNewRound() {
+		recordOfFighter1 = new FightRecord(fighter1);
+		recordOfFighter2 = new FightRecord(fighter2);
 	}
 
 	@Override
@@ -191,10 +215,14 @@ public class OneOnOneArena implements Arena {
 		boolean bothAlive = true;
 		boolean endlessFight = false;
 		while (bothAlive && !endlessFight) {
-			boolean gotDmg = fighter1.defend(fighter2.getTotalAttack());
-			boolean gotDmg2 = fighter2.defend(fighter1.getTotalAttack());
+			BigDecimal dmgDoneToFighter1 = fighter1.defend(fighter2.getTotalAttack());
+			recordOfFighter1.addDmgTaken(dmgDoneToFighter1);
+			recordOfFighter2.addDmgInflicted(dmgDoneToFighter1);
+			BigDecimal damageDoneToFighter2 = fighter2.defend(fighter1.getTotalAttack());
+			recordOfFighter2.addDmgTaken(damageDoneToFighter2);
+			recordOfFighter1.addDmgInflicted(damageDoneToFighter2);
 			bothAlive = fighter1.isAlive() && fighter2.isAlive();
-			endlessFight = !gotDmg && !gotDmg2;
+			endlessFight = !dmgDoneToFighter1.equals(BigDecimal.ZERO) && !damageDoneToFighter2.equals(BigDecimal.ZERO);
 		}
 		endRound();
 	}

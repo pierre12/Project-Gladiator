@@ -1,4 +1,4 @@
-package de.twins.arena;
+package de.twins.arena.process;
 
 import java.util.Set;
 

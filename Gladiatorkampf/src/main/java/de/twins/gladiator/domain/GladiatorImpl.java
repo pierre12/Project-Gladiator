@@ -54,13 +54,13 @@ public class GladiatorImpl extends AbstractFighter implements Gladiator {
 	 * @see de.twins.gladiator.domain.Gladiator#defend(java.math.BigDecimal)
 	 */
 	@Override
-	public boolean defend(BigDecimal attack) {
+	public BigDecimal defend(BigDecimal attack) {
 		BigDecimal dmg = attack.subtract(totalDefense);
 		if (dmg.compareTo(BigDecimal.ZERO) > 0) {
 			setCurrentHealthPoints(getCurrentHealthPoints().subtract(dmg));
-			return true;
+			return dmg;
 		}
-		return false;
+		return BigDecimal.ZERO;
 	}
 
 	/**
