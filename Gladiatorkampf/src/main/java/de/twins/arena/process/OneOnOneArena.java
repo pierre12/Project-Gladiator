@@ -222,7 +222,7 @@ public class OneOnOneArena implements Arena {
 			recordOfFighter2.addDmgTaken(damageDoneToFighter2);
 			recordOfFighter1.addDmgInflicted(damageDoneToFighter2);
 			bothAlive = fighter1.isAlive() && fighter2.isAlive();
-			endlessFight = !dmgDoneToFighter1.equals(BigDecimal.ZERO) && !damageDoneToFighter2.equals(BigDecimal.ZERO);
+			endlessFight = dmgDoneToFighter1.equals(BigDecimal.ZERO) && damageDoneToFighter2.equals(BigDecimal.ZERO);
 		}
 		endRound();
 	}
