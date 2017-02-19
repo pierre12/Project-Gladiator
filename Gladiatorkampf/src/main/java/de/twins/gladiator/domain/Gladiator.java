@@ -1,6 +1,7 @@
 package de.twins.gladiator.domain;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Map;
 
 import de.twins.gladiator.domain.Equipment.BodyPart;
@@ -20,7 +21,8 @@ public interface Gladiator extends Fightable {
 	 *            equipment which should be equipped.
 	 */
 	void addOrReplaceEquipment(Equipment equipment);
-
+	
+	void addOrReplaceEquipments(Collection<Equipment> equipment);
 
 
 	/**

@@ -16,8 +16,12 @@ public class Minion extends AbstractFighter {
 
 	@Override
 	public BigDecimal defend(BigDecimal attack) {
-		// Invincible
-		return BigDecimal.ZERO;
+		BigDecimal dmg = attack.subtract(this.totalDefense);
+		this.currentHealthPoints = this.currentHealthPoints.subtract(dmg);
+		if (dmg.compareTo(BigDecimal.ZERO) <= 0) {
+			return BigDecimal.ZERO;
+		}
+		return dmg;
 	}
 
 }

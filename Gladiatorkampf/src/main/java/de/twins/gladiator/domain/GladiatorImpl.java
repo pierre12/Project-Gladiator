@@ -1,6 +1,7 @@
 package de.twins.gladiator.domain;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -219,6 +220,14 @@ public class GladiatorImpl extends AbstractFighter implements Gladiator {
 		}
 	}
 	
+	@Override
+	public void addOrReplaceEquipments(Collection<Equipment> equipments) {
+		for (Equipment equipment : equipments) {
+			this.addOrReplaceEquipment(equipment);
+		}
+
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

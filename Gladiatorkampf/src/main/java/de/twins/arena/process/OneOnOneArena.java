@@ -83,7 +83,7 @@ public class OneOnOneArena implements Arena {
 	@Override
 	public void announceWinner() {
 		String winnerMessage = "Gladiator %s won the fight.With %d round win(s)";
-		String tiedMessage = "Both gladiators won %d round.";
+		String tiedMessage = "End Of The Match: Draw";
 		Integer wonRoundsFirstGladiator = result.getWonRound(fighter1);
 		Integer wonRoundsSecondGladiator = result.getWonRound(fighter2);
 		if (wonRoundsFirstGladiator > wonRoundsSecondGladiator) {
@@ -107,7 +107,6 @@ public class OneOnOneArena implements Arena {
 		System.out.println(
 				"Fighter2 made " + dmgMadeFighter2.toString() + " dmg and got " + dmgGotFighter2.toString() + " dmg.");
 		announceWinner();
-		resetResults();
 	}
 
 	private BigDecimal calculateDmgIncome(Fightable fighter) {
@@ -132,16 +131,28 @@ public class OneOnOneArena implements Arena {
 	public void endRound() {
 		if (fighter1.isAlive() && !fighter2.isAlive()) {
 			setResults(Result.WIN, Result.LOSE);
+			fighterWinsRound(fighter1);
 		} else if (!fighter1.isAlive() && fighter2.isAlive()) {
 			setResults(Result.LOSE, Result.WIN);
+			fighterWinsRound(fighter2);
 		} else {
 			setResults(Result.DRAW, Result.DRAW);
+			drawRound();
 		}
 		this.result.addRecord(recordOfFighter1);
 		this.result.addRecord(recordOfFighter2);
-		recordOfFighter1 = new FightRecord(this.fighter1);
-		recordOfFighter2 = new FightRecord(this.fighter2);
+		createOrResetFightRecordsForNewRound();
 		restoreHealthOfGladiators();
+
+	}
+
+	private void fighterWinsRound(Fightable fighter) {
+		System.out.println("Fighter " + fighter.getName() + " wins the Round.");
+
+	}
+
+	private void drawRound() {
+		System.out.println("Draw");
 
 	}
 
@@ -193,9 +204,12 @@ public class OneOnOneArena implements Arena {
 
 	@Override
 	public void startFight() {
+
 		Iterator<Fightable> iterator = fighters.iterator();
 		fighter1 = iterator.next();
 		fighter2 = iterator.next();
+
+		resetResults();
 		createOrResetFightRecordsForNewRound();
 		for (int i = 1; i <= rounds; i++) {
 			System.out.println("Round " + i);
@@ -225,6 +239,10 @@ public class OneOnOneArena implements Arena {
 			endlessFight = dmgDoneToFighter1.equals(BigDecimal.ZERO) && damageDoneToFighter2.equals(BigDecimal.ZERO);
 		}
 		endRound();
+	}
+
+	public ArenaResult getResult() {
+		return this.result;
 	}
 
 }
