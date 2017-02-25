@@ -1,6 +1,7 @@
 package de.twins.arena.process;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -98,15 +99,21 @@ public class OneOnOneArena implements Arena {
 
 	@Override
 	public void endFight() {
+		reportDmg();
+		announceWinner();
+	}
+
+	private void reportDmg() {
 		BigDecimal dmgGotFighter1 = calculateDmgInflicted(fighter1);
 		BigDecimal dmgGotFighter2 = calculateDmgInflicted(fighter2);
 		BigDecimal dmgMadeFighter1 = calculateDmgIncome(fighter1);
 		BigDecimal dmgMadeFighter2 = calculateDmgIncome(fighter2);
 		System.out.println(
-				"Fighter1 made " + dmgMadeFighter1.toString() + " dmg and got " + dmgGotFighter1.toString() + " dmg.");
+				"Fighter1 made " + dmgMadeFighter1.setScale(2, RoundingMode.FLOOR) + " dmg and got "
+						+ dmgGotFighter1.setScale(2, RoundingMode.FLOOR) + " dmg.");
 		System.out.println(
-				"Fighter2 made " + dmgMadeFighter2.toString() + " dmg and got " + dmgGotFighter2.toString() + " dmg.");
-		announceWinner();
+				"Fighter2 made " + dmgMadeFighter2.setScale(2, RoundingMode.FLOOR) + " dmg and got "
+						+ dmgGotFighter2.setScale(2, RoundingMode.FLOOR) + " dmg.");
 	}
 
 	private BigDecimal calculateDmgIncome(Fightable fighter) {
@@ -122,7 +129,7 @@ public class OneOnOneArena implements Arena {
 		List<FightRecord> records = this.result.getFightRecordsByFightable(fighter);
 		BigDecimal dmgInflicted = BigDecimal.ZERO;
 		for (FightRecord fightRecord : records) {
-			dmgInflicted = dmgInflicted.add(fightRecord.getDmgTaken());
+			dmgInflicted = dmgInflicted.add(fightRecord.getDmgDone());
 		}
 		return dmgInflicted;
 	}
@@ -233,8 +240,8 @@ public class OneOnOneArena implements Arena {
 			recordOfFighter1.addDmgTaken(dmgDoneToFighter1);
 			recordOfFighter2.addDmgInflicted(dmgDoneToFighter1);
 			BigDecimal damageDoneToFighter2 = fighter2.defend(fighter1.getTotalAttack());
-			recordOfFighter2.addDmgTaken(damageDoneToFighter2);
 			recordOfFighter1.addDmgInflicted(damageDoneToFighter2);
+			recordOfFighter2.addDmgTaken(damageDoneToFighter2);
 			bothAlive = fighter1.isAlive() && fighter2.isAlive();
 			endlessFight = dmgDoneToFighter1.equals(BigDecimal.ZERO) && damageDoneToFighter2.equals(BigDecimal.ZERO);
 		}

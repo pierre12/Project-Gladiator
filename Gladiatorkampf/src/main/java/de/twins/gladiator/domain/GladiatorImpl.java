@@ -51,17 +51,23 @@ public class GladiatorImpl extends AbstractFighter implements Gladiator {
 
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.twins.gladiator.domain.Gladiator#defend(java.math.BigDecimal)
 	 */
 	@Override
 	public BigDecimal defend(BigDecimal attack) {
-		BigDecimal dmg = attack.subtract(totalDefense);
-		if (dmg.compareTo(BigDecimal.ZERO) > 0) {
-			setCurrentHealthPoints(getCurrentHealthPoints().subtract(dmg));
-			return dmg;
+		double dmgRes = getDMGResistant();
+		BigDecimal nettoDmg = attack.multiply(new BigDecimal(1 - dmgRes));
+		if (nettoDmg.compareTo(BigDecimal.ZERO) > 0) {
+			setCurrentHealthPoints(getCurrentHealthPoints().subtract(nettoDmg));
+			return nettoDmg;
 		}
 		return BigDecimal.ZERO;
+	}
+
+	private double getDMGResistant() {
+		double doubleValue = this.getTotalDefense().doubleValue();
+		return Math.log(doubleValue) / 10;
 	}
 
 	/**
