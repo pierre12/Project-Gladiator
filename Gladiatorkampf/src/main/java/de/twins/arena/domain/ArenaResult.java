@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import de.twins.gladiator.domain.Fightable;
+import de.twins.gladiator.domain.Persistable;
 
-public class ArenaResult {
+public class ArenaResult extends Persistable {
 
 	public enum Result {
 		WIN, LOSE, DRAW

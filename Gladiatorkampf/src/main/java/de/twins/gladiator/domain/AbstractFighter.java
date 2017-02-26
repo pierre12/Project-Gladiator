@@ -2,7 +2,13 @@ package de.twins.gladiator.domain;
 
 import java.math.BigDecimal;
 
-public abstract class AbstractFighter implements Fightable {
+import javax.persistence.MappedSuperclass;
+
+
+@MappedSuperclass
+public abstract class AbstractFighter extends Persistable implements Fightable {
+
+
 
 	protected String name;
 	protected BigDecimal baseHealthPoints;

@@ -13,7 +13,7 @@ import org.junit.Test;
 import de.twins.arena.domain.ArenaResult;
 import de.twins.arena.domain.FightRecord;
 import de.twins.arena.process.OneOnOneArena;
-import de.twins.enemy.Minion;
+import de.twins.enemy.domain.Minion;
 import de.twins.gladiator.domain.Fightable;
 
 public class OneOnOneArenaTest {

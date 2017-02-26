@@ -7,6 +7,7 @@ import java.util.Map;
 
 import de.twins.gladiator.domain.Equipment.BodyPart;
 
+//@Entity
 public class GladiatorImpl extends AbstractFighter implements Gladiator {
 
 

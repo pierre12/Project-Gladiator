@@ -2,13 +2,19 @@ package de.twins.gladiator.domain;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 /**
  * Equipment used for the gladiatorto enhance his attributes.
  * 
  * @author Pierre
  *
  */
-public class Equipment {
+
+@Entity
+public class Equipment extends Persistable {
 
 	public enum Rarity {
 		COMMON, LEGENDARY, EPIC, MAGIC, UNCOMMON;
@@ -18,7 +24,9 @@ public class Equipment {
 		HEAD, ARMS, BODY, LEGS, HANDS
 	}
 
+	@Enumerated(EnumType.STRING)
 	private Rarity rarity;
+	@Enumerated(EnumType.STRING)
 	private BodyPart bodyPart;
 	private BigDecimal healthPoints;
 	private BigDecimal attack;
@@ -73,6 +81,13 @@ public class Equipment {
 		return rarity;
 	}
 
+	public void setRarity(Rarity rarity) {
+		this.rarity = rarity;
+	}
+
+	public void setHealthPoints(BigDecimal healthPoints) {
+		this.healthPoints = healthPoints;
+	}
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

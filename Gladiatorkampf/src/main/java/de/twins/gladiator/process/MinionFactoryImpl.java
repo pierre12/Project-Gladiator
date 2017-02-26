@@ -2,7 +2,7 @@ package de.twins.gladiator.process;
 
 import java.math.BigDecimal;
 
-import de.twins.enemy.Minion;
+import de.twins.enemy.domain.Minion;
 
 public class MinionFactoryImpl implements EnemyFactory {
 

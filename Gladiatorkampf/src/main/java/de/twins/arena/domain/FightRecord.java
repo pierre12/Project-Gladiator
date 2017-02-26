@@ -5,8 +5,9 @@ import java.util.List;
 
 import de.twins.arena.domain.ArenaResult.Result;
 import de.twins.gladiator.domain.Fightable;
+import de.twins.gladiator.domain.Persistable;
 
-public class FightRecord {
+public class FightRecord extends Persistable {
 
 	private Fightable fighter;
 
