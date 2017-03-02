@@ -3,17 +3,26 @@ package de.twins.arena.domain;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 import de.twins.arena.domain.ArenaResult.Result;
-import de.twins.gladiator.domain.Fightable;
+import de.twins.gladiator.domain.AbstractFighter;
 import de.twins.gladiator.domain.Persistable;
 
+@Entity
 public class FightRecord extends Persistable {
 
-	private Fightable fighter;
+	@ManyToOne
+	private AbstractFighter fighter;
 
-	private List<Fightable> enemies;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<AbstractFighter> enemies;
 
-	private List<Fightable> allies;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<AbstractFighter> allies;
 
 	private BigDecimal dmgTaken;
 
@@ -21,17 +30,17 @@ public class FightRecord extends Persistable {
 
 	private Result result;
 
-	public FightRecord(Fightable fighter) {
+	public FightRecord(AbstractFighter fighter) {
 		this.fighter = fighter;
 		dmgTaken = BigDecimal.ZERO;
 		dmgInflicted = BigDecimal.ZERO;
 	}
 
-	public Fightable getFightable() {
+	public AbstractFighter getFighter() {
 		return fighter;
 	}
 
-	public void setFightable(Fightable fightable) {
+	public void setFigher(AbstractFighter fightable) {
 		this.fighter = fightable;
 	}
 
@@ -51,11 +60,11 @@ public class FightRecord extends Persistable {
 		this.dmgInflicted = dmgDone;
 	}
 
-	public List<Fightable> getEnemies() {
+	public List<AbstractFighter> getEnemies() {
 		return enemies;
 	}
 
-	public List<Fightable> getAllies() {
+	public List<AbstractFighter> getAllies() {
 		return allies;
 	}
 
@@ -63,11 +72,11 @@ public class FightRecord extends Persistable {
 		return result;
 	}
 
-	public void setEnemies(List<Fightable> enemies) {
+	public void setEnemies(List<AbstractFighter> enemies) {
 		this.enemies = enemies;
 	}
 
-	public void setAllies(List<Fightable> allies) {
+	public void setAllies(List<AbstractFighter> allies) {
 		this.allies = allies;
 	}
 

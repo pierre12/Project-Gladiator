@@ -9,10 +9,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import de.twins.arena.process.OneOnOneArena;
 import de.twins.enemy.domain.Minion;
 import de.twins.enemy.persistence.MinionPersistence;
-import de.twins.gladiator.domain.Equipment;
-import de.twins.gladiator.persistence.EquipmentPersistence;
+import de.twins.gladiator.domain.GladiatorImpl;
+import de.twins.gladiator.persistence.GladiatorPersistence;
 import de.twins.gladiator.process.SimpleEquipFactoryImpl;
 
 @SpringBootApplication
@@ -26,13 +27,18 @@ public class Start {
 	}
 
 	@Autowired
-	public void start(MinionPersistence p, EquipmentPersistence ep) {
-		p.save(new Minion("First Monster", BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO));
+	public void start(GladiatorPersistence gp, OneOnOneArena arena, MinionPersistence mp) {
+		GladiatorImpl g = new GladiatorImpl("Rene", BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,
+				new SimpleEquipFactoryImpl().randomFullSet());
+		
+		gp.save(g);
+		Minion m = new Minion("Broly", BigDecimal.TEN, BigDecimal.TEN, BigDecimal.ONE);
+		mp.save(m);
+		arena.addFighter(g);
+		arena.addFighter(m);
+		arena.startFight();
+		System.out.println("Geschafft");
 
-		SimpleEquipFactoryImpl simpleEquipFactoryImpl = new SimpleEquipFactoryImpl();
-		for (int i = 100; i > 0; i--) {
-			Equipment createRandomEquipment = simpleEquipFactoryImpl.createRandomEquipment();
-			ep.save(createRandomEquipment);
-		}
+
 	}
 }

@@ -2,10 +2,13 @@ package de.twins.gladiator.domain;
 
 import java.math.BigDecimal;
 
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class AbstractFighter extends Persistable implements Fightable {
 
 
@@ -19,6 +22,12 @@ public abstract class AbstractFighter extends Persistable implements Fightable {
 	protected BigDecimal totalHealthPoints;
 	protected BigDecimal totalAttack;
 	protected BigDecimal totalDefense;
+
+	/**
+	 * Default-Konstruktor
+	 */
+	public AbstractFighter() {
+	}
 	/**
 	 * 
 	 * Konstruktor

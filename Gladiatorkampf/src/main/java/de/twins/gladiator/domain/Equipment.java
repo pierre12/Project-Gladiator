@@ -33,6 +33,12 @@ public class Equipment extends Persistable {
 
 	private BigDecimal defense;
 
+	/**
+	 * Default-Konstruktor
+	 */
+	public Equipment() {
+		;
+	}
 	public Equipment(BodyPart bodyPart, BigDecimal hp, BigDecimal attack, BigDecimal defense, Rarity rarity) {
 		this(bodyPart, hp, attack, defense);
 		this.rarity = rarity;

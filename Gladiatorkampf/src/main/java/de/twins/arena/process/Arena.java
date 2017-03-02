@@ -2,6 +2,7 @@ package de.twins.arena.process;
 
 import java.util.Set;
 
+import de.twins.gladiator.domain.AbstractFighter;
 import de.twins.gladiator.domain.Fightable;
 
 /**
@@ -17,7 +18,7 @@ public interface Arena {
 	 * @param gladiator
 	 *            {@link Fightable} which is added to the arena.
 	 */
-	void addFighter(Fightable gladiator);
+	void addFighter(AbstractFighter gladiator);
 
 	/**
 	 * Adds a set of {@link Fightable} to the arena.
@@ -25,7 +26,7 @@ public interface Arena {
 	 * @param gladiators
 	 *            {@link Fightable} which should be added to the arena.
 	 */
-	void addFighters(Set<Fightable> gladiators);
+	void addFighters(Set<AbstractFighter> gladiators);
 
 	/**
 	 * Announce the winner of the fight.

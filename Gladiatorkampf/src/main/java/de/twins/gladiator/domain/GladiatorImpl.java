@@ -5,14 +5,27 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.MapKey;
+import javax.persistence.OneToMany;
+
 import de.twins.gladiator.domain.Equipment.BodyPart;
 
-//@Entity
+@Entity
 public class GladiatorImpl extends AbstractFighter implements Gladiator {
 
-
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@MapKey(name = "bodyPart")
 	private Map<BodyPart, Equipment> equipments;
 
+	/**
+	 * Default-Konstruktor
+	 */
+	public GladiatorImpl() {
+
+	}
 	public GladiatorImpl(String name, BigDecimal healthPoints, BigDecimal attack, BigDecimal defense,
 			Map<BodyPart, Equipment> equipments) {
 		super(name, healthPoints, attack, defense);

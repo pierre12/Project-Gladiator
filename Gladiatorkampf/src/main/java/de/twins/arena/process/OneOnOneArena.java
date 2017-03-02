@@ -7,12 +7,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import de.twins.arena.domain.ArenaResult;
 import de.twins.arena.domain.ArenaResult.Result;
 import de.twins.arena.domain.FightRecord;
 import de.twins.arena.exception.ArenaException;
+import de.twins.arena.persistence.ArenaResultPersistence;
+import de.twins.gladiator.domain.AbstractFighter;
 import de.twins.gladiator.domain.Fightable;
 
 /**
@@ -22,14 +27,18 @@ import de.twins.gladiator.domain.Fightable;
  *
  */
 @Component
+@Transactional
 public class OneOnOneArena implements Arena {
 
-	private Fightable fighter1;
+	@Autowired
+	private ArenaResultPersistence arenaResultPersistence;
+
+	private AbstractFighter fighter1;
 	private FightRecord recordOfFighter1;
-	private Fightable fighter2;
+	private AbstractFighter fighter2;
 	private FightRecord recordOfFighter2;
 	private ArenaResult result;
-	private Set<Fightable> fighters;
+	private Set<AbstractFighter> fighters;
 
 	private int rounds;
 
@@ -43,7 +52,7 @@ public class OneOnOneArena implements Arena {
 		result.resetResults();
 	}
 
-	public OneOnOneArena(Set<Fightable> gladiators, int rounds) {
+	public OneOnOneArena(Set<AbstractFighter> gladiators, int rounds) {
 		super();
 		this.fighters = gladiators;
 		this.rounds = rounds;
@@ -51,7 +60,7 @@ public class OneOnOneArena implements Arena {
 	}
 
 	@Override
-	public void addFighter(Fightable gladiator) {
+	public void addFighter(AbstractFighter gladiator) {
 		if (gladiator == null) {
 			throw new ArenaException("Gladiator set must not be null");
 		} else if (fighters.size() == 2) {
@@ -65,7 +74,7 @@ public class OneOnOneArena implements Arena {
 	}
 
 	@Override
-	public void addFighters(Set<Fightable> fighter) {
+	public void addFighters(Set<AbstractFighter> fighter) {
 		if (fighter == null) {
 			throw new ArenaException("Gladiators set must not be null");
 		}
@@ -74,7 +83,7 @@ public class OneOnOneArena implements Arena {
 					"Arena does only allows two Gladiators but it was tried to increase the number of gladiators to "
 							+ this.fighters.size() + fighter.size());
 		} else {
-			for (Fightable fightable : fighter) {
+			for (AbstractFighter fightable : fighter) {
 				this.fighters.add(fightable);
 			}
 		}
@@ -101,6 +110,8 @@ public class OneOnOneArena implements Arena {
 	public void endFight() {
 		reportDmg();
 		announceWinner();
+
+		arenaResultPersistence.save(this.result);
 	}
 
 	private void reportDmg() {
@@ -116,7 +127,7 @@ public class OneOnOneArena implements Arena {
 						+ dmgGotFighter2.setScale(2, RoundingMode.FLOOR) + " dmg.");
 	}
 
-	private BigDecimal calculateDmgIncome(Fightable fighter) {
+	private BigDecimal calculateDmgIncome(AbstractFighter fighter) {
 		List<FightRecord> records = this.result.getFightRecordsByFightable(fighter);
 		BigDecimal dmgIncome = BigDecimal.ZERO;
 		for (FightRecord fightRecord : records) {
@@ -125,7 +136,7 @@ public class OneOnOneArena implements Arena {
 		return dmgIncome;
 	}
 
-	private BigDecimal calculateDmgInflicted(Fightable fighter) {
+	private BigDecimal calculateDmgInflicted(AbstractFighter fighter) {
 		List<FightRecord> records = this.result.getFightRecordsByFightable(fighter);
 		BigDecimal dmgInflicted = BigDecimal.ZERO;
 		for (FightRecord fightRecord : records) {
@@ -212,7 +223,7 @@ public class OneOnOneArena implements Arena {
 	@Override
 	public void startFight() {
 
-		Iterator<Fightable> iterator = fighters.iterator();
+		Iterator<AbstractFighter> iterator = fighters.iterator();
 		fighter1 = iterator.next();
 		fighter2 = iterator.next();
 
