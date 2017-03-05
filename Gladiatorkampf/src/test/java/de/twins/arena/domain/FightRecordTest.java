@@ -17,19 +17,19 @@ public class FightRecordTest {
 	}
 
 	@Test
-	public void shouldAddDmgTaken() throws Exception {
-		assertThat(testee.getDmgTaken(), is(BigDecimal.ZERO));
-		testee.addDmgTaken(BigDecimal.ONE);
-		testee.addDmgTaken(BigDecimal.ONE);
-		assertThat(testee.getDmgTaken().longValueExact(), is(2l));
-	}
-
-	@Test
 	public void shouldAddDmgInflicted() throws Exception {
 		assertThat(testee.getDmgInflicted(), is(BigDecimal.ZERO));
 		testee.addDmgInflicted(BigDecimal.ONE);
 		testee.addDmgInflicted(BigDecimal.ONE);
 		assertThat(testee.getDmgInflicted().longValueExact(), is(2l));
+	}
+
+	@Test
+	public void shouldAddDmgTaken() throws Exception {
+		assertThat(testee.getDmgTaken(), is(BigDecimal.ZERO));
+		testee.addDmgTaken(BigDecimal.ONE);
+		testee.addDmgTaken(BigDecimal.ONE);
+		assertThat(testee.getDmgTaken().longValueExact(), is(2l));
 	}
 
 }

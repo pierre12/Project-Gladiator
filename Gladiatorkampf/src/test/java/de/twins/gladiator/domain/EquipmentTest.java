@@ -20,6 +20,11 @@ public class EquipmentTest {
 	}
 
 	@Test
+	public void shouldPrintRelevantData(){
+		assertThat(testee.toString(), is("Attack:1\nDefense:1\nHp:1\nBodypart:BODY\nRarity:EPIC\n"));
+	}
+
+	@Test
 	public void shouldSetStats() {
 
 		assertThat(testee.getAttack(), is(BigDecimal.ONE));
@@ -27,10 +32,5 @@ public class EquipmentTest {
 		assertThat(testee.getHealthPoints(), is(BigDecimal.ONE));
 		assertThat(testee.getBodyPart(), is(BodyPart.BODY));
 		assertThat(testee.getRarity(), is(Rarity.EPIC));
-	}
-
-	@Test
-	public void shouldPrintRelevantData(){
-		assertThat(testee.toString(), is("Attack:1\nDefense:1\nHp:1\nBodypart:BODY\nRarity:EPIC\n"));
 	}
 }

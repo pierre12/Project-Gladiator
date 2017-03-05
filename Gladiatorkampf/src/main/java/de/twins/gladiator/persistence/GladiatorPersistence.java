@@ -3,9 +3,9 @@ package de.twins.gladiator.persistence;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import de.twins.gladiator.domain.GladiatorImpl;
+import de.twins.gladiator.domain.Gladiator;
 
 @Repository
-public interface GladiatorPersistence extends CrudRepository<GladiatorImpl, Integer> {
+public interface GladiatorPersistence extends CrudRepository<Gladiator, Integer> {
 
 }

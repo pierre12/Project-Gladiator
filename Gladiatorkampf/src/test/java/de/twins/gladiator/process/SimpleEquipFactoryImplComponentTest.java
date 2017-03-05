@@ -19,6 +19,13 @@ import de.twins.gladiator.domain.Equipment.Rarity;
 @ContextConfiguration(classes = { SimpleEquipFactoryImplComponentTest.Config.class })
 @TestPropertySource("equipment_test.properties")
 public class SimpleEquipFactoryImplComponentTest {
+	static class Config {
+		@Bean
+		public SimpleEquipFactoryImpl factoryImpl() {
+			return new SimpleEquipFactoryImpl();
+		}
+	}
+
 	@Autowired
 	SimpleEquipFactoryImpl testee;
 
@@ -47,12 +54,5 @@ public class SimpleEquipFactoryImplComponentTest {
 		}
 
 
-	}
-
-	static class Config {
-		@Bean
-		public SimpleEquipFactoryImpl factoryImpl() {
-			return new SimpleEquipFactoryImpl();
-		}
 	}
 }

@@ -16,12 +16,12 @@ import javax.persistence.Enumerated;
 @Entity
 public class Equipment extends Persistable {
 
-	public enum Rarity {
-		COMMON, LEGENDARY, EPIC, MAGIC, UNCOMMON;
-	}
-
 	public enum BodyPart {
 		HEAD, ARMS, BODY, LEGS, HANDS
+	}
+
+	public enum Rarity {
+		COMMON, LEGENDARY, EPIC, MAGIC, UNCOMMON;
 	}
 
 	@Enumerated(EnumType.STRING)
@@ -38,16 +38,16 @@ public class Equipment extends Persistable {
 	 */
 	public Equipment() {
 	}
-	public Equipment(BodyPart bodyPart, BigDecimal hp, BigDecimal attack, BigDecimal defense, Rarity rarity) {
-		this(bodyPart, hp, attack, defense);
-		this.rarity = rarity;
-	}
 	public Equipment(BodyPart bodyPart, BigDecimal hp, BigDecimal attack, BigDecimal defense) {
 		super();
 		this.bodyPart = bodyPart;
 		this.healthPoints = hp;
 		this.attack = attack;
 		this.defense = defense;
+	}
+	public Equipment(BodyPart bodyPart, BigDecimal hp, BigDecimal attack, BigDecimal defense, Rarity rarity) {
+		this(bodyPart, hp, attack, defense);
+		this.rarity = rarity;
 	}
 
 	public BigDecimal getAttack() {
@@ -66,6 +66,10 @@ public class Equipment extends Persistable {
 		return healthPoints;
 	}
 
+	public Rarity getRarity() {
+		return rarity;
+	}
+
 	public void setAttack(BigDecimal attack) {
 		this.attack = attack;
 	}
@@ -78,20 +82,16 @@ public class Equipment extends Persistable {
 		this.defense = defense;
 	}
 
+	public void setHealthPoints(BigDecimal healthPoints) {
+		this.healthPoints = healthPoints;
+	}
+
 	public void setHp(BigDecimal hp) {
 		this.healthPoints = hp;
 	}
 
-	public Rarity getRarity() {
-		return rarity;
-	}
-
 	public void setRarity(Rarity rarity) {
 		this.rarity = rarity;
-	}
-
-	public void setHealthPoints(BigDecimal healthPoints) {
-		this.healthPoints = healthPoints;
 	}
 	@Override
 	public String toString() {

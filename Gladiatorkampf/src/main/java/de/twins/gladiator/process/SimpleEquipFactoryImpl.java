@@ -30,36 +30,12 @@ public class SimpleEquipFactoryImpl implements EquipmentFactory {
 		return createRandomEquipmentWithRarityGrade(bodypart, getRandomRarity());
 	}
 
-	private BodyPart getRandomBodyPart() {
-		BodyPart[] bodyParts = BodyPart.values();
-		return bodyParts[(int) (Math.random() * bodyParts.length)];
-	}
-
-	private Rarity getRandomRarity() {
-		Rarity[] rarities = Rarity.values();
-		return rarities[(int) (Math.random() * rarities.length)];
-	}
-
 	@Override
 	public Equipment createRandomEquipmentWithRarityGrade(BodyPart bodypart, Rarity rarity) {
 		BigDecimal hp = randomHp(rarity);
 		BigDecimal attack = randomDefense(rarity);
 		BigDecimal defense = randomAttack(rarity);
 		return  new Equipment(bodypart, hp, attack, defense, rarity);
-	}
-
-	private BigDecimal randomHp(Rarity rarity) {
-		int maxHp = getProperty("healthpoints", rarity);
-		return new BigDecimal(randomizeValue(maxHp));
-	}
-
-	private double randomizeValue(int maxHp) {
-		return Math.random() * maxHp + 1;
-	}
-
-	private BigDecimal randomDefense(Rarity rarity) {
-		int defense = getProperty("defense", rarity);
-		return new BigDecimal(randomizeValue(defense));
 	}
 
 	/*
@@ -70,11 +46,27 @@ public class SimpleEquipFactoryImpl implements EquipmentFactory {
 		return Integer.parseInt(env.getProperty(PREFIX + baseKey + "." + rarity.toString().toLowerCase(), "0"));
 	}
 
+	private BodyPart getRandomBodyPart() {
+		BodyPart[] bodyParts = BodyPart.values();
+		return bodyParts[(int) (Math.random() * bodyParts.length)];
+	}
+
+	private Rarity getRandomRarity() {
+		Rarity[] rarities = Rarity.values();
+		return rarities[(int) (Math.random() * rarities.length)];
+	}
+
 	private BigDecimal randomAttack(Rarity rarity) {
 		int attack = getProperty("attack", rarity);
 		return new BigDecimal(randomizeValue(attack));
 	}
 
+	private BigDecimal randomDefense(Rarity rarity) {
+		int defense = getProperty("defense", rarity);
+		return new BigDecimal(randomizeValue(defense));
+	}
+
+	@Override
 	public Map<BodyPart, Equipment> randomFullSet() {
 		Map<BodyPart, Equipment> equipmentSet = new HashMap<>();
 		for (BodyPart bodyPart : BodyPart.values()) {
@@ -82,5 +74,14 @@ public class SimpleEquipFactoryImpl implements EquipmentFactory {
 			equipmentSet.put(bodyPart, randomPart);
 		}
 		return equipmentSet;
+	}
+
+	private BigDecimal randomHp(Rarity rarity) {
+		int maxHp = getProperty("healthpoints", rarity);
+		return new BigDecimal(randomizeValue(maxHp));
+	}
+
+	private double randomizeValue(int maxHp) {
+		return Math.random() * maxHp + 1;
 	}
 }

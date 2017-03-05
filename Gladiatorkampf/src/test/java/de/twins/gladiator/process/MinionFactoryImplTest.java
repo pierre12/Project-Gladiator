@@ -5,7 +5,6 @@ import static org.junit.Assert.assertThat;
 
 import java.math.BigDecimal;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import de.twins.enemy.domain.Minion;

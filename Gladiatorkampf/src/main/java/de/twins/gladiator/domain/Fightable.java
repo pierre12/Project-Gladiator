@@ -1,5 +1,6 @@
 package de.twins.gladiator.domain;
 
+
 import java.math.BigDecimal;
 
 public interface Fightable {
@@ -14,6 +15,27 @@ public interface Fightable {
 	 * @return true falls der Schaden durchkam
 	 */
 	BigDecimal defend(BigDecimal attack);
+
+	/**
+	 * Returns the base attack which is originated from the {@link Fightable}.
+	 * 
+	 * @return the base attack which is originated from the {@link Fightable}.
+	 */
+	BigDecimal getBaseAttack();
+
+	/**
+	 * Returns the base defense which is originated from the {@link Fightable}.
+	 * 
+	 * @return the base defense which is originated from the {@link Fightable}.
+	 */
+	BigDecimal getBaseDefense();
+
+	/**
+	 * Returns the base health points which is originated from the {@link Fightable}.
+	 * 
+	 * @return the base health points which is originated from the {@link Fightable}.
+	 */
+	BigDecimal getBaseHealthPoints();
 
 	/**
 	 * Returns the current health points of the {@link Fightable}.
@@ -61,10 +83,33 @@ public interface Fightable {
 	boolean isAlive();
 
 	/**
-	 * Sets the base attack of the gladiator
+	 * Sets the base attack of the {@link Fightable}.
+	 * @param baseAttack base attack which should be set.
+	 */
+	void setBaseAttack(BigDecimal baseAttack);
+	
+	/**
+	 * Sets the base attack of the {@link Fightable}.
+	 * @param baseAttack base attack which should be set.
+	 */
+	void setBaseDefense(BigDecimal baseDefense);
+	/**
+	 * Sets the base health points of the {@link Fightable}.
+	 * @param healthPoints base health points which should be set.
+	 */
+	void setBaseHealthPoints(BigDecimal healthPoints);
+	/**
+	 * Sets the base attack of the {@link Fightable}
 	 * 
 	 * @param healthPoints
 	 *            current health points which should be set.
 	 */
 	void setCurrentHealthPoints(BigDecimal healthPoints);
+	/**
+	 * Sets the name of the {@link Fightable}
+	 * @param name name which should be set.
+	 */
+	void setName(String name);
+	
+	
 }

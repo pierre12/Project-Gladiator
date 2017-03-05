@@ -1,9 +1,5 @@
 package de.twins.arena;
 
-import static org.hamcrest.CoreMatchers.any;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.verify;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -31,13 +27,6 @@ public class OneOnOneArenaTest {
 	@Mock
 	ArenaResultPersistence persistence;
 	
-	@Before
-	public void setUp() {
-		MockitoAnnotations.initMocks(this);
-		fighter1 = new Minion("Fighter1", new BigDecimal(11), new BigDecimal(100), new BigDecimal(100));
-		fighter2 = new Minion("Fighter2", new BigDecimal(11), new BigDecimal(10), new BigDecimal(10));
-	}
-
 	@Test(timeout = 5000)
 	public void drawFightsEnd() {
 		// timeout um einen endlosen kampf zu entgehen
@@ -49,6 +38,13 @@ public class OneOnOneArenaTest {
 		ArenaResult record = testee.getResult();
 		List<FightRecord> fightRecords = record.getRecords();
 		Assert.assertEquals(2 * 100, fightRecords.size());
+	}
+
+	@Before
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+		fighter1 = new Minion("Fighter1", new BigDecimal(11), new BigDecimal(100), new BigDecimal(100));
+		fighter2 = new Minion("Fighter2", new BigDecimal(11), new BigDecimal(10), new BigDecimal(10));
 	}
 	
 }

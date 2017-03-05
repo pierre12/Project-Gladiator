@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -45,13 +44,6 @@ public class ArenaResultTest {
 	}
 
 	@Test
-	public void shouldResetResults() {
-		testee.addRecord(fightRecordMock);
-		testee.resetResults();
-		assertThat(testee.getRecords().size(), is(0));
-	}
-
-	@Test
 	public void shouldGetFightRecordForFighter() {
 
 		List<FightRecord> fightRecordsForFighter = testee.getFightRecordsByFightable(fighterMock);
@@ -65,6 +57,13 @@ public class ArenaResultTest {
 		when(fightRecordMock2.getResult()).thenReturn(Result.LOSE);
 		int numberOfResult = testee.getNumberOfRoundsWithResult(fighterMock, Result.WIN);
 		assertThat(numberOfResult, is(1));
+	}
+
+	@Test
+	public void shouldResetResults() {
+		testee.addRecord(fightRecordMock);
+		testee.resetResults();
+		assertThat(testee.getRecords().size(), is(0));
 	}
 
 }

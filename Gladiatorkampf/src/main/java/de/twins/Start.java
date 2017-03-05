@@ -14,7 +14,7 @@ import org.springframework.context.annotation.PropertySource;
 import de.twins.arena.process.OneOnOneArena;
 import de.twins.enemy.domain.Minion;
 import de.twins.enemy.persistence.MinionPersistence;
-import de.twins.gladiator.domain.GladiatorImpl;
+import de.twins.gladiator.domain.Gladiator;
 import de.twins.gladiator.persistence.GladiatorPersistence;
 import de.twins.gladiator.process.SimpleEquipFactoryImpl;
 
@@ -24,19 +24,24 @@ import de.twins.gladiator.process.SimpleEquipFactoryImpl;
 @EnableAutoConfiguration
 public class Start {
 
+	public static void main(String[] args) {
+		SpringApplication.run(Start.class);
+	}
 	@Autowired
 	GladiatorPersistence gp;
 	@Autowired
 	OneOnOneArena arena;
+
 	@Autowired
 	MinionPersistence mp;
 
-	public static void main(String[] args) {
-		SpringApplication.run(Start.class);
+	@PostConstruct
+	public void init() {
+		start();
 	}
 
 	public void start() {
-		GladiatorImpl g = new GladiatorImpl("Rene", BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,
+		Gladiator g = new Gladiator("Rene", BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,
 				new SimpleEquipFactoryImpl().randomFullSet());
 
 		gp.save(g);
@@ -47,10 +52,5 @@ public class Start {
 		arena.startFight();
 		System.out.println("Geschafft");
 
-	}
-
-	@PostConstruct
-	public void init() {
-		start();
 	}
 }

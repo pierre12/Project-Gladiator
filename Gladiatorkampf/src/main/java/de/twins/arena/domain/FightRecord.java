@@ -36,61 +36,61 @@ public class FightRecord extends Persistable {
 		dmgInflicted = BigDecimal.ZERO;
 	}
 
-	public AbstractFighter getFighter() {
-		return fighter;
-	}
+	public void addDmgInflicted(BigDecimal damageDoneToFighter) {
+		dmgInflicted = this.dmgInflicted.add(damageDoneToFighter);
 
-	public void setFigher(AbstractFighter fightable) {
-		this.fighter = fightable;
-	}
-
-	public BigDecimal getDmgTaken() {
-		return dmgTaken;
-	}
-
-	public void setDmgTaken(BigDecimal dmgTaken) {
-		this.dmgTaken = dmgTaken;
-	}
-
-	public BigDecimal getDmgInflicted() {
-		return dmgInflicted;
-	}
-
-	public void setDmgInflicted(BigDecimal dmgDone) {
-		this.dmgInflicted = dmgDone;
-	}
-
-	public List<AbstractFighter> getEnemies() {
-		return enemies;
-	}
-
-	public List<AbstractFighter> getAllies() {
-		return allies;
-	}
-
-	public Result getResult() {
-		return result;
-	}
-
-	public void setEnemies(List<AbstractFighter> enemies) {
-		this.enemies = enemies;
-	}
-
-	public void setAllies(List<AbstractFighter> allies) {
-		this.allies = allies;
-	}
-
-	public void setResult(Result result) {
-		this.result = result;
 	}
 
 	public void addDmgTaken(BigDecimal damageDoneToFighter) {
 		dmgTaken = this.dmgTaken.add(damageDoneToFighter);
 	}
 
-	public void addDmgInflicted(BigDecimal damageDoneToFighter) {
-		dmgInflicted = this.dmgInflicted.add(damageDoneToFighter);
+	public List<AbstractFighter> getAllies() {
+		return allies;
+	}
 
+	public BigDecimal getDmgInflicted() {
+		return dmgInflicted;
+	}
+
+	public BigDecimal getDmgTaken() {
+		return dmgTaken;
+	}
+
+	public List<AbstractFighter> getEnemies() {
+		return enemies;
+	}
+
+	public AbstractFighter getFighter() {
+		return fighter;
+	}
+
+	public Result getResult() {
+		return result;
+	}
+
+	public void setAllies(List<AbstractFighter> allies) {
+		this.allies = allies;
+	}
+
+	public void setDmgInflicted(BigDecimal dmgDone) {
+		this.dmgInflicted = dmgDone;
+	}
+
+	public void setDmgTaken(BigDecimal dmgTaken) {
+		this.dmgTaken = dmgTaken;
+	}
+
+	public void setEnemies(List<AbstractFighter> enemies) {
+		this.enemies = enemies;
+	}
+
+	public void setFigher(AbstractFighter fightable) {
+		this.fighter = fightable;
+	}
+
+	public void setResult(Result result) {
+		this.result = result;
 	}
 
 }

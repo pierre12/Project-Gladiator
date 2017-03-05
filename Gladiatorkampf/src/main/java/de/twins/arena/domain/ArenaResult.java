@@ -25,15 +25,8 @@ public class ArenaResult extends Persistable {
 	public ArenaResult() {
 		records = new ArrayList<FightRecord>();
 	}
-	public void resetResults() {
-		records.clear();
-	}
-
-	public void setRecords(List<FightRecord> records) {
-		this.records = records;
-	}
-	public List<FightRecord> getRecords() {
-		return new ArrayList<>(records);
+	public void addRecord(FightRecord record) {
+		records.add(record);
 	}
 
 	public List<FightRecord> getFightRecordsByFightable(AbstractFighter fighter) {
@@ -45,11 +38,6 @@ public class ArenaResult extends Persistable {
 		}
 		return recordsOfFighter;
 	}
-
-	public void addRecord(FightRecord record) {
-		records.add(record);
-	}
-
 	public int getNumberOfRoundsWithResult(AbstractFighter fighter,Result result) {
 		List<FightRecord> fightRecords = getFightRecordsByFightable(fighter);
 		int numberOfResult = 0;
@@ -59,6 +47,18 @@ public class ArenaResult extends Persistable {
 			}
 		}
 		return numberOfResult;
+	}
+
+	public List<FightRecord> getRecords() {
+		return new ArrayList<>(records);
+	}
+
+	public void resetResults() {
+		records.clear();
+	}
+
+	public void setRecords(List<FightRecord> records) {
+		this.records = records;
 	}
 
 

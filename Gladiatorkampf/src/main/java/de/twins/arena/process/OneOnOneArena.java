@@ -48,10 +48,6 @@ public class OneOnOneArena implements Arena {
 		rounds = 20;
 	}
 
-	private void resetResults() {
-		result.resetResults();
-	}
-
 	public OneOnOneArena(Set<AbstractFighter> gladiators, int rounds) {
 		super();
 		this.fighters = gladiators;
@@ -106,27 +102,6 @@ public class OneOnOneArena implements Arena {
 
 	}
 
-	@Override
-	public void endFight() {
-		reportDmg();
-		announceWinner();
-
-		arenaResultPersistence.save(this.result);
-	}
-
-	private void reportDmg() {
-		BigDecimal dmgGotFighter1 = calculateDmgInflicted(fighter1);
-		BigDecimal dmgGotFighter2 = calculateDmgInflicted(fighter2);
-		BigDecimal dmgMadeFighter1 = calculateDmgIncome(fighter1);
-		BigDecimal dmgMadeFighter2 = calculateDmgIncome(fighter2);
-		System.out.println(
-				"Fighter1 made " + dmgMadeFighter1.setScale(2, RoundingMode.FLOOR) + " dmg and got "
-						+ dmgGotFighter1.setScale(2, RoundingMode.FLOOR) + " dmg.");
-		System.out.println(
-				"Fighter2 made " + dmgMadeFighter2.setScale(2, RoundingMode.FLOOR) + " dmg and got "
-						+ dmgGotFighter2.setScale(2, RoundingMode.FLOOR) + " dmg.");
-	}
-
 	private BigDecimal calculateDmgIncome(AbstractFighter fighter) {
 		List<FightRecord> records = this.result.getFightRecordsByFightable(fighter);
 		BigDecimal dmgIncome = BigDecimal.ZERO;
@@ -143,6 +118,24 @@ public class OneOnOneArena implements Arena {
 			dmgInflicted = dmgInflicted.add(fightRecord.getDmgInflicted());
 		}
 		return dmgInflicted;
+	}
+
+	private void createOrResetFightRecordsForNewRound() {
+		recordOfFighter1 = new FightRecord(fighter1);
+		recordOfFighter2 = new FightRecord(fighter2);
+	}
+
+	private void drawRound() {
+		System.out.println("Draw");
+
+	}
+
+	@Override
+	public void endFight() {
+		reportDmg();
+		announceWinner();
+
+		arenaResultPersistence.save(this.result);
 	}
 
 	@Override
@@ -169,9 +162,8 @@ public class OneOnOneArena implements Arena {
 
 	}
 
-	private void drawRound() {
-		System.out.println("Draw");
-
+	public ArenaResult getResult() {
+		return this.result;
 	}
 
 	@Override
@@ -185,6 +177,23 @@ public class OneOnOneArena implements Arena {
 			this.fighters.remove(gladiator);
 		}
 
+	}
+
+	private void reportDmg() {
+		BigDecimal dmgGotFighter1 = calculateDmgInflicted(fighter1);
+		BigDecimal dmgGotFighter2 = calculateDmgInflicted(fighter2);
+		BigDecimal dmgMadeFighter1 = calculateDmgIncome(fighter1);
+		BigDecimal dmgMadeFighter2 = calculateDmgIncome(fighter2);
+		System.out.println(
+				"Fighter1 made " + dmgMadeFighter1.setScale(2, RoundingMode.FLOOR) + " dmg and got "
+						+ dmgGotFighter1.setScale(2, RoundingMode.FLOOR) + " dmg.");
+		System.out.println(
+				"Fighter2 made " + dmgMadeFighter2.setScale(2, RoundingMode.FLOOR) + " dmg and got "
+						+ dmgGotFighter2.setScale(2, RoundingMode.FLOOR) + " dmg.");
+	}
+
+	private void resetResults() {
+		result.resetResults();
 	}
 
 	// heals dead gladiator by 100% and living gladiator by 25%
@@ -237,11 +246,6 @@ public class OneOnOneArena implements Arena {
 		endFight();
 	}
 
-	private void createOrResetFightRecordsForNewRound() {
-		recordOfFighter1 = new FightRecord(fighter1);
-		recordOfFighter2 = new FightRecord(fighter2);
-	}
-
 	@Override
 	public void startRound() {
 		boolean bothAlive = true;
@@ -257,10 +261,6 @@ public class OneOnOneArena implements Arena {
 			endlessFight = dmgDoneToFighter1.equals(BigDecimal.ZERO) && damageDoneToFighter2.equals(BigDecimal.ZERO);
 		}
 		endRound();
-	}
-
-	public ArenaResult getResult() {
-		return this.result;
 	}
 
 }

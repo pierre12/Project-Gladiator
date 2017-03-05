@@ -10,21 +10,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.Map;
-import java.util.Properties;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.core.env.Environment;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import de.twins.gladiator.domain.Equipment;
 import de.twins.gladiator.domain.Equipment.BodyPart;
 import de.twins.gladiator.domain.Equipment.Rarity;
@@ -35,12 +28,6 @@ public class SimpleEquipFactoryImplTest {
 
 	@Mock
 	Environment env;
-
-	@Before
-	public void setup() {
-		testee = spy(new SimpleEquipFactoryImpl());
-		MockitoAnnotations.initMocks(this);
-	}
 
 	@Test
 	public void createRandomEquipment() {
@@ -62,14 +49,6 @@ public class SimpleEquipFactoryImplTest {
 	}
 
 	@Test
-	public void shouldCreateRandomEquipmentWithRarity() {
-		Equipment createRandomEquipment = testee.createRandomEquipmentWithRarityGrade(BodyPart.HEAD, Rarity.LEGENDARY);
-		Assert.assertNotNull(createRandomEquipment);
-		Assert.assertEquals(BodyPart.HEAD, createRandomEquipment.getBodyPart());
-		Assert.assertEquals(Rarity.LEGENDARY, createRandomEquipment.getRarity());
-	}
-
-	@Test
 	public void randomFullSet() {
 		int numberOfBodyParts = BodyPart.values().length;
 		Map<BodyPart, Equipment> randomFullSet = testee.randomFullSet();
@@ -77,6 +56,21 @@ public class SimpleEquipFactoryImplTest {
 		verify(testee, times(numberOfBodyParts)).createRandomEquipmentFor(any(BodyPart.class));
 		assertThat(randomFullSet.size(), is(numberOfBodyParts));
 		assertThat(randomFullSet.keySet(), hasItems(BodyPart.values()));
+	}
+
+	@Before
+	public void setup() {
+		testee = spy(new SimpleEquipFactoryImpl());
+		MockitoAnnotations.initMocks(this);
+		when(env.getProperty(anyString(),anyString())).thenReturn(String.valueOf((int)(Math.random()*500)));
+	}
+
+	@Test
+	public void shouldCreateRandomEquipmentWithRarity() {
+		Equipment createRandomEquipment = testee.createRandomEquipmentWithRarityGrade(BodyPart.HEAD, Rarity.LEGENDARY);
+		Assert.assertNotNull(createRandomEquipment);
+		Assert.assertEquals(BodyPart.HEAD, createRandomEquipment.getBodyPart());
+		Assert.assertEquals(Rarity.LEGENDARY, createRandomEquipment.getRarity());
 	}
 
 }

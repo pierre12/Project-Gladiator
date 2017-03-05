@@ -13,8 +13,8 @@ public interface EquipmentFactory {
 
 	Equipment createRandomEquipmentFor(BodyPart bodypart);
 
-	Map<BodyPart, Equipment> randomFullSet();
-
 	Equipment createRandomEquipmentWithRarityGrade(BodyPart bodypart,Rarity rarity);
+
+	Map<BodyPart, Equipment> randomFullSet();
 
 }
