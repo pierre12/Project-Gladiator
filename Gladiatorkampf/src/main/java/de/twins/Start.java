@@ -2,6 +2,8 @@ package de.twins;
 
 import java.math.BigDecimal;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -17,20 +19,26 @@ import de.twins.gladiator.persistence.GladiatorPersistence;
 import de.twins.gladiator.process.SimpleEquipFactoryImpl;
 
 @SpringBootApplication
-@PropertySource(value = "file:config/application.properties")
+@PropertySource(value = "classpath:config/application.properties")
 @Configuration
 @EnableAutoConfiguration
 public class Start {
+
+	@Autowired
+	GladiatorPersistence gp;
+	@Autowired
+	OneOnOneArena arena;
+	@Autowired
+	MinionPersistence mp;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Start.class);
 	}
 
-	@Autowired
-	public void start(GladiatorPersistence gp, OneOnOneArena arena, MinionPersistence mp) {
+	public void start() {
 		GladiatorImpl g = new GladiatorImpl("Rene", BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,
 				new SimpleEquipFactoryImpl().randomFullSet());
-		
+
 		gp.save(g);
 		Minion m = new Minion("Broly", BigDecimal.TEN, BigDecimal.TEN, BigDecimal.ONE);
 		mp.save(m);
@@ -39,6 +47,10 @@ public class Start {
 		arena.startFight();
 		System.out.println("Geschafft");
 
+	}
 
+	@PostConstruct
+	public void init() {
+		start();
 	}
 }

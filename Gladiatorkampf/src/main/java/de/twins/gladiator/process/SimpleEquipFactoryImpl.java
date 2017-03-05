@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import de.twins.gladiator.domain.Equipment;
@@ -11,150 +14,65 @@ import de.twins.gladiator.domain.Equipment.BodyPart;
 import de.twins.gladiator.domain.Equipment.Rarity;
 
 @Component
+@PropertySource(value = "classpath:config/simple_equipment.properties")
 public class SimpleEquipFactoryImpl implements EquipmentFactory {
+	private static final String PREFIX = "simpleequipment.";
+	@Autowired
+	private Environment env;
 
 	@Override
-	public Equipment createRandomEquipment(){
-		BodyPart rdBodyPart = getRandomBodyPart();
-		return createRandomEquipmentFor(rdBodyPart);
+	public Equipment createRandomEquipment() {
+		return createRandomEquipmentFor(getRandomBodyPart());
 	}
-	
+
 	@Override
 	public Equipment createRandomEquipmentFor(BodyPart bodypart) {
-		Rarity rdRarity = getRandomRarity();
-		switch (rdRarity) {
-		case COMMON:
-			return createRandomCommonEquipmentFor(bodypart);
-		case UNCOMMON:
-			return createRandomUncommonEquipmentFor(bodypart);
-		case EPIC:
-			return createRandomEpicEquipmentFor(bodypart);
-		case LEGENDARY:
-			return createRandomLegendaryEquipmentFor(bodypart);
-		case MAGIC:
-			return createRandomMagicEquipmentFor(bodypart);
-		default:
-			return new Equipment(bodypart, new BigDecimal("1"), new BigDecimal("1"), new BigDecimal("1"));
-		}
+		return createRandomEquipmentWithRarityGrade(bodypart, getRandomRarity());
 	}
 
 	private BodyPart getRandomBodyPart() {
-		BodyPart[] values = BodyPart.values();
-		return values[(int) (Math.random() * values.length)];
+		BodyPart[] bodyParts = BodyPart.values();
+		return bodyParts[(int) (Math.random() * bodyParts.length)];
 	}
 
 	private Rarity getRandomRarity() {
-		Rarity[] values = Rarity.values();
-		return values[(int) (Math.random() * values.length)];
+		Rarity[] rarities = Rarity.values();
+		return rarities[(int) (Math.random() * rarities.length)];
 	}
 
 	@Override
-	public Equipment createRandomLegendaryEquipmentFor(BodyPart bodypart){
-		BigDecimal rdHp = randomHp(Rarity.LEGENDARY);
-		BigDecimal rdAttack = randomDefense(Rarity.LEGENDARY);
-		BigDecimal rdDefense = randomAttack(Rarity.LEGENDARY);
-		Equipment equip = new Equipment(bodypart, rdHp, rdAttack, rdDefense, Rarity.LEGENDARY);
-		return equip;
-	}
-
-
-	@Override
-	public Equipment createRandomCommonEquipmentFor(BodyPart bodypart) {
-		BigDecimal rdHp = randomHp(Rarity.COMMON);
-		BigDecimal rdAttack = randomDefense(Rarity.COMMON);
-		BigDecimal rdDefense = randomAttack(Rarity.COMMON);
-		Equipment equip = new Equipment(bodypart, rdHp, rdAttack, rdDefense, Rarity.COMMON);
-		return equip;
-	}
-
-	@Override
-	public Equipment createRandomEpicEquipmentFor(BodyPart bodypart) {
-		BigDecimal rdHp = randomHp(Rarity.EPIC);
-		BigDecimal rdAttack = randomDefense(Rarity.EPIC);
-		BigDecimal rdDefense = randomAttack(Rarity.EPIC);
-		Equipment equip = new Equipment(bodypart, rdHp, rdAttack, rdDefense, Rarity.EPIC);
-		return equip;
-	}
-
-	@Override
-	public Equipment createRandomMagicEquipmentFor(BodyPart bodypart) {
-		BigDecimal rdHp = randomHp(Rarity.MAGIC);
-		BigDecimal rdAttack = randomDefense(Rarity.MAGIC);
-		BigDecimal rdDefense = randomAttack(Rarity.MAGIC);
-		Equipment equip = new Equipment(bodypart, rdHp, rdAttack, rdDefense, Rarity.MAGIC);
-		return equip;
-	}
-
-	@Override
-	public Equipment createRandomUncommonEquipmentFor(BodyPart bodypart) {
-		BigDecimal rdHp = randomHp(Rarity.UNCOMMON);
-		BigDecimal rdAttack = randomDefense(Rarity.UNCOMMON);
-		BigDecimal rdDefense = randomAttack(Rarity.UNCOMMON);
-		Equipment equip = new Equipment(bodypart, rdHp, rdAttack, rdDefense, Rarity.UNCOMMON);
-		return equip;
+	public Equipment createRandomEquipmentWithRarityGrade(BodyPart bodypart, Rarity rarity) {
+		BigDecimal hp = randomHp(rarity);
+		BigDecimal attack = randomDefense(rarity);
+		BigDecimal defense = randomAttack(rarity);
+		return  new Equipment(bodypart, hp, attack, defense, rarity);
 	}
 
 	private BigDecimal randomHp(Rarity rarity) {
-		int maxHp = 0;
-		if (Rarity.LEGENDARY.equals(rarity)) {
-			maxHp = 500;
-		}
-		if (Rarity.EPIC.equals(rarity)) {
-			maxHp = 200;
-		}
-		if (Rarity.MAGIC.equals(rarity)) {
-			maxHp = 100;
-		}
-		if (Rarity.UNCOMMON.equals(rarity)) {
-			maxHp = 50;
-		}
-		if (Rarity.COMMON.equals(rarity)) {
-			maxHp = 20;
-		}
-		double hp = Math.random() * maxHp + 1;
-		return new BigDecimal(String.valueOf(hp));
+		int maxHp = getProperty("healthpoints", rarity);
+		return new BigDecimal(randomizeValue(maxHp));
+	}
+
+	private double randomizeValue(int maxHp) {
+		return Math.random() * maxHp + 1;
 	}
 
 	private BigDecimal randomDefense(Rarity rarity) {
-		int maxHp = 0;
-		if (Rarity.LEGENDARY.equals(rarity)) {
-			maxHp = 500;
-		}
-		if (Rarity.EPIC.equals(rarity)) {
-			maxHp = 200;
-		}
-		if (Rarity.MAGIC.equals(rarity)) {
-			maxHp = 100;
-		}
-		if (Rarity.UNCOMMON.equals(rarity)) {
-			maxHp = 50;
-		}
-		if (Rarity.COMMON.equals(rarity)) {
-			maxHp = 20;
-		}
-		double hp = Math.random() * maxHp + 1;
-		return new BigDecimal(String.valueOf(hp));
+		int defense = getProperty("defense", rarity);
+		return new BigDecimal(randomizeValue(defense));
+	}
+
+	/*
+	 * (non-javadoc)
+	 * returns if property can be found the value will be returned else 0
+	 */
+	private int getProperty(String baseKey, Rarity rarity) {
+		return Integer.parseInt(env.getProperty(PREFIX + baseKey + "." + rarity.toString().toLowerCase(), "0"));
 	}
 
 	private BigDecimal randomAttack(Rarity rarity) {
-		int maxHp = 0;
-		if (Rarity.LEGENDARY.equals(rarity)) {
-			maxHp = 500;
-		}
-		if (Rarity.EPIC.equals(rarity)) {
-			maxHp = 200;
-		}
-		if (Rarity.MAGIC.equals(rarity)) {
-			maxHp = 100;
-		}
-		if (Rarity.UNCOMMON.equals(rarity)) {
-			maxHp = 50;
-		}
-		if (Rarity.COMMON.equals(rarity)) {
-			maxHp = 20;
-		}
-		double hp = Math.random() * maxHp + 1;
-		return new BigDecimal(String.valueOf(hp));
+		int attack = getProperty("attack", rarity);
+		return new BigDecimal(randomizeValue(attack));
 	}
 
 	public Map<BodyPart, Equipment> randomFullSet() {

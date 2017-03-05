@@ -1,6 +1,7 @@
 package de.twins.gladiator.domain;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.closeTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -74,7 +76,7 @@ public class GladiatorImplTest {
 	@Test
 	public void shouldLoseHpFromAttack() {
 		testee.defend(new BigDecimal(20));
-		assertThat(testee.getCurrentHealthPoints(), is(new BigDecimal(90)));
+		assertThat(testee.getCurrentHealthPoints().doubleValue(), is(closeTo(84.6, 0.01)));
 	}
 
 	@Test
@@ -87,11 +89,6 @@ public class GladiatorImplTest {
 		assertThat(testee.getCurrentHealthPoints(), is(new BigDecimal(90)));
 	}
 
-	@Test
-	public void shouldNullifyAttackWhenDefenseIsEqualsOrHigher() {
-		testee.defend(new BigDecimal(10));
-		assertThat(testee.getCurrentHealthPoints(), is(new BigDecimal(100)));
-	}
 
 	@Test
 	public void shouldReduceCurrentHealthPointToTotalHealthPointsIfLower() {
@@ -181,13 +178,15 @@ public class GladiatorImplTest {
 		testee.setBaseDefense(new BigDecimal(-100));
 	}
 	
-	@Test
-	public void shouldBeAliveWhenCurrentHealthIsGreaterZero(){
-		assertThat(testee.isAlive(), is(true));
-	}
+
 	@Test
 	public void shouldBeDeadWhenCurrentHealthEqualsZero(){
 		testee.defend(new BigDecimal(200));
 		assertThat(testee.isAlive(), is(false));
+	}
+	
+	@Test
+	public void shouldPrintRelevantData(){
+		assertThat(testee.toString(), is("[CurrentHP:100, Attack:10, Defense:10]"));
 	}
 }

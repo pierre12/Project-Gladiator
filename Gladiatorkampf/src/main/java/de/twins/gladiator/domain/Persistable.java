@@ -1,12 +1,13 @@
 package de.twins.gladiator.domain;
 
 import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class Persistable {
 
-	@javax.persistence.Id
+	@Id
 	@GeneratedValue
 	private int id;
 

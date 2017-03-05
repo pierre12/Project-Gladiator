@@ -7,7 +7,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 /**
- * Equipment used for the gladiatorto enhance his attributes.
+ * Equipment used for the gladiator to enhance his attributes.
  * 
  * @author Pierre
  *
@@ -37,7 +37,6 @@ public class Equipment extends Persistable {
 	 * Default-Konstruktor
 	 */
 	public Equipment() {
-		;
 	}
 	public Equipment(BodyPart bodyPart, BigDecimal hp, BigDecimal attack, BigDecimal defense, Rarity rarity) {
 		this(bodyPart, hp, attack, defense);

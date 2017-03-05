@@ -52,11 +52,11 @@ public class FightRecord extends Persistable {
 		this.dmgTaken = dmgTaken;
 	}
 
-	public BigDecimal getDmgDone() {
+	public BigDecimal getDmgInflicted() {
 		return dmgInflicted;
 	}
 
-	public void setDmgDone(BigDecimal dmgDone) {
+	public void setDmgInflicted(BigDecimal dmgDone) {
 		this.dmgInflicted = dmgDone;
 	}
 

@@ -36,10 +36,10 @@ public class ArenaResult extends Persistable {
 		return new ArrayList<>(records);
 	}
 
-	public List<FightRecord> getFightRecordsByFightable(AbstractFighter fightable) {
+	public List<FightRecord> getFightRecordsByFightable(AbstractFighter fighter) {
 		List<FightRecord> recordsOfFighter = new ArrayList<>();
 		for (FightRecord fightRecord : records) {
-			if (fightRecord.getFighter().getId() == fightable.getId()) {
+			if (fightRecord.getFighter().getId() == fighter.getId()) {
 				recordsOfFighter.add(fightRecord);
 			}
 		}
@@ -50,38 +50,16 @@ public class ArenaResult extends Persistable {
 		records.add(record);
 	}
 
-	public int getLostRound(AbstractFighter fighter) {
+	public int getNumberOfRoundsWithResult(AbstractFighter fighter,Result result) {
 		List<FightRecord> fightRecords = getFightRecordsByFightable(fighter);
-		int loses = 0;
+		int numberOfResult = 0;
 		for (FightRecord fightRecord : fightRecords) {
-			if (fightRecord.getResult().equals(Result.LOSE)) {
-				loses += 1;
+			if (fightRecord.getResult().equals(result)) {
+				numberOfResult += 1;
 			}
 		}
-		return loses;
+		return numberOfResult;
 	}
 
-	public int getTiedRound(AbstractFighter fighter) {
-		List<FightRecord> fightRecords = getFightRecordsByFightable(fighter);
-		int draws = 0;
-		for (FightRecord fightRecord : fightRecords) {
-			if (fightRecord.getResult().equals(Result.DRAW)) {
-				draws += 1;
-			}
-		}
-		return draws;
 
-	}
-
-	public int getWonRound(AbstractFighter fighter) {
-		List<FightRecord> fightRecords = getFightRecordsByFightable(fighter);
-		int wins = 0;
-		for (FightRecord fightRecord : fightRecords) {
-			if (fightRecord.getResult().equals(Result.WIN)) {
-				wins += 1;
-			}
-		}
-		return wins;
-
-	}
 }

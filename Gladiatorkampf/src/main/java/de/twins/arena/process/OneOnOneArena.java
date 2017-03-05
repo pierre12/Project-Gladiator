@@ -94,8 +94,8 @@ public class OneOnOneArena implements Arena {
 	public void announceWinner() {
 		String winnerMessage = "Gladiator %s won the fight.With %d round win(s)";
 		String tiedMessage = "End Of The Match: Draw";
-		Integer wonRoundsFirstGladiator = result.getWonRound(fighter1);
-		Integer wonRoundsSecondGladiator = result.getWonRound(fighter2);
+		Integer wonRoundsFirstGladiator = result.getNumberOfRoundsWithResult(fighter1, Result.WIN);
+		Integer wonRoundsSecondGladiator = result.getNumberOfRoundsWithResult(fighter2, Result.WIN);
 		if (wonRoundsFirstGladiator > wonRoundsSecondGladiator) {
 			System.out.println(String.format(winnerMessage, fighter1.getName(), wonRoundsFirstGladiator));
 		} else if (wonRoundsFirstGladiator == wonRoundsSecondGladiator) {
@@ -140,7 +140,7 @@ public class OneOnOneArena implements Arena {
 		List<FightRecord> records = this.result.getFightRecordsByFightable(fighter);
 		BigDecimal dmgInflicted = BigDecimal.ZERO;
 		for (FightRecord fightRecord : records) {
-			dmgInflicted = dmgInflicted.add(fightRecord.getDmgDone());
+			dmgInflicted = dmgInflicted.add(fightRecord.getDmgInflicted());
 		}
 		return dmgInflicted;
 	}

@@ -4,23 +4,17 @@ import java.util.Map;
 
 import de.twins.gladiator.domain.Equipment;
 import de.twins.gladiator.domain.Equipment.BodyPart;
+import de.twins.gladiator.domain.Equipment.Rarity;
 
 public interface EquipmentFactory {
 
-	Equipment createRandomLegendaryEquipmentFor(BodyPart bodypart);
 
 	Equipment createRandomEquipment();
-
-	Equipment createRandomUncommonEquipmentFor(BodyPart bodypart);
-
-	Equipment createRandomMagicEquipmentFor(BodyPart bodypart);
-
-	Equipment createRandomEpicEquipmentFor(BodyPart bodypart);
-
-	Equipment createRandomCommonEquipmentFor(BodyPart bodypart);
 
 	Equipment createRandomEquipmentFor(BodyPart bodypart);
 
 	Map<BodyPart, Equipment> randomFullSet();
+
+	Equipment createRandomEquipmentWithRarityGrade(BodyPart bodypart,Rarity rarity);
 
 }

@@ -11,8 +11,7 @@ public class MinionFactoryImpl implements EnemyFactory {
 		BigDecimal healthPoints = new BigDecimal(10);
 		BigDecimal attack = new BigDecimal(10);
 		BigDecimal defense = new BigDecimal(10);
-		Minion minion = new Minion("Minion", healthPoints, healthPoints, healthPoints);
-		return minion;
+		return new Minion("Minion", healthPoints, attack, defense);
 	}
 
 

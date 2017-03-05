@@ -81,7 +81,7 @@ public class GladiatorImpl extends AbstractFighter implements Gladiator {
 
 	private double getDMGResistant() {
 		double doubleValue = this.getTotalDefense().doubleValue();
-		return Math.log(doubleValue) / 10;
+		return doubleValue != 0?Math.log(doubleValue) / 10:0;
 	}
 
 	/**
@@ -251,16 +251,16 @@ public class GladiatorImpl extends AbstractFighter implements Gladiator {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("[ ");
+		sb.append("[");
 		sb.append("CurrentHP:");
 		sb.append(this.getCurrentHealthPoints());
-		sb.append(",");
+		sb.append(", ");
 		sb.append("Attack:");
 		sb.append(this.getTotalAttack());
-		sb.append(",");
+		sb.append(", ");
 		sb.append("Defense:");
 		sb.append(this.getTotalDefense());
-		sb.append(" ]");
+		sb.append("]");
 		return sb.toString();
 	}
 }
