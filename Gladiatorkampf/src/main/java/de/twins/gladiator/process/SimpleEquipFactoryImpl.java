@@ -66,7 +66,7 @@ public class SimpleEquipFactoryImpl implements EquipmentFactory {
 	 * (non-javadoc)
 	 * returns if property can be found the value will be returned else 0
 	 */
-	private int getProperty(String baseKey, Rarity rarity) {
+	protected int getProperty(String baseKey, Rarity rarity) {
 		return Integer.parseInt(env.getProperty(PREFIX + baseKey + "." + rarity.toString().toLowerCase(), "0"));
 	}
 

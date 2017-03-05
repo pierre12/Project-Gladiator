@@ -1,4 +1,4 @@
-package de.twins.gladiator.domain;
+package de.twins.gladiator.process;
 
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -10,19 +10,24 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Map;
+import java.util.Properties;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.core.env.Environment;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import de.twins.gladiator.domain.Equipment;
 import de.twins.gladiator.domain.Equipment.BodyPart;
 import de.twins.gladiator.domain.Equipment.Rarity;
-import de.twins.gladiator.process.SimpleEquipFactoryImpl;
 
 public class SimpleEquipFactoryImplTest {
 	@InjectMocks
@@ -35,7 +40,6 @@ public class SimpleEquipFactoryImplTest {
 	public void setup() {
 		testee = spy(new SimpleEquipFactoryImpl());
 		MockitoAnnotations.initMocks(this);
-		when(env.getProperty(anyString(),anyString())).thenAnswer(key -> String.valueOf((int)(Math.random()*100)));
 	}
 
 	@Test
