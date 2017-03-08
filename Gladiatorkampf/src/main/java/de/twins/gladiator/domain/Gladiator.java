@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 
@@ -17,6 +19,11 @@ import de.twins.gladiator.domain.Equipment.BodyPart;
 public class Gladiator extends AbstractFighter implements Equipable {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(
+			   name = "FIGHTER_EQUIPMENT", 
+			   joinColumns = @JoinColumn(name = "fighter_id"), 
+			   inverseJoinColumns = @JoinColumn(name = "equipment_id")
+			 )
 	@MapKey(name = "bodyPart")
 	private Map<BodyPart, Equipment> equipments = new  HashMap<>();
 

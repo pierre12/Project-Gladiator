@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 
@@ -13,6 +14,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Answers;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class AbstractFighterTest {
 
@@ -28,12 +32,22 @@ public class AbstractFighterTest {
 
 	}
 	private AbstractFighter testee;
+	@Mock(answer=Answers.RETURNS_DEEP_STUBS)
+	private AbstractFighter testee2;
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
 
 	@Before
 	public void setUp() throws Exception {
 		testee = new TestFighter("testfighter",new BigDecimal(100),new BigDecimal(10),new BigDecimal(10));
+		MockitoAnnotations.initMocks(this);
+	}
+	@Test
+	public void should(){
+		when(testee2.getBaseAttack().toString().substring(1)).thenReturn("heil");
+		String substring = testee2.getBaseAttack().toString().substring(1);
+		assertThat(substring, is("heil"));
+		
 	}
 	@Test
 	public void shouldBeAliveWhenCurrentHealthIsGreaterZero() {

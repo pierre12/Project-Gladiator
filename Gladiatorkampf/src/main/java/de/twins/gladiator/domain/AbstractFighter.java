@@ -8,8 +8,8 @@ import javax.persistence.InheritanceType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class AbstractFighter extends Persistable implements Fightable {
 
+public abstract class AbstractFighter extends Persistable implements Fightable {
 	protected String name;
 	protected BigDecimal baseHealthPoints;
 	protected BigDecimal baseAttack;
@@ -171,6 +171,9 @@ public abstract class AbstractFighter extends Persistable implements Fightable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
+		sb.append("Name:");
+		sb.append(this.getName());
+		sb.append(", ");
 		sb.append("CurrentHP:");
 		sb.append(this.getCurrentHealthPoints());
 		sb.append(", ");

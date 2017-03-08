@@ -1,5 +1,6 @@
 package de.twins.arena.process;
 
+import java.util.List;
 import java.util.Set;
 
 import de.twins.gladiator.domain.AbstractFighter;
@@ -18,7 +19,7 @@ public interface Arena {
 	 * @param gladiator
 	 *            {@link Fightable} which is added to the arena.
 	 */
-	void addFighter(AbstractFighter gladiator);
+	void addFighter(AbstractFighter fighter);
 
 	/**
 	 * Adds a set of {@link Fightable} to the arena.
@@ -26,7 +27,7 @@ public interface Arena {
 	 * @param gladiators
 	 *            {@link Fightable} which should be added to the arena.
 	 */
-	void addFighters(Set<AbstractFighter> gladiators);
+	void addFighters(List<AbstractFighter> fighters);
 
 	/**
 	 * Announce the winner of the fight.
@@ -49,7 +50,7 @@ public interface Arena {
 	 * @param fighter
 	 *            {@link Fightable} which should be removed from the arena.
 	 */
-	void removeFighter(Fightable fighter);
+	void removeFighter(AbstractFighter fighter);
 
 	/**
 	 * Removes a set of {@link Fightable} from the arena.
@@ -57,7 +58,7 @@ public interface Arena {
 	 * @param fighter
 	 *            {@link Fightable} which should be removed from the arena.
 	 */
-	void removeFighters(Set<Fightable> fighter);
+	void removeFighters(Set<AbstractFighter> fighter);
 
 	/**
 	 * Determines the number of rounds
@@ -76,4 +77,5 @@ public interface Arena {
 	 * Starts a round.
 	 */
 	void startRound();
+
 }

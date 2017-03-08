@@ -19,7 +19,7 @@ public class ArenaResult extends Persistable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "arena_result_id")
+	@JoinColumn(name = "ARENARESULTID")
 	private List<FightRecord> records;
 
 	public ArenaResult() {

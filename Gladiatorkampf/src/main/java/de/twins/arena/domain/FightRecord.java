@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -28,6 +30,7 @@ public class FightRecord extends Persistable {
 
 	private BigDecimal dmgInflicted;
 
+	@Enumerated(EnumType.STRING)
 	private Result result;
 
 	public FightRecord(AbstractFighter fighter) {

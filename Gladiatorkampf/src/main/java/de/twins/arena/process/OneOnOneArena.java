@@ -2,10 +2,11 @@ package de.twins.arena.process;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -33,71 +34,66 @@ public class OneOnOneArena implements Arena {
 	@Autowired
 	private ArenaResultPersistence arenaResultPersistence;
 
-	private AbstractFighter fighter1;
 	private FightRecord recordOfFighter1;
-	private AbstractFighter fighter2;
 	private FightRecord recordOfFighter2;
 	private ArenaResult result;
-	private Set<AbstractFighter> fighters;
+	private List<AbstractFighter> fighters;
 
 	private int rounds;
 
 	public OneOnOneArena() {
-		fighters = new HashSet<>();
+		fighters = new ArrayList<>();
 		result = new ArenaResult();
 		rounds = 20;
 	}
 
-	public OneOnOneArena(Set<AbstractFighter> gladiators, int rounds) {
+	public OneOnOneArena(List<AbstractFighter> fighter, int rounds) {
 		super();
-		this.fighters = gladiators;
+		this.fighters = fighter;
 		this.rounds = rounds;
 
 	}
 
 	@Override
-	public void addFighter(AbstractFighter gladiator) {
-		if (gladiator == null) {
-			throw new ArenaException("Gladiator set must not be null");
-		} else if (fighters.size() == 2) {
+	public void addFighter(AbstractFighter fighter) {
+		if (fighter == null) {
+			throw new ArenaException("Fighter must not be null");
+		}
+		boolean isAlreadyInArena = fighters.contains(fighter);
+		if (fighters.size() == 2 && !isAlreadyInArena) {
 			throw new ArenaException(
-					"Arena does only allows two Gladiators but it was tried to increase the number of gladiators to "
-							+ 3);
-		} else {
-			fighters.add(gladiator);
+					"Arena does only allow two fighters but it was tried to increase the number of fighters to " + 3);
+		}
+		if (!isAlreadyInArena) {
+			fighters.add(fighter);
+		}else{
+			System.out.println(fighter.getName() + "is already in the arena" );
 		}
 
 	}
 
 	@Override
-	public void addFighters(Set<AbstractFighter> fighter) {
-		if (fighter == null) {
-			throw new ArenaException("Gladiators set must not be null");
+	public void addFighters(List<AbstractFighter> fighters) {
+		if (fighters == null) {
+			throw new ArenaException("Fighters set must not be null");
 		}
-		if ((this.fighters.size() + fighter.size()) >= 2) {
-			throw new ArenaException(
-					"Arena does only allows two Gladiators but it was tried to increase the number of gladiators to "
-							+ this.fighters.size() + fighter.size());
-		} else {
-			for (AbstractFighter fightable : fighter) {
-				this.fighters.add(fightable);
-			}
+		for (AbstractFighter fighter : fighters) {
+			addFighter(fighter);
 		}
-
 	}
 
 	@Override
 	public void announceWinner() {
 		String winnerMessage = "Gladiator %s won the fight.With %d round win(s)";
 		String tiedMessage = "End Of The Match: Draw";
-		Integer wonRoundsFirstGladiator = result.getNumberOfRoundsWithResult(fighter1, Result.WIN);
-		Integer wonRoundsSecondGladiator = result.getNumberOfRoundsWithResult(fighter2, Result.WIN);
+		Integer wonRoundsFirstGladiator = result.getNumberOfRoundsWithResult(fighters.get(0), Result.WIN);
+		Integer wonRoundsSecondGladiator = result.getNumberOfRoundsWithResult(fighters.get(1), Result.WIN);
 		if (wonRoundsFirstGladiator > wonRoundsSecondGladiator) {
-			System.out.println(String.format(winnerMessage, fighter1.getName(), wonRoundsFirstGladiator));
+			System.out.println(String.format(winnerMessage, fighters.get(0).getName(), wonRoundsFirstGladiator));
 		} else if (wonRoundsFirstGladiator == wonRoundsSecondGladiator) {
 			System.out.println(String.format(tiedMessage, wonRoundsFirstGladiator));
 		} else {
-			System.out.println(String.format(winnerMessage, fighter2.getName(), wonRoundsSecondGladiator));
+			System.out.println(String.format(winnerMessage, fighters.get(1), wonRoundsSecondGladiator));
 		}
 
 	}
@@ -121,8 +117,8 @@ public class OneOnOneArena implements Arena {
 	}
 
 	private void createOrResetFightRecordsForNewRound() {
-		recordOfFighter1 = new FightRecord(fighter1);
-		recordOfFighter2 = new FightRecord(fighter2);
+		recordOfFighter1 = new FightRecord(fighters.get(0));
+		recordOfFighter2 = new FightRecord(fighters.get(1));
 	}
 
 	private void drawRound() {
@@ -140,12 +136,13 @@ public class OneOnOneArena implements Arena {
 
 	@Override
 	public void endRound() {
-		if (fighter1.isAlive() && !fighter2.isAlive()) {
+
+		if (fighters.get(0).isAlive() && !fighters.get(1).isAlive()) {
 			setResults(Result.WIN, Result.LOSE);
-			fighterWinsRound(fighter1);
-		} else if (!fighter1.isAlive() && fighter2.isAlive()) {
+			fighterWinsRound(fighters.get(0));
+		} else if (!fighters.get(0).isAlive() && fighters.get(1).isAlive()) {
 			setResults(Result.LOSE, Result.WIN);
-			fighterWinsRound(fighter2);
+			fighterWinsRound(fighters.get(1));
 		} else {
 			setResults(Result.DRAW, Result.DRAW);
 			drawRound();
@@ -167,29 +164,27 @@ public class OneOnOneArena implements Arena {
 	}
 
 	@Override
-	public void removeFighter(Fightable gladiator) {
-		fighters.remove(gladiator);
+	public void removeFighter(AbstractFighter fighter) {
+		fighters.remove(fighter);
 	}
 
 	@Override
-	public void removeFighters(Set<Fightable> gladiators) {
-		for (Fightable gladiator : gladiators) {
-			this.fighters.remove(gladiator);
+	public void removeFighters(Set<AbstractFighter> fighters) {
+		for (AbstractFighter fighter : fighters) {
+			this.fighters.remove(fighter);
 		}
 
 	}
 
 	private void reportDmg() {
-		BigDecimal dmgGotFighter1 = calculateDmgInflicted(fighter1);
-		BigDecimal dmgGotFighter2 = calculateDmgInflicted(fighter2);
-		BigDecimal dmgMadeFighter1 = calculateDmgIncome(fighter1);
-		BigDecimal dmgMadeFighter2 = calculateDmgIncome(fighter2);
-		System.out.println(
-				"Fighter1 made " + dmgMadeFighter1.setScale(2, RoundingMode.FLOOR) + " dmg and got "
-						+ dmgGotFighter1.setScale(2, RoundingMode.FLOOR) + " dmg.");
-		System.out.println(
-				"Fighter2 made " + dmgMadeFighter2.setScale(2, RoundingMode.FLOOR) + " dmg and got "
-						+ dmgGotFighter2.setScale(2, RoundingMode.FLOOR) + " dmg.");
+		BigDecimal dmgGotFighter1 = calculateDmgInflicted(fighters.get(0));
+		BigDecimal dmgGotFighter2 = calculateDmgInflicted(fighters.get(1));
+		BigDecimal dmgMadeFighter1 = calculateDmgIncome(fighters.get(0));
+		BigDecimal dmgMadeFighter2 = calculateDmgIncome(fighters.get(1));
+		System.out.println("Fighter1 made " + dmgMadeFighter1.setScale(2, RoundingMode.FLOOR) + " dmg and got "
+				+ dmgGotFighter1.setScale(2, RoundingMode.FLOOR) + " dmg.");
+		System.out.println("Fighter2 made " + dmgMadeFighter2.setScale(2, RoundingMode.FLOOR) + " dmg and got "
+				+ dmgGotFighter2.setScale(2, RoundingMode.FLOOR) + " dmg.");
 	}
 
 	private void resetResults() {
@@ -231,11 +226,6 @@ public class OneOnOneArena implements Arena {
 
 	@Override
 	public void startFight() {
-
-		Iterator<AbstractFighter> iterator = fighters.iterator();
-		fighter1 = iterator.next();
-		fighter2 = iterator.next();
-
 		resetResults();
 		createOrResetFightRecordsForNewRound();
 		for (int i = 1; i <= rounds; i++) {
@@ -251,13 +241,13 @@ public class OneOnOneArena implements Arena {
 		boolean bothAlive = true;
 		boolean endlessFight = false;
 		while (bothAlive && !endlessFight) {
-			BigDecimal dmgDoneToFighter1 = fighter1.defend(fighter2.getTotalAttack());
+			BigDecimal dmgDoneToFighter1 = fighters.get(0).defend(fighters.get(1).getTotalAttack());
 			recordOfFighter1.addDmgTaken(dmgDoneToFighter1);
 			recordOfFighter2.addDmgInflicted(dmgDoneToFighter1);
-			BigDecimal damageDoneToFighter2 = fighter2.defend(fighter1.getTotalAttack());
+			BigDecimal damageDoneToFighter2 = fighters.get(1).defend(fighters.get(0).getTotalAttack());
 			recordOfFighter1.addDmgInflicted(damageDoneToFighter2);
 			recordOfFighter2.addDmgTaken(damageDoneToFighter2);
-			bothAlive = fighter1.isAlive() && fighter2.isAlive();
+			bothAlive = fighters.get(0).isAlive() && fighters.get(1).isAlive();
 			endlessFight = dmgDoneToFighter1.equals(BigDecimal.ZERO) && damageDoneToFighter2.equals(BigDecimal.ZERO);
 		}
 		endRound();
