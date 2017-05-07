@@ -18,7 +18,7 @@ public class FighterUI extends GameObject {
 	private static final int HEIGHT = 10;
 
 	public FighterUI(Player id,AbstractFighter fighter, int x, int y) {
-		//penis
+		//penis2
 		super(id, fighter, x, y);
 	}
 
