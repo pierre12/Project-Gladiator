@@ -1,5 +1,7 @@
 package de.twins.ui;
 
+import de.twins.gladiator.domain.AbstractFighter;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.math.BigDecimal;
@@ -7,9 +9,9 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 public class HUD {
-private GameObject gameObject;
+private AbstractFighterUI gameObject;
 
-public HUD(GameObject gameObject) {
+public HUD(AbstractFighterUI gameObject) {
 	this.gameObject = gameObject;
 }
 	public void tick(){
@@ -28,7 +30,7 @@ public HUD(GameObject gameObject) {
 		g.setColor(Color.GRAY);
 		g.fillRect(15, 15, 200, 32);
 		g.setColor(Color.GREEN);
-		g.fillRect(15, 15,(int)(200) , 32);	g.setColor(Color.GRAY);
+		g.fillRect(15, 15,200 , 32);	g.setColor(Color.GRAY);
 		g.fillRect(15, 15, 200, 32);
 		g.setColor(Color.GREEN);
 		g.fillRect(15, 15,(int)(200*percentageOfLife) , 32);

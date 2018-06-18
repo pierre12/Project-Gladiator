@@ -4,8 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import de.twins.enemy.domain.Minion;
+import de.twins.gladiator.domain.AbstractFighter;
 
-public class MinionUI extends GameObject {
+public class MinionUI extends AbstractFighterUI {
 
 	private static final int WIDTH = 10;
 	private static final int HEIGHT = 10;
@@ -13,7 +14,7 @@ public class MinionUI extends GameObject {
 	public MinionUI(Player id,Minion minion, int x, int y) {
 		super(id,minion, x, y);
 		setVely(5);
-//		setVelx(5);
+		setVelx(5);
 	}
 
 	@Override
@@ -22,6 +23,10 @@ public class MinionUI extends GameObject {
 		setY(getY()+getVely());
 		if(getY() <= 0 ||getY() >= Game.HEIGHT-45){
 			setVely(getVely() *-1);
+		}
+
+		if(getX() <= 0 ||getX() >= Game.WIDTH-10){
+			setVelx(getVelx() *-1);
 		}
 	}
 

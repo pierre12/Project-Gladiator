@@ -4,18 +4,25 @@ import java.awt.Graphics;
 
 import de.twins.gladiator.domain.AbstractFighter;
 
-public abstract class GameObject {
-	private int x;
-	private int y;
-	private Player id;
-	private AbstractFighter fighter;
-	public Player getId() {
-		return id;
+public abstract class GameObject implements UIObject{
+	protected int x;
+	protected int y;
+
+	protected int velx;
+	protected int vely;
+
+	protected int width;
+	protected int height;
+
+
+	public GameObject(int x, int y) {
+		super();
+
+		this.x = x;
+		this.y = y;
 	}
 
-	public void setId(Player id) {
-		this.id = id;
-	}
+
 
 	public int getX() {
 		return x;
@@ -27,14 +34,6 @@ public abstract class GameObject {
 
 	public int getY() {
 		return y;
-	}
-
-	public GameObject(Player id,AbstractFighter fighter,int x, int y) {
-		super();
-		this.id = id;
-		this.fighter = fighter;
-		this.x = x;
-		this.y = y;
 	}
 
 	public void setY(int y) {
@@ -57,18 +56,7 @@ public abstract class GameObject {
 		this.vely = vely;
 	}
 
-	private int velx;
-	private int vely;
-	
-	public abstract void tick();
-	public abstract void render(Graphics g);
 
-	public AbstractFighter getFighter() {
-		return fighter;
-	}
 
-	public void setFighter(AbstractFighter fighter) {
-		this.fighter = fighter;
-	}
 	
 }

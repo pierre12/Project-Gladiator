@@ -195,4 +195,6 @@ public abstract class AbstractFighter extends Persistable implements Fightable {
 			currentHealthPoints = totalHealthPoints;
 		}
 	}
+
+
 }

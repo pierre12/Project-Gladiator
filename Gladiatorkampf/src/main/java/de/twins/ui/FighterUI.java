@@ -1,6 +1,5 @@
 package de.twins.ui;
 
-import static org.mockito.Mockito.stubVoid;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -12,7 +11,7 @@ import de.twins.gladiator.domain.AbstractFighter;
  * @author Pierre
  *
  */
-public class FighterUI extends GameObject {
+public class FighterUI extends AbstractFighterUI {
 
 	private static final int WIDTH = 10;
 	private static final int HEIGHT = 10;
