@@ -1,10 +1,7 @@
 package de.twins.ui;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -21,7 +18,6 @@ public class GameObjectHandler {
         for (GameObject gameObject : getGameObjects()) {
             gameObject.tick();
         }
-
     }
 
     public void render(Graphics g) {
@@ -35,8 +31,8 @@ public class GameObjectHandler {
     }
 
     public void addObjects(Collection<GameObject> objects) {
-        for (GameObject gameObject : objects) {
-            gameObjects.add(gameObject);
+        if (objects != null && !objects.isEmpty()) {
+            gameObjects.addAll(objects.stream().filter(Objects::nonNull).collect(Collectors.toList()));
         }
     }
 
