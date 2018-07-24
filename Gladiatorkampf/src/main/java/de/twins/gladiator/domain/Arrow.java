@@ -1,6 +1,6 @@
 package de.twins.gladiator.domain;
 
-public class Arrow extends Persistable implements Ortable {
+public class Arrow implements Ortable {
 
 
     private double power;
@@ -15,7 +15,7 @@ public class Arrow extends Persistable implements Ortable {
 
     private double speed;
 
-    public Arrow(){
+    public Arrow() {
 
     }
 

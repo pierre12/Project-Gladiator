@@ -1,20 +1,20 @@
 package de.twins.gladiator.process;
 
-import java.util.Map;
-
 import de.twins.gladiator.domain.Equipment;
 import de.twins.gladiator.domain.Equipment.BodyPart;
 import de.twins.gladiator.domain.Equipment.Rarity;
 
+import java.util.Map;
+
 public interface EquipmentFactory {
 
 
-	Equipment createRandomEquipment();
+    Equipment createRandomEquipment();
 
-	Equipment createRandomEquipmentFor(BodyPart bodypart);
+    Equipment createRandomEquipmentFor(BodyPart bodypart);
 
-	Equipment createRandomEquipmentWithRarityGrade(BodyPart bodypart,Rarity rarity);
+    Equipment createRandomEquipmentWithRarityGrade(BodyPart bodypart, Rarity rarity);
 
-	Map<BodyPart, Equipment> randomFullSet();
+    Map<BodyPart, Equipment> randomFullSet();
 
 }

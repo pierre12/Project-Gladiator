@@ -4,5 +4,5 @@ import de.twins.enemy.domain.Minion;
 
 public interface EnemyFactory {
 
-	public Minion createMinion();
+    public Minion createMinion();
 }

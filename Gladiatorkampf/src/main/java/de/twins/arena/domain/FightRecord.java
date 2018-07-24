@@ -1,99 +1,86 @@
 package de.twins.arena.domain;
 
+import de.twins.arena.domain.ArenaResult.Result;
+import de.twins.gladiator.domain.AbstractFighter;
+
 import java.math.BigDecimal;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+public class FightRecord {
 
-import de.twins.arena.domain.ArenaResult.Result;
-import de.twins.gladiator.domain.AbstractFighter;
-import de.twins.gladiator.domain.Persistable;
+    private AbstractFighter fighter;
 
-@Entity
-public class FightRecord extends Persistable {
+    private List<AbstractFighter> enemies;
 
-	@ManyToOne
-	private AbstractFighter fighter;
+    private List<AbstractFighter> allies;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<AbstractFighter> enemies;
+    private BigDecimal dmgTaken;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<AbstractFighter> allies;
+    private BigDecimal dmgInflicted;
 
-	private BigDecimal dmgTaken;
+    private Result result;
 
-	private BigDecimal dmgInflicted;
+    public FightRecord(AbstractFighter fighter) {
+        this.fighter = fighter;
+        dmgTaken = BigDecimal.ZERO;
+        dmgInflicted = BigDecimal.ZERO;
+    }
 
-	@Enumerated(EnumType.STRING)
-	private Result result;
+    public void addDmgInflicted(BigDecimal damageDoneToFighter) {
+        dmgInflicted = this.dmgInflicted.add(damageDoneToFighter);
 
-	public FightRecord(AbstractFighter fighter) {
-		this.fighter = fighter;
-		dmgTaken = BigDecimal.ZERO;
-		dmgInflicted = BigDecimal.ZERO;
-	}
+    }
 
-	public void addDmgInflicted(BigDecimal damageDoneToFighter) {
-		dmgInflicted = this.dmgInflicted.add(damageDoneToFighter);
+    public void addDmgTaken(BigDecimal damageDoneToFighter) {
+        dmgTaken = this.dmgTaken.add(damageDoneToFighter);
+    }
 
-	}
+    public List<AbstractFighter> getAllies() {
+        return allies;
+    }
 
-	public void addDmgTaken(BigDecimal damageDoneToFighter) {
-		dmgTaken = this.dmgTaken.add(damageDoneToFighter);
-	}
+    public BigDecimal getDmgInflicted() {
+        return dmgInflicted;
+    }
 
-	public List<AbstractFighter> getAllies() {
-		return allies;
-	}
+    public BigDecimal getDmgTaken() {
+        return dmgTaken;
+    }
 
-	public BigDecimal getDmgInflicted() {
-		return dmgInflicted;
-	}
+    public List<AbstractFighter> getEnemies() {
+        return enemies;
+    }
 
-	public BigDecimal getDmgTaken() {
-		return dmgTaken;
-	}
+    public AbstractFighter getFighter() {
+        return fighter;
+    }
 
-	public List<AbstractFighter> getEnemies() {
-		return enemies;
-	}
+    public Result getResult() {
+        return result;
+    }
 
-	public AbstractFighter getFighter() {
-		return fighter;
-	}
+    public void setAllies(List<AbstractFighter> allies) {
+        this.allies = allies;
+    }
 
-	public Result getResult() {
-		return result;
-	}
+    public void setDmgInflicted(BigDecimal dmgDone) {
+        this.dmgInflicted = dmgDone;
+    }
 
-	public void setAllies(List<AbstractFighter> allies) {
-		this.allies = allies;
-	}
+    public void setDmgTaken(BigDecimal dmgTaken) {
+        this.dmgTaken = dmgTaken;
+    }
 
-	public void setDmgInflicted(BigDecimal dmgDone) {
-		this.dmgInflicted = dmgDone;
-	}
+    public void setEnemies(List<AbstractFighter> enemies) {
+        this.enemies = enemies;
+    }
 
-	public void setDmgTaken(BigDecimal dmgTaken) {
-		this.dmgTaken = dmgTaken;
-	}
+    public void setFigher(AbstractFighter fightable) {
+        this.fighter = fightable;
+    }
 
-	public void setEnemies(List<AbstractFighter> enemies) {
-		this.enemies = enemies;
-	}
-
-	public void setFigher(AbstractFighter fightable) {
-		this.fighter = fightable;
-	}
-
-	public void setResult(Result result) {
-		this.result = result;
-	}
+    public void setResult(Result result) {
+        this.result = result;
+    }
 
 }

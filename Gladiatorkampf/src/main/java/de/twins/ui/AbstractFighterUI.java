@@ -16,8 +16,8 @@ public abstract class AbstractFighterUI extends GameObject {
     }
 
 
-    public AbstractFighterUI(Player id,AbstractFighter fighter,int x,int y){
-        super(x,y);
+    public AbstractFighterUI(Player id, AbstractFighter fighter, int x, int y) {
+        super(x, y);
         this.id = id;
         this.fighter = fighter;
     }

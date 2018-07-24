@@ -1,7 +1,8 @@
 package de.twins.ui;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**

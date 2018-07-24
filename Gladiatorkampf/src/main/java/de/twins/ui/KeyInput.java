@@ -92,11 +92,10 @@ public class KeyInput extends KeyAdapter {
     private GameObject doAction(char key, AbstractFighterUI object) {
         if (key == SHOOT) {
             return new ArrowUI(object.getX(), object.getY());
-        }
-        else if(key == SWING){
-            return new SwordUI(50,50,object);
-        }else if(key == STAB){
-            return new LanceUI(60,60,object);
+        } else if (key == SWING) {
+            return new SwordUI(50, 50, object);
+        } else if (key == STAB) {
+            return new LanceUI(60, 60, object);
         }
         return null;
     }

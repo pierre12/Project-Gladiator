@@ -2,11 +2,11 @@ package de.twins.gladiator.domain;
 
 /**
  * Exception for gladiator related problems.
- * @author Pierre
  *
+ * @author Pierre
  */
 public class GladiatorException extends RuntimeException {
-public GladiatorException(String string) {
-	super(string);
-}
+    public GladiatorException(String string) {
+        super(string);
+    }
 }
