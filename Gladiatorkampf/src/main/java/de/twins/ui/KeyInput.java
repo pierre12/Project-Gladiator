@@ -1,7 +1,5 @@
 package de.twins.ui;
 
-import de.twins.gladiator.domain.AbstractFighter;
-
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -13,6 +11,8 @@ public class KeyInput extends KeyAdapter {
     public final static char LEFT = 'a';
     public final static char RIGHT = 'd';
     public final static char SHOOT = 'e';
+    public static final char SWING = 'q';
+    public static final char STAB = 'r';
 
     private GameObjectHandler handler;
 
@@ -93,11 +93,16 @@ public class KeyInput extends KeyAdapter {
         if (key == SHOOT) {
             return new ArrowUI(object.getX(), object.getY());
         }
+        else if(key == SWING){
+            return new SwordUI(50,50,object);
+        }else if(key == STAB){
+            return new LanceUI(60,60,object);
+        }
         return null;
     }
 
     private boolean isAction(char key) {
-        return key == SHOOT;
+        return key == SHOOT || key == SWING || key == STAB;
     }
 
     private boolean isMovement(char key) {
