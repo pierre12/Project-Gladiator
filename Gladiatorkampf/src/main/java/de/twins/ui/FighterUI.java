@@ -2,6 +2,7 @@ package de.twins.ui;
 
 
 import de.twins.gladiator.domain.AbstractFighter;
+import de.twins.gladiator.domain.Gladiator;
 
 import java.awt.*;
 
@@ -12,11 +13,13 @@ import java.awt.*;
  */
 public class FighterUI extends AbstractFighterUI {
 
-    private static final int WIDTH = 10;
-    private static final int HEIGHT = 10;
 
     public FighterUI(Player id, AbstractFighter fighter, int x, int y) {
         super(id, fighter, x, y);
+    }
+
+    public FighterUI(Player id, Gladiator gladiator) {
+        super(id, gladiator, gladiator.getX(), gladiator.getY());
     }
 
     @Override
@@ -32,16 +35,17 @@ public class FighterUI extends AbstractFighterUI {
         if (getId() == Player.PLAYER) {
             g.setColor(Color.WHITE);
         }
+
         //draw body
-        g.fillRect(getX(), getY(), WIDTH, HEIGHT);
+        g.fillRect(getX(), getY(), width, height);
         //arms
-        g.fillRect(getX() + WIDTH, getY(), WIDTH / 5, HEIGHT / 5);
-        g.fillRect(getX() - 2, getY(), WIDTH / 5, HEIGHT / 5);
+        g.fillRect(getX() + width, getY(), width / 5, height / 5);
+        g.fillRect(getX() - 2, getY(), width / 5, height / 5);
         //legs
-        g.fillRect(getX(), getY() + HEIGHT, WIDTH / 5, HEIGHT / 2);
-        g.fillRect(getX() + WIDTH - 2, getY() + HEIGHT, WIDTH / 5, HEIGHT / 2);
+        g.fillRect(getX(), getY() + height, width / 5, height / 2);
+        g.fillRect(getX() + width - 2, getY() + height, width / 5, height / 2);
         //head
-        g.fillRect(getX() + (WIDTH / 4), getY() - 5, WIDTH / 2, HEIGHT / 2);
+        g.fillRect(getX() + (width / 4), getY() - 5, width / 2, height / 2);
     }
 
 }

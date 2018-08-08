@@ -1,8 +1,10 @@
 package de.twins.gladiator.domain;
 
+import de.twins.equipment.domain.IsWeapon;
+
 import java.math.BigDecimal;
 
-public abstract class AbstractFighter implements Fightable {
+public abstract class AbstractFighter implements Fightable, Ortable {
 
     protected String name;
     protected BigDecimal baseHealthPoints;
@@ -13,6 +15,15 @@ public abstract class AbstractFighter implements Fightable {
     protected BigDecimal totalHealthPoints;
     protected BigDecimal totalAttack;
     protected BigDecimal totalDefense;
+
+    private IsWeapon weapon;
+
+    protected int width;
+    protected int height;
+    protected int x;
+    protected int y;
+    protected int xSpeed;
+    protected int ySpeed;
 
     /**
      * Default-Konstruktor
@@ -122,6 +133,43 @@ public abstract class AbstractFighter implements Fightable {
         updateStats();
     }
 
+    @Override
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+
     /**
      * @see de.twins.gladiator.domain.Equipable#setBaseDefense(java.math.BigDecimal)
      */
@@ -191,5 +239,29 @@ public abstract class AbstractFighter implements Fightable {
         }
     }
 
+    public IsWeapon getWeapon() {
+        return weapon;
+    }
 
+    public void setWeapon(IsWeapon weapon) {
+        this.weapon = weapon;
+    }
+
+    @Override
+    public int getXSpeed() {
+        return xSpeed;
+    }
+
+    @Override
+    public int getYSpeed() {
+        return ySpeed;
+    }
+
+    public void setXSpeed(int xSpeed) {
+        this.xSpeed = xSpeed;
+    }
+
+    public void setYSpeed(int ySpeed) {
+        this.ySpeed = ySpeed;
+    }
 }

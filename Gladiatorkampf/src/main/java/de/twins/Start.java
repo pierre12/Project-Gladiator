@@ -36,8 +36,12 @@ public class Start {
     public void start() {
         Gladiator g = new Gladiator("Rene", BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,
                 new SimpleEquipFactoryImpl().randomFullSet());
+        g.setX(50);
+        g.setY(50);
 
         Minion m = new Minion("Broly", BigDecimal.TEN, BigDecimal.TEN, BigDecimal.ONE);
+        m.setX(0);
+        m.setY(0);
         arena.addFighter(g);
         arena.addFighter(m);
         arena.startFight();

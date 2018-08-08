@@ -1,5 +1,7 @@
 package de.twins.ui;
 
+import de.twins.gladiator.domain.AbstractFighter;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ public class KeyInput extends KeyAdapter {
         for (GameObject object : handler.getGameObjects()) {
             if (object instanceof AbstractFighterUI) {
                 if (((AbstractFighterUI) object).getId() == Player.PLAYER) {
-                    setMovement(key, object, 5);
+                    setMovement(key, ((AbstractFighterUI) object), 5);
                 }
             }
         }
@@ -69,24 +71,26 @@ public class KeyInput extends KeyAdapter {
                 if (object instanceof AbstractFighterUI) {
                     AbstractFighterUI abstractFighter = (AbstractFighterUI) object;
                     if (abstractFighter.getId() == Player.PLAYER) {
-                        Character opposite = getOpposite(key);
-                        if (!keysPressed.contains(opposite)) {
-                            if (isMovement(key)) {
-                                setMovement(key, object, 0);
-                            } else if (isAction(key)) {
-                                GameObject gameObject = doAction(key, abstractFighter);
-                                if (gameObject != null) {
-                                    itemsToAdd.add(gameObject);
-                                }
-                            }
-                        }
+                        handlePlayerInput(key, itemsToAdd, abstractFighter);
                     }
                 }
             }
-
             handler.addObjects(itemsToAdd);
         }
+    }
 
+    private void handlePlayerInput(char key, List<GameObject> itemsToAdd, AbstractFighterUI abstractFighter) {
+        Character opposite = getOpposite(key);
+        if (!keysPressed.contains(opposite)) {
+            if (isMovement(key)) {
+                setMovement(key, abstractFighter, 0);
+            } else if (isAction(key)) {
+                GameObject gameObject = doAction(key, abstractFighter);
+                if (gameObject != null) {
+                    itemsToAdd.add(gameObject);
+                }
+            }
+        }
     }
 
     private GameObject doAction(char key, AbstractFighterUI object) {
@@ -108,18 +112,19 @@ public class KeyInput extends KeyAdapter {
         return key == UP || key == DOWN || key == LEFT || key == RIGHT;
     }
 
-    private void setMovement(int key, GameObject object, int velocity) {
+    private void setMovement(int key, AbstractFighterUI object, int velocity) {
+        AbstractFighter fighter = object.getFighter();
         if (key == UP) {
-            object.setVely(-velocity);
+            fighter.setYSpeed(-velocity);
         }
         if (key == LEFT) {
-            object.setVelx(-velocity);
+            fighter.setXSpeed(-velocity);
         }
         if (key == DOWN) {
-            object.setVely(velocity);
+            fighter.setYSpeed(velocity);
         }
         if (key == RIGHT) {
-            object.setVelx(velocity);
+            fighter.setXSpeed(velocity);
         }
     }
 }

@@ -20,6 +20,8 @@ public abstract class AbstractFighterUI extends GameObject {
         super(x, y);
         this.id = id;
         this.fighter = fighter;
+        this.width = fighter.getWidth();
+        this.height = fighter.getHeight();
     }
 
     public AbstractFighter getFighter() {
