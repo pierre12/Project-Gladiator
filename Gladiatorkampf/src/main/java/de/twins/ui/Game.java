@@ -31,6 +31,7 @@ public class Game extends Canvas implements Runnable {
         snake.setHeight(30);
         snake.setWidth(30);
         snake.setYSpeed(2);
+        snake.setTarget(conan);
         arena.addFighter(snake);
         handler = new GameObjectHandler();
         handler.setArena(arena);
