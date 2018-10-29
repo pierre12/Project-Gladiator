@@ -15,11 +15,14 @@ public class GameObjectHandler {
     private List<GameObject> gameObjects = new ArrayList<>();
 
 
+
     public void tick() {
-        for (GameObject gameObject : getGameObjects()) {
-            gameObject.tick();
-        }
+//        for (GameObject gameObject : getGameObjects()) {
+//            gameObject.tick();
+//    }
     }
+
+
 
     public void render(Graphics g) {
         for (GameObject gameObject : getGameObjects()) {
@@ -48,4 +51,5 @@ public class GameObjectHandler {
         //hinzugefügt werden
         return new ArrayList<>(gameObjects);
     }
+
 }

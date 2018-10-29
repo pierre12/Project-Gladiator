@@ -17,11 +17,19 @@ public class Game extends Canvas implements Runnable {
     private HUD hud;
 
     public Game() {
+
+        Gladiator conan = new Gladiator("CONAN", new BigDecimal(10000), new BigDecimal(10000), new BigDecimal(10000), null);
+        conan.setHeight(10);
+        conan.setWidth(10);
+        conan.setXSpeed(3);
+        conan.setX(100);
+        conan.setY(100);
+        Minion snake = new Minion("Snake", new BigDecimal(10000), new BigDecimal(10000), new BigDecimal(10000));
+        snake.setHeight(30);
+        snake.setWidth(30);
+        snake.setYSpeed(2);
+        snake.setTarget(conan);
         handler = new GameObjectHandler();
-        FighterUI fighter = new FighterUI(Player.PLAYER, new Gladiator("CONAN", new BigDecimal(10000), new BigDecimal(10000), new BigDecimal(10000), null), 100, 100);
-        MinionUI dummyFighter = new MinionUI(Player.ENEMY, new Minion("CONAN", new BigDecimal(10000), new BigDecimal(10000), new BigDecimal(10000)), 200, 100);
-        hud = new HUD(fighter);
-        handler.addObjects(dummyFighter, fighter);
         addKeyListener(new KeyInput(handler));
         new Window(WIDTH, HEIGHT, "Working title: Gladiators", this);
     }
@@ -59,7 +67,9 @@ public class Game extends Canvas implements Runnable {
             lastTime = now;
             while (delta >= 1) {
                 tick();
-                hud.tick();
+                if (hud != null) {
+                    hud.tick();
+                }
                 delta--;
             }
             if (running) {
@@ -89,7 +99,9 @@ public class Game extends Canvas implements Runnable {
         Graphics g = bs.getDrawGraphics();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
-        hud.render(g);
+        if (hud != null) {
+            hud.render(g);
+        }
         handler.render(g);
         g.dispose();
         bs.show();

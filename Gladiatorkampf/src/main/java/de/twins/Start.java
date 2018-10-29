@@ -1,6 +1,5 @@
 package de.twins;
 
-import de.twins.arena.process.OneOnOneArena;
 import de.twins.enemy.domain.Minion;
 import de.twins.gladiator.domain.Gladiator;
 import de.twins.gladiator.process.SimpleEquipFactory;
@@ -20,8 +19,6 @@ public class Start {
         SpringApplication.run(Start.class);
     }
 
-    @Autowired
-    OneOnOneArena arena;
 
     @Autowired
     SimpleEquipFactory simpleEquip;
@@ -32,14 +29,6 @@ public class Start {
     }
 
     public void start() {
-        Gladiator g = new Gladiator("Rene", BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,
-                simpleEquip.randomFullSet());
-
-        Minion m = new Minion("Broly", BigDecimal.TEN, BigDecimal.TEN, BigDecimal.ONE);
-        arena.addFighter(g);
-        arena.addFighter(m);
-        arena.startFight();
-        System.out.println("Geschafft");
-
+        //TODO: Boot application with actual game
     }
 }

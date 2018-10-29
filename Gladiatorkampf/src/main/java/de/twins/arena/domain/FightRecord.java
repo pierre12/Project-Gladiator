@@ -1,6 +1,5 @@
 package de.twins.arena.domain;
 
-import de.twins.arena.domain.ArenaResult.Result;
 import de.twins.gladiator.domain.AbstractFighter;
 
 import java.math.BigDecimal;
@@ -18,7 +17,7 @@ public class FightRecord {
 
     private BigDecimal dmgInflicted;
 
-    private Result result;
+
 
     public FightRecord(AbstractFighter fighter) {
         this.fighter = fighter;
@@ -55,10 +54,6 @@ public class FightRecord {
         return fighter;
     }
 
-    public Result getResult() {
-        return result;
-    }
-
     public void setAllies(List<AbstractFighter> allies) {
         this.allies = allies;
     }
@@ -77,10 +72,6 @@ public class FightRecord {
 
     public void setFigher(AbstractFighter fightable) {
         this.fighter = fightable;
-    }
-
-    public void setResult(Result result) {
-        this.result = result;
     }
 
 }

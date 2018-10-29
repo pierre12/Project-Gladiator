@@ -6,11 +6,15 @@ import java.awt.*;
 
 public class MinionUI extends AbstractFighterUI {
 
-    private static final int WIDTH = 10;
-    private static final int HEIGHT = 10;
 
     public MinionUI(Player id, Minion minion, int x, int y) {
         super(id, minion, x, y);
+        setVely(5);
+        setVelx(5);
+    }
+
+    public MinionUI(Player id, Minion minion) {
+        super(id, minion, minion.getX(), minion.getY());
         setVely(5);
         setVelx(5);
     }
@@ -30,17 +34,18 @@ public class MinionUI extends AbstractFighterUI {
 
     @Override
     public void render(Graphics g) {
+        
         g.setColor(Color.RED);
         //draw body
-        g.fillRect(getX(), getY(), WIDTH, HEIGHT);
+        g.fillRect(getX(), getY(), width, height);
         //arms
-        g.fillRect(getX() + WIDTH, getY(), WIDTH / 5, HEIGHT / 5);
-        g.fillRect(getX() - 2, getY(), WIDTH / 5, HEIGHT / 5);
+        g.fillRect(getX() + width, getY(), width / 5, height / 5);
+        g.fillRect(getX() - 2, getY(), width / 5, height / 5);
         //legs
-        g.fillRect(getX(), getY() + HEIGHT, WIDTH / 5, HEIGHT / 2);
-        g.fillRect(getX() + WIDTH - 2, getY() + HEIGHT, WIDTH / 5, HEIGHT / 2);
+        g.fillRect(getX(), getY() + height, width / 5, height / 2);
+        g.fillRect(getX() + width - 2, getY() + height, width / 5, height / 2);
         //head
-        g.fillRect(getX() + (WIDTH / 4), getY() - 5, WIDTH / 2, HEIGHT / 2);
+        g.fillRect(getX() + (width / 4), getY() - 5, width / 2, height / 2);
     }
 
 }
