@@ -1,12 +1,15 @@
 package de.twins.enemy.domain;
 
 import de.twins.gladiator.domain.AbstractFighter;
+import org.springframework.boot.autoconfigure.web.ResourceProperties;
 
 import java.math.BigDecimal;
 
 public class Minion extends AbstractFighter {
 
     private AbstractFighter target;
+
+    private Strategy strategy = new FollowStrategy(this);
     public Minion(String name, BigDecimal healthPoints, BigDecimal attack, BigDecimal defense) {
         super(name, healthPoints, attack, defense);
         updateStats();
@@ -19,5 +22,13 @@ public class Minion extends AbstractFighter {
 
     public void setTarget(AbstractFighter target) {
         this.target = target;
+    }
+
+    public Strategy getStrategy() {
+        return strategy;
+    }
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
     }
 }
