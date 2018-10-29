@@ -3,21 +3,17 @@ package de.twins;
 import de.twins.arena.process.OneOnOneArena;
 import de.twins.enemy.domain.Minion;
 import de.twins.gladiator.domain.Gladiator;
-import de.twins.gladiator.process.SimpleEquipFactoryImpl;
+import de.twins.gladiator.process.SimpleEquipFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 
-@SpringBootApplication
-@PropertySource(value = "classpath:config/application.properties")
-@Configuration
-@EnableAutoConfiguration
+@SpringBootApplication(exclude ={DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 public class Start {
 
     public static void main(String[] args) {
@@ -27,6 +23,8 @@ public class Start {
     @Autowired
     OneOnOneArena arena;
 
+    @Autowired
+    SimpleEquipFactory simpleEquip;
 
     @PostConstruct
     public void init() {
@@ -35,7 +33,7 @@ public class Start {
 
     public void start() {
         Gladiator g = new Gladiator("Rene", BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,
-                new SimpleEquipFactoryImpl().randomFullSet());
+                simpleEquip.randomFullSet());
 
         Minion m = new Minion("Broly", BigDecimal.TEN, BigDecimal.TEN, BigDecimal.ONE);
         arena.addFighter(g);
