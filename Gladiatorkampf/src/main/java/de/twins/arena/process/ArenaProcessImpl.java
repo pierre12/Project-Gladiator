@@ -2,6 +2,7 @@ package de.twins.arena.process;
 
 import de.twins.arena.domain.Arena;
 import de.twins.enemy.domain.Minion;
+import de.twins.enemy.domain.Strategy;
 import de.twins.gladiator.domain.AbstractFighter;
 import de.twins.physic.CollissionProcess;
 import de.twins.physic.CollissionProcessImpl;
@@ -84,7 +85,7 @@ public class ArenaProcessImpl implements ArenaProcess {
 
     private void executeStrategy(Set<Minion> minions) {
         for (Minion minion : minions) {
-            minion.getStrategy().ifPresent(strategy -> strategy.execute());
+            minion.getStrategy().ifPresent(Strategy::execute);
         }
     }
 

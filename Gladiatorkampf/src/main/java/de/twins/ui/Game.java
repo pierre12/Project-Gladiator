@@ -1,5 +1,7 @@
 package de.twins.ui;
 
+import de.twins.arena.domain.Arena;
+import de.twins.arena.domain.Obstacle;
 import de.twins.enemy.domain.Minion;
 import de.twins.gladiator.domain.Gladiator;
 
@@ -29,7 +31,12 @@ public class Game extends Canvas implements Runnable {
         snake.setWidth(30);
         snake.setYSpeed(2);
         snake.setTarget(conan);
+        Arena arena = new Arena(WIDTH, HEIGHT);
+        arena.addFighter(conan);
+        arena.addFighter(snake);
+        arena.addObstacle(new Obstacle(100,200,20,20));
         handler = new GameObjectHandler();
+        handler.setArena(arena);
         addKeyListener(new KeyInput(handler));
         new Window(WIDTH, HEIGHT, "Working title: Gladiators", this);
     }
