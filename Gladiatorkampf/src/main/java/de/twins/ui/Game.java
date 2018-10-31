@@ -5,8 +5,13 @@ import de.twins.arena.domain.Obstacle;
 import de.twins.enemy.domain.Minion;
 import de.twins.gladiator.domain.Gladiator;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 
 public class Game extends Canvas implements Runnable {
@@ -34,7 +39,7 @@ public class Game extends Canvas implements Runnable {
         Arena arena = new Arena(WIDTH, HEIGHT);
         arena.addFighter(conan);
         arena.addFighter(snake);
-        arena.addObstacle(new Obstacle(100,200,20,20));
+        arena.addObstacle(new Obstacle(100, 200, 20, 20));
         handler = new GameObjectHandler();
         handler.setArena(arena);
         addKeyListener(new KeyInput(handler));
@@ -104,8 +109,19 @@ public class Game extends Canvas implements Runnable {
             return;
         }
         Graphics g = bs.getDrawGraphics();
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, WIDTH, HEIGHT);
+
+        File file = new File(ImagePaths.GRASS_UNDERGROUND);
+        try {
+            BufferedImage read = ImageIO.read(file);
+            g.drawImage(read, 0, 0, WIDTH, HEIGHT, new ImageObserver() {
+                @Override
+                public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
+                    return false;
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (hud != null) {
             hud.render(g);
         }
