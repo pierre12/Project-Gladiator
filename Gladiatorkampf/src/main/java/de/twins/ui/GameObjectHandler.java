@@ -1,5 +1,12 @@
 package de.twins.ui;
 
+import de.twins.arena.domain.Arena;
+import de.twins.arena.process.ArenaProcess;
+import de.twins.arena.process.ArenaProcessImpl;
+import de.twins.enemy.domain.Minion;
+import de.twins.gladiator.domain.AbstractFighter;
+import de.twins.gladiator.domain.Gladiator;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -13,10 +20,12 @@ import java.util.stream.Collectors;
 public class GameObjectHandler {
 
     private List<GameObject> gameObjects = new ArrayList<>();
-
+    private Arena arena;
+    private ArenaProcess arenaProcess = new ArenaProcessImpl();
 
 
     public void tick() {
+        arena = arenaProcess.tick(arena);
 //        for (GameObject gameObject : getGameObjects()) {
 //            gameObject.tick();
 //    }
@@ -25,8 +34,28 @@ public class GameObjectHandler {
 
 
     public void render(Graphics g) {
+        renderArena();
         for (GameObject gameObject : getGameObjects()) {
             gameObject.render(g);
+        }
+    }
+
+    private void renderArena() {
+        if (arena != null) {
+            gameObjects.clear();
+            List<AbstractFighter> abstractFighters = arena.getAbstractFighters();
+            for (AbstractFighter abstractFighter : abstractFighters) {
+                if (abstractFighter instanceof Gladiator) {
+                    Gladiator gladiator = (Gladiator) abstractFighter;
+                    FighterUI fighterUI = new FighterUI(Player.PLAYER, gladiator);
+                    gameObjects.add(fighterUI);
+                } else if (abstractFighter instanceof Minion) {
+                    MinionUI minionUI = new MinionUI(Player.ENEMY, ((Minion) abstractFighter));
+                    gameObjects.add(minionUI);
+                }
+            }
+
+            arena.getObstacles().forEach(obstacle -> gameObjects.add(new ObstacleUI(obstacle)) );
         }
     }
 
@@ -52,4 +81,7 @@ public class GameObjectHandler {
         return new ArrayList<>(gameObjects);
     }
 
+    public void setArena(Arena arena) {
+        this.arena = arena;
+    }
 }

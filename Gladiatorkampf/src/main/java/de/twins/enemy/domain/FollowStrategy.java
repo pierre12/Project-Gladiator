@@ -19,6 +19,7 @@ public class FollowStrategy implements Strategy {
     @Override
     public void execute() {
         if(minion == null){
+            return;
         }else{
 
             int newXSpeed;
