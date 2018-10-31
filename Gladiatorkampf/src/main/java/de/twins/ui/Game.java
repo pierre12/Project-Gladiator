@@ -1,11 +1,17 @@
 package de.twins.ui;
 
 import de.twins.arena.domain.Arena;
+import de.twins.arena.domain.Obstacle;
 import de.twins.enemy.domain.Minion;
 import de.twins.gladiator.domain.Gladiator;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 
 public class Game extends Canvas implements Runnable {
@@ -23,7 +29,7 @@ public class Game extends Canvas implements Runnable {
         Gladiator conan = new Gladiator("CONAN", new BigDecimal(10000), new BigDecimal(10000), new BigDecimal(10000), null);
         conan.setHeight(10);
         conan.setWidth(10);
-        conan.setXSpeed(3);
+        conan.setXSpeed(1);
         conan.setX(100);
         conan.setY(100);
         arena.addFighter(conan);
@@ -33,6 +39,8 @@ public class Game extends Canvas implements Runnable {
         snake.setYSpeed(2);
         snake.setTarget(conan);
         arena.addFighter(snake);
+        arena.addObstacle(new Obstacle(50,50,30,30));
+
         handler = new GameObjectHandler();
         handler.setArena(arena);
         addKeyListener(new KeyInput(handler));
@@ -101,15 +109,29 @@ public class Game extends Canvas implements Runnable {
             createBufferStrategy(3);
             return;
         }
-        Graphics g = bs.getDrawGraphics();
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, WIDTH, HEIGHT);
-        if (hud != null) {
-            hud.render(g);
+
+        //load background
+        File file = new File(ImagePaths.GRASS_UNDERGROUND);
+        try {
+            BufferedImage read = ImageIO.read(file);
+            Graphics g = bs.getDrawGraphics();
+            g.drawImage(read,0,0, WIDTH, HEIGHT, new ImageObserver() {
+                @Override
+                public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
+                    return false;
+                }
+            });
+            if (hud != null) {
+                hud.render(g);
+            }
+            handler.render(g);
+            g.dispose();
+            bs.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        handler.render(g);
-        g.dispose();
-        bs.show();
+
+
     }
 
     private void tick() {

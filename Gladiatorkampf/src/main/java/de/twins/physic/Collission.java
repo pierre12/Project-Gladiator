@@ -2,6 +2,9 @@ package de.twins.physic;
 
 import de.twins.gladiator.domain.Ortable;
 
+/**
+ *
+ */
 public class Collission {
 
     private Ortable ortable1;

@@ -4,12 +4,14 @@ import de.twins.gladiator.domain.AbstractFighter;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 public class Minion extends AbstractFighter {
 
     private AbstractFighter target;
 
     private Strategy strategy = new FollowStrategy(this);
+
     public Minion(String name, BigDecimal healthPoints, BigDecimal attack, BigDecimal defense) {
         super(name, healthPoints, attack, defense);
         updateStats();
@@ -24,8 +26,8 @@ public class Minion extends AbstractFighter {
         this.target = target;
     }
 
-    public Strategy getStrategy() {
-        return strategy;
+    public Optional<Strategy> getStrategy() {
+        return Optional.ofNullable(strategy);
     }
 
     public void setStrategy(Strategy strategy) {

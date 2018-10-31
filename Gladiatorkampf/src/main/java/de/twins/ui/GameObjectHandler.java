@@ -53,6 +53,8 @@ public class GameObjectHandler {
                     gameObjects.add(minionUI);
                 }
             }
+
+            arena.getObstacles().forEach(obstacle -> gameObjects.add(new ObstacleUI(obstacle)) );
         }
     }
 

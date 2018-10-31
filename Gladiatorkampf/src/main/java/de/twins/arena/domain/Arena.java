@@ -9,7 +9,7 @@ import java.util.List;
 public class Arena {
 
     private List<AbstractFighter> abstractFighters = new ArrayList<>();
-
+    private List<Obstacle> obstacles = new ArrayList<>();
     private int width;
     private int heigth;
 
@@ -44,5 +44,17 @@ public class Arena {
 
     public void setHeigth(int heigth) {
         this.heigth = heigth;
+    }
+
+    public List<Obstacle> getObstacles() {
+        return obstacles;
+    }
+
+    public void setObstacles(List<Obstacle> obstacles) {
+        this.obstacles = obstacles;
+    }
+
+    public void addObstacle(Obstacle obstacle){
+        this.obstacles.add(obstacle);
     }
 }

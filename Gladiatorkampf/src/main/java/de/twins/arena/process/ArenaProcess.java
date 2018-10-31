@@ -7,31 +7,40 @@ import de.twins.gladiator.domain.AbstractFighter;
 import de.twins.physic.CollissionProcess;
 import de.twins.physic.CollissionProcessImpl;
 
+import java.beans.PropertyEditorSupport;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class ArenaProcess {
 
     private CollissionProcess collissionProcess = new CollissionProcessImpl();
 
 
-
     public Arena tick(Arena arena) {
-        int arenaHeigth = arena.getHeigth();
-        int arenaWidth = arena.getWidth();
-
         List<AbstractFighter> abstractFighters = arena.getAbstractFighters();
+        Set<Minion> minions = extractMinions(abstractFighters);
+        this.executeStrategy(minions);
+        this.moveFighters(arena, abstractFighters);
+        return arena;
+    }
+
+    private Set<Minion> extractMinions(List<AbstractFighter> abstractFighters) {
+        Predicate<AbstractFighter> isMinion = fighter -> fighter instanceof Minion;
+        return abstractFighters.stream()
+                .filter(isMinion)
+                .filter(Objects::nonNull)
+                .map(minion -> (Minion) minion)
+                .collect(Collectors.toSet());
+    }
+
+    private void moveFighters(Arena arena, List<AbstractFighter> abstractFighters) {
         for (AbstractFighter abstractFighter : abstractFighters) {
             int xSpeed = abstractFighter.getXSpeed();
             int ySpeed = abstractFighter.getYSpeed();
-
-            if (abstractFighter instanceof Minion) {
-                Strategy strategy = ((Minion) abstractFighter).getStrategy();
-                if (strategy != null) {
-                    strategy.execute();
-                }
-            }
-
 
             int oldX = abstractFighter.getX();
             int oldY = abstractFighter.getY();
@@ -39,6 +48,10 @@ public class ArenaProcess {
             int height = abstractFighter.getHeight();
             int newX = oldX + xSpeed;
             int newY = oldY + ySpeed;
+
+            int arenaHeigth = arena.getHeigth();
+            int arenaWidth = arena.getWidth();
+
             if (newX + width <= arenaWidth && newX >= 10) {
                 abstractFighter.setX(newX);
             }
@@ -65,10 +78,18 @@ public class ArenaProcess {
                 abstractFighter.setY(oldY);
                 abstractFighter.setX(oldX);
             }
-        }
 
-        return arena;
+            if (!collissionProcess.determineCollissions(abstractFighter, arena.getObstacles()).isEmpty()) {
+                abstractFighter.setY(oldY);
+                abstractFighter.setX(oldX);
+            }
+        }
     }
 
+    private void executeStrategy(Set<Minion> minions) {
+        for (Minion minion : minions) {
+            minion.getStrategy().ifPresent(strategy -> strategy.execute());
+        }
+    }
 
 }

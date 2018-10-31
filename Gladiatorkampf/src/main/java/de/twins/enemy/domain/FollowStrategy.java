@@ -4,6 +4,11 @@ import de.twins.gladiator.domain.AbstractFighter;
 
 import java.util.Random;
 
+/**
+ * Strategy zum Folgen eines Targets.
+ * Wenn kein Target vorhanden ist läuft, das Minion
+ * in zufällige Richtungen.
+ */
 public class FollowStrategy implements Strategy {
 
     private final Minion minion;
