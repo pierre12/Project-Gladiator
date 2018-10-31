@@ -1,12 +1,14 @@
 package de.twins.physic;
 
 import de.twins.gladiator.domain.Ortable;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 public class CollissionProcessImpl implements CollissionProcess {
 

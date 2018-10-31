@@ -13,7 +13,7 @@ public interface CollissionProcess {
     /**
      * Ermittelt sämtliche Collissionen, die zwischen den {@link Ortable}s auftreten
      *
-     * @param ortableList
+     * @param ortableList Liste der zu prüfenden {@link Ortable}
      * @return eine Liste von {@link Collission}
      */
     List<Collission> getCollidingObjects(List<Ortable> ortableList);
