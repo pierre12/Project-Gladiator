@@ -2,6 +2,7 @@ package de.twins.ui;
 
 import de.twins.arena.domain.Arena;
 import de.twins.arena.process.ArenaProcess;
+import de.twins.arena.process.ArenaProcessImpl;
 import de.twins.enemy.domain.Minion;
 import de.twins.gladiator.domain.AbstractFighter;
 import de.twins.gladiator.domain.Gladiator;
@@ -20,7 +21,7 @@ public class GameObjectHandler {
 
     private List<GameObject> gameObjects = new ArrayList<>();
     private Arena arena;
-    private ArenaProcess arenaProcess = new ArenaProcess();
+    private ArenaProcess arenaProcess = new ArenaProcessImpl();
 
 
     public void tick() {

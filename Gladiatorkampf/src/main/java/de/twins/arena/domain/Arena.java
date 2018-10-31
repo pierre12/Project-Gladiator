@@ -6,6 +6,9 @@ import de.twins.gladiator.domain.Ortable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Welt-Objekt für {@link Obstacle} und {@link AbstractFighter}
+ */
 public class Arena {
 
     private List<AbstractFighter> abstractFighters = new ArrayList<>();
