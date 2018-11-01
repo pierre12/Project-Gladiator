@@ -1,7 +1,9 @@
 package de.twins.physic;
 
 import de.twins.gladiator.domain.Ortable;
+import de.twins.gladiator.domain.Position;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,4 +39,14 @@ public interface CollissionProcess {
      * @return ein Optional einer {@link Collission}
      */
     List<Collission> determineCollissions(Ortable ortable, List<? extends Ortable> ortables);
+
+    /**
+     * Ermittelt die Position die der Ortable besitzen darf um nicht mit den anderen Ortables zu kollidieren,
+     * sollte eine Collision vorhanden sein.
+     *
+     * @param ortable
+     * @param ortables
+     * @return
+     */
+    Optional<Position> determineOptimalPosition(Ortable ortable, List<? extends  Ortable> ortables);
 }

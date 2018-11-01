@@ -1,15 +1,21 @@
 package de.twins.gladiator.process;
 
+import de.twins.enemy.domain.Minion;
+import de.twins.gladiator.domain.Gladiator;
 import de.twins.gladiator.domain.Ortable;
+import de.twins.gladiator.domain.Position;
 import de.twins.physic.Collission;
 import de.twins.physic.CollissionProcess;
 import de.twins.physic.CollissionProcessImpl;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 
@@ -91,7 +97,47 @@ public class CollissionProcessImplTest {
     }
 
 
-    private Ortable createOrtable(int x, int y, int width, int height) {
+    @Test
+    public void testDetermineOptimalPosition_FromLeft(){
+        //Case 1 von links
+        Ortable obstacle = this.createOrtable(30, 30, 50, 50);
+        Ortable ortableWithFromLeft = this.createOrtableWithSpeed(20, 30, 30, 20, 50, 0);
+        Optional<Position> position = this.collissionProcess.determineOptimalPosition(ortableWithFromLeft, Collections.singletonList(obstacle));
+        Assert.assertTrue(position.isPresent());
+        Assert.assertThat(position.get().getX(), Matchers.is(obstacle.getX() - ortableWithFromLeft.getWidth()));
+    }
+
+    @Test
+    public void testDetermineOptimalPosition_FromRight(){
+        //Case 1 von links
+        Ortable obstacle = this.createOrtable(30, 30, 50, 50);
+        Ortable ortableWithFromRight = this.createOrtableWithSpeed(70, 30, 30, 20, -100, 0);
+        Optional<Position> position = this.collissionProcess.determineOptimalPosition(ortableWithFromRight, Collections.singletonList(obstacle));
+        Assert.assertTrue(position.isPresent());
+        Assert.assertThat(position.get().getX(), Matchers.is(obstacle.maxX()));
+    }
+
+    @Test
+    public void testDetermineOptimalPosition_FromTop(){
+        //Case 1 von links
+        Ortable obstacle = this.createOrtable(30, 30, 50, 50);
+        Ortable ortableWithFromTop = this.createOrtableWithSpeed(30, 40, 30, 20, 0, 10);
+        Optional<Position> position = this.collissionProcess.determineOptimalPosition(ortableWithFromTop, Collections.singletonList(obstacle));
+        Assert.assertTrue(position.isPresent());
+        Assert.assertThat(position.get().getY(), Matchers.is(obstacle.getY() - ortableWithFromTop.getHeight()));
+    }
+
+    @Test
+    public void testDetermineOptimalPosition_FromBottom(){
+        //Case 1 von links
+        Ortable obstacle = this.createOrtable(30, 30, 50, 50);
+        Ortable ortableWithFromTop = this.createOrtableWithSpeed(30, 50, 30, 20, 0, -10);
+        Optional<Position> position = this.collissionProcess.determineOptimalPosition(ortableWithFromTop, Collections.singletonList(obstacle));
+        Assert.assertTrue(position.isPresent());
+        Assert.assertThat(position.get().getY(), Matchers.is(obstacle.maxY()));
+    }
+
+    private Ortable createOrtableWithSpeed(int x, int y, int width, int height, int xSpeed, int ySpeed) {
         return new Ortable() {
             @Override
             public int getX() {
@@ -115,14 +161,20 @@ public class CollissionProcessImplTest {
 
             @Override
             public int getXSpeed() {
-                return 0;
+                return xSpeed;
             }
 
             @Override
             public int getYSpeed() {
-                return 0;
+                return ySpeed;
             }
+
+
         };
+    }
+
+    private Ortable createOrtable(int x, int y, int width, int height) {
+            return this.createOrtableWithSpeed(x,y,width,height,0,0);
     }
 
 }

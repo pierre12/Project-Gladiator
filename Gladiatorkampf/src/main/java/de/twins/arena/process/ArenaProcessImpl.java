@@ -4,11 +4,13 @@ import de.twins.arena.domain.Arena;
 import de.twins.enemy.domain.Minion;
 import de.twins.enemy.domain.Strategy;
 import de.twins.gladiator.domain.AbstractFighter;
+import de.twins.gladiator.domain.Position;
 import de.twins.physic.CollissionProcess;
 import de.twins.physic.CollissionProcessImpl;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -72,13 +74,20 @@ public class ArenaProcessImpl implements ArenaProcess {
             }
 
             if (!collissionProcess.determineCollissions(abstractFighter, abstractFighters).isEmpty()) {
-                abstractFighter.setY(oldY);
-                abstractFighter.setX(oldX);
+                Optional<Position> position = collissionProcess.determineOptimalPosition(abstractFighter, abstractFighters);
+                if(position.isPresent()){
+                    abstractFighter.setY(position.get().getY());
+                    abstractFighter.setX(position.get().getX());
+                }
             }
 
             if (!collissionProcess.determineCollissions(abstractFighter, arena.getObstacles()).isEmpty()) {
-                abstractFighter.setY(oldY);
-                abstractFighter.setX(oldX);
+                Optional<Position> position = collissionProcess.determineOptimalPosition(abstractFighter, arena.getObstacles());
+                if(position.isPresent()){
+                    System.out.println(position);
+                    abstractFighter.setY(position.get().getY());
+                    abstractFighter.setX(position.get().getX());
+                }
             }
         }
     }

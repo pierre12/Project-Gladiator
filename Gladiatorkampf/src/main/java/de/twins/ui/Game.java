@@ -39,7 +39,7 @@ public class Game extends Canvas implements Runnable {
         Arena arena = new Arena(WIDTH, HEIGHT);
         arena.addFighter(conan);
         arena.addFighter(snake);
-        arena.addObstacle(new Obstacle(100, 200, 20, 20));
+        arena.addObstacle(new Obstacle(100, 200, 50, 50));
         handler = new GameObjectHandler();
         handler.setArena(arena);
         addKeyListener(new KeyInput(handler));
@@ -113,12 +113,7 @@ public class Game extends Canvas implements Runnable {
         File file = new File(ImagePaths.GRASS_UNDERGROUND);
         try {
             BufferedImage read = ImageIO.read(file);
-            g.drawImage(read, 0, 0, WIDTH, HEIGHT, new ImageObserver() {
-                @Override
-                public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
-                    return false;
-                }
-            });
+            g.drawImage(read, 0, 0, WIDTH, HEIGHT, (img, infoflags, x, y, width, height) -> false);
         } catch (IOException e) {
             e.printStackTrace();
         }

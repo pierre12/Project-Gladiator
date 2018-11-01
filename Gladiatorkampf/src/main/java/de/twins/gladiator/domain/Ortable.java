@@ -2,23 +2,44 @@ package de.twins.gladiator.domain;
 
 public interface Ortable {
 
-    default boolean doCollide(Ortable ortable){
-        if(ortable.equals(this)){
+    default boolean doCollide(Ortable ortable) {
+        if (ortable.equals(this)) {
             return false;
         }
-        int x = this.getX();
-        int y = this.getY();
-        double width = this.getWidth();
-        double height = this.getHeight();
 
 
-        boolean outsideBottom = y + height  < ortable.getY();
-        boolean outsideTop = y > ortable.getY() + ortable.getHeight();
-        boolean outsideLeft = x > ortable.getX() + ortable.getWidth();
-        boolean outsideRight = x + width < ortable.getX();
+        boolean outsideBottom = isOutsideBottom(ortable);
+        boolean outsideTop = isOutsideTop(ortable);
+        boolean outsideLeft = isOutsideLeft(ortable);
+        boolean outsideRight = isOutsideRight(ortable);
         return !(outsideBottom || outsideTop || outsideLeft || outsideRight);
 
-    };
+    }
+
+    default boolean isOutsideRight(Ortable ortable) {
+        return this.getX() + this.getWidth() <= ortable.getX();
+    }
+
+    default boolean isOutsideLeft(Ortable ortable) {
+        return this.getX() >= ortable.getX() + ortable.getWidth();
+    }
+
+    default boolean isOutsideTop(Ortable ortable) {
+        return this.getY() >= ortable.getY() + ortable.getHeight();
+    }
+
+    default boolean isOutsideBottom(Ortable ortable) {
+        return this.getY() + this.getHeight() <= ortable.getY();
+    }
+
+    default int maxX() {
+        return getX() + getWidth();
+    }
+
+    default int maxY() {
+        return getY() + getHeight();
+    }
+
 
     int getX();
 
