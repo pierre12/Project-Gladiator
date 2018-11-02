@@ -1,5 +1,6 @@
 package de.twins.physic;
 
+import de.twins.gladiator.domain.DummyOrtable;
 import de.twins.gladiator.domain.Ortable;
 import de.twins.gladiator.domain.Position;
 import org.springframework.stereotype.Component;
@@ -25,9 +26,9 @@ public class CollissionProcessImpl implements CollissionProcess {
 
     @Override
     public List<Collission> getCollidingObjects(List<Ortable> ortableList) {
-        if(!CollectionUtils.isEmpty(ortableList)){
+        if (!CollectionUtils.isEmpty(ortableList)) {
             return ortableList.stream().map(ortable -> determineCollissions(ortable, ortableList)).flatMap(Collection::stream).collect(Collectors.toList());
-        }else{
+        } else {
             return new ArrayList<>();
         }
     }
@@ -53,35 +54,52 @@ public class CollissionProcessImpl implements CollissionProcess {
     @Override
     public Optional<Position> determineOptimalPosition(Ortable ortable, List<? extends Ortable> ortables) {
         List<Collission> collissions = this.determineCollissions(ortable, ortables);
-        if(!collissions.isEmpty()){
+        if (!collissions.isEmpty()) {
             int xSpeed = ortable.getXSpeed();
             int ySpeed = ortable.getYSpeed();
-            if(xSpeed == 0 && ySpeed == 0){
+            if (xSpeed == 0 && ySpeed == 0) {
                 //Ortable is static wird nicht bewegt
                 return Optional.empty();
             }
             List<Position> possiblePositions = new ArrayList<>();
             for (Collission collission : collissions) {
                 Ortable ortable2 = collission.getOrtable2();
-                int y = getOptimalY(ortable, ortable2);
-                int x = getOptimalX(ortable, ortable2);
-                possiblePositions.add(new Position(x,y));
+                int optimalY = getOptimalY(ortable, ortable2);
+                int optimalX = getOptimalX(ortable, ortable2);
+
+                //both new Values really necessary?
+                //try it out
+                Ortable ortableAlteredX = new DummyOrtable(optimalX, ortable.getY(), ortable.getWidth(), ortable.getHeight());
+                Ortable ortableAlteredY = new DummyOrtable(ortable.getX(), ortable.getX(), ortable.getWidth(), ortable.getHeight());
+                if (!ortableAlteredX.doCollide(ortable2)) {
+                    possiblePositions.add(new Position(optimalX, ortable.getY()));
+                } else if (!ortableAlteredY.doCollide(ortable2)) {
+                    possiblePositions.add(new Position(ortable.getX(), optimalY));
+                } else {
+                    possiblePositions.add(new Position(optimalX, optimalY));
+                }
             }
             //Prüfen ob die mögliche nicht in einem kolliderenden Ortable ist
             Predicate<Position> isNotInOrtables = position -> ortables.stream().noneMatch(position::isInOrtable);
             return possiblePositions.stream().filter(isNotInOrtables).findFirst();
-        }else{
+        } else {
             return Optional.empty();
         }
     }
 
     public int getOptimalX(Ortable ortable, Ortable ortable2) {
-        if(!(ortable.isOutsideLeft(ortable2) || ortable.isOutsideRight(ortable2))){
-            if(ortable.getXSpeed() != 0){
-                if(ortable.getXSpeed() > 0){
-                    return ortable2.getX() - ortable.getWidth();
+        if (!(ortable.isOutsideLeft(ortable2) || ortable.isOutsideRight(ortable2))) {
+            if (ortable.getXSpeed() != 0) {
+                int newPositionX;
+                if (ortable.getXSpeed() > 0) {
+                    newPositionX =  ortable2.getX() - ortable.getWidth();
+                } else {
+                    newPositionX = ortable2.maxX();
+                }
+                if(Math.abs(ortable.getX() - newPositionX) > Math.abs(ortable.getXSpeed())){
+                    return ortable.getX() - ortable.getXSpeed();
                 }else{
-                    return ortable2.maxX();
+                    return  newPositionX;
                 }
             }
         }
@@ -89,12 +107,19 @@ public class CollissionProcessImpl implements CollissionProcess {
     }
 
     private int getOptimalY(Ortable ortable, Ortable ortable2) {
-     if(!(ortable.isOutsideBottom(ortable2) || ortable.isOutsideTop(ortable2))){
-            if(ortable.getYSpeed() != 0){
-                if(ortable.getYSpeed() > 0){
-                    return ortable2.getY() - ortable.getHeight();
+        if (!(ortable.isOutsideBottom(ortable2) || ortable.isOutsideTop(ortable2))) {
+            if (ortable.getYSpeed() != 0) {
+                int newPositionY;
+                if (ortable.getYSpeed() > 0) {
+                    newPositionY = ortable2.getY() - ortable.getHeight();
+                } else {
+                    newPositionY = ortable2.maxY();
+                }
+
+                if(Math.abs(ortable.getY() - newPositionY) > Math.abs(ortable.getYSpeed())){
+                    return ortable.getY() - ortable.getYSpeed();
                 }else{
-                    return ortable2.maxY();
+                    return  newPositionY;
                 }
             }
         }

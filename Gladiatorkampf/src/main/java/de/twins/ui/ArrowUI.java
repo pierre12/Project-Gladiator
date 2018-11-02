@@ -42,8 +42,6 @@ public class ArrowUI extends GameObject {
 
     private double calculateDegree(int velx, int vely) {
         // -------------------------- 0
-        double velx1 = velx;
-        double vely1 = vely;
         return Math.tan((double) vely / (double) velx);
     }
 }

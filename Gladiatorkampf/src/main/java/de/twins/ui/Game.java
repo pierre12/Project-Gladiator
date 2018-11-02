@@ -26,8 +26,8 @@ public class Game extends Canvas implements Runnable {
     public Game() {
 
         Gladiator conan = new Gladiator("CONAN", new BigDecimal(10000), new BigDecimal(10000), new BigDecimal(10000), null);
-        conan.setHeight(10);
-        conan.setWidth(10);
+        conan.setHeight(30);
+        conan.setWidth(30);
         conan.setXSpeed(3);
         conan.setX(100);
         conan.setY(100);
@@ -38,8 +38,8 @@ public class Game extends Canvas implements Runnable {
         snake.setTarget(conan);
         Arena arena = new Arena(WIDTH, HEIGHT);
         arena.addFighter(conan);
-        arena.addFighter(snake);
-        arena.addObstacle(new Obstacle(100, 200, 50, 50));
+//        arena.addFighter(snake);
+        arena.addObstacle(new Obstacle(100, 200, 200, 50));
         handler = new GameObjectHandler();
         handler.setArena(arena);
         addKeyListener(new KeyInput(handler));

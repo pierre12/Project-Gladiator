@@ -35,7 +35,7 @@ public class KeyInput extends KeyAdapter {
         for (GameObject object : handler.getGameObjects()) {
             if (object instanceof AbstractFighterUI) {
                 if (((AbstractFighterUI) object).getId() == Player.PLAYER) {
-                    setMovement(key, ((AbstractFighterUI) object), 15);
+                    setMovement(key, ((AbstractFighterUI) object), 3);
                 }
             }
         }
