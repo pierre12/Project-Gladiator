@@ -25,6 +25,7 @@ public abstract class AbstractFighter implements Fightable, Ortable {
     protected int xSpeed;
     protected int ySpeed;
 
+
     /**
      * Default-Konstruktor
      */

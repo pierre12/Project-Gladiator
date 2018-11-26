@@ -20,19 +20,6 @@ public class MinionUI extends AbstractFighterUI {
     }
 
     @Override
-    public void tick() {
-        setX(getX() + getVelx());
-        setY(getY() + getVely());
-        if (getY() <= 0 || getY() >= Game.HEIGHT - 45) {
-            setVely(getVely() * -1);
-        }
-
-        if (getX() <= 0 || getX() >= Game.WIDTH - 10) {
-            setVelx(getVelx() * -1);
-        }
-    }
-
-    @Override
     public void render(Graphics g) {
         
         g.setColor(Color.RED);

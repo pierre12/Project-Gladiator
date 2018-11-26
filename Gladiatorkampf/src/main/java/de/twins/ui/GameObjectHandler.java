@@ -26,9 +26,6 @@ public class GameObjectHandler {
 
     public void tick() {
         arena = arenaProcess.tick(arena);
-//        for (GameObject gameObject : getGameObjects()) {
-//            gameObject.tick();
-//    }
     }
 
 
@@ -56,6 +53,7 @@ public class GameObjectHandler {
             }
 
             arena.getObstacles().forEach(obstacle -> gameObjects.add(new ObstacleUI(obstacle)) );
+            arena.getArrows().forEach(arrow -> gameObjects.add(new ArrowUI(arrow)));
         }
     }
 
@@ -81,6 +79,9 @@ public class GameObjectHandler {
         return new ArrayList<>(gameObjects);
     }
 
+    public void shootArrow(AbstractFighter shooter){
+        this.arena.shootArrow(shooter.getX()+ shooter.getWidth() + 1,shooter.getY(),(int) (Math.random() * 10),(int) (Math.random() * 10));
+    }
     public void setArena(Arena arena) {
         this.arena = arena;
     }

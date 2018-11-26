@@ -1,6 +1,8 @@
 package de.twins.ui;
 
 
+import de.twins.gladiator.domain.Arrow;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
@@ -9,23 +11,16 @@ public class ArrowUI extends GameObject {
 
     private int arrowLength;
 
-    public ArrowUI(int x, int y) {
-        super(x, y);
-        setVelx(5);
-        setVely(-4);
+    public ArrowUI(Arrow arrow) {
+        super(arrow.getX(),arrow.getY());
+        setVelx(arrow.getXSpeed());
+        setVely(arrow.getYSpeed());
         arrowLength = 10;
-    }
-
-
-    @Override
-    public void tick() {
-        setX(getX() + getVelx());
-        setY(getY() + getVely());
     }
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.WHITE);
+        g.setColor(Color.BLACK);
         Graphics2D g1 = (Graphics2D) g;
 
         double degree = calculateDegree(getVelx(), getVely());

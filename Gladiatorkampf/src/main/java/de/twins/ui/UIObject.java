@@ -20,8 +20,6 @@ public interface UIObject {
 
     void setVely(int vely);
 
-    void tick();
-
     void render(Graphics g);
 
 

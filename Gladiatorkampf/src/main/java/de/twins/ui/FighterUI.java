@@ -23,14 +23,6 @@ public class FighterUI extends AbstractFighterUI {
     }
 
     @Override
-    public void tick() {
-        System.out.println("velx: " + (getX() + getVelx()));
-        setX(getX() + getVelx());
-        System.out.println("vely: " + (getY() + getVely()));
-        setY(getY() + getVely());
-    }
-
-    @Override
     public void render(Graphics g) {
         if (getId() == Player.PLAYER) {
             g.setColor(Color.WHITE);

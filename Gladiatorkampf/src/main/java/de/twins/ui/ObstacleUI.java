@@ -20,13 +20,6 @@ public class ObstacleUI extends GameObject {
     }
 
     @Override
-    public void tick() {
-
-    }
-
-
-
-    @Override
     public void render(Graphics g) {
         try {
             File file = new File(ImagePaths.STAR_BALL);

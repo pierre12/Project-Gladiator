@@ -14,13 +14,6 @@ public class LanceUI extends GameObject {
         this.abstractFighter = abstractFighter;
     }
 
-    @Override
-    public void tick() {
-        length = length + expansionSpeed;
-        if (length > 70) {
-            length = defaultLength;
-        }
-    }
 
     @Override
     public void render(Graphics g) {

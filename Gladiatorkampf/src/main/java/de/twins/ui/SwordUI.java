@@ -14,14 +14,6 @@ public class SwordUI extends GameObject {
     }
 
     @Override
-    public void tick() {
-        rotate += 12;
-        if (rotate >= 90) {
-            rotate = -90;
-        }
-    }
-
-    @Override
     public void render(Graphics g) {
         int x = abstractFighter.getX() + abstractFighter.getWidth() + 10;
         int y = abstractFighter.getY() + abstractFighter.getHeight() / 2;

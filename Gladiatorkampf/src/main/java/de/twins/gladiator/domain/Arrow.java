@@ -1,11 +1,10 @@
 package de.twins.gladiator.domain;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class Arrow implements Ortable {
 
 
-    private double power;
+    private final AbstractFighter owner;
 
     private int x;
 
@@ -15,12 +14,19 @@ public class Arrow implements Ortable {
 
     private int height;
 
-    private double speed;
+    private int ySpeed;
 
-    public Arrow() {
+    private int xSpeed;
 
+    public Arrow(AbstractFighter owner) {
+        this.owner = owner;
     }
 
+    public AbstractFighter getOwner() {
+        return owner;
+    }
+
+    @Override
     public int getX() {
         return x;
     }
@@ -29,28 +35,13 @@ public class Arrow implements Ortable {
         this.x = x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public double getPower() {
-        return power;
-    }
-
-    public void setPower(double power) {
-        this.power = power;
     }
 
     @Override
@@ -67,17 +58,23 @@ public class Arrow implements Ortable {
         return height;
     }
 
-    @Override
-    public int getXSpeed() {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public int getYSpeed() {
-        throw new NotImplementedException();
-    }
-
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public int getYSpeed() {
+        return ySpeed;
+    }
+
+    public void setYSpeed(int ySpeed) {
+        this.ySpeed = ySpeed;
+    }
+
+    public int getXSpeed() {
+        return xSpeed;
+    }
+
+    public void setXSpeed(int xSpeed) {
+        this.xSpeed = xSpeed;
     }
 }

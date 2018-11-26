@@ -79,7 +79,7 @@ public class CollissionProcessImpl implements CollissionProcess {
                     possiblePositions.add(new Position(optimalX, optimalY));
                 }
             }
-            //Prüfen ob die mögliche nicht in einem kolliderenden Ortable ist
+            //Prüfen ob die mögliche Position nicht in einem kolliderenden Ortable kollidiert TODO fehlerquelle prüfen mit mehreren Ortables
             Predicate<Position> isNotInOrtables = position -> ortables.stream().noneMatch(position::isInOrtable);
             return possiblePositions.stream().filter(isNotInOrtables).findFirst();
         } else {

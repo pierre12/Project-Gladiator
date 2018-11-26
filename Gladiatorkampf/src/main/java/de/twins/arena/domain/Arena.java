@@ -1,7 +1,7 @@
 package de.twins.arena.domain;
 
 import de.twins.gladiator.domain.AbstractFighter;
-import de.twins.gladiator.domain.Ortable;
+import de.twins.gladiator.domain.Arrow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,7 @@ public class Arena {
     private List<Obstacle> obstacles = new ArrayList<>();
     private int width;
     private int heigth;
+    private List<Arrow> arrows = new ArrayList<>();
 
     public Arena(int width, int heigth) {
         this.width = width;
@@ -57,7 +58,26 @@ public class Arena {
         this.obstacles = obstacles;
     }
 
-    public void addObstacle(Obstacle obstacle){
+    public void addObstacle(Obstacle obstacle) {
         this.obstacles.add(obstacle);
+    }
+
+    public List<Arrow> getArrows() {
+        return arrows;
+    }
+
+    public void shootArrow(int x, int y, int xSpeed, int ySpeed) {
+        Arrow arrow = new Arrow(null);
+        arrow.setX(x);
+        arrow.setY(y);
+        arrow.setYSpeed(ySpeed);
+        arrow.setXSpeed(xSpeed);
+        this.arrows.add(arrow);
+    }
+
+    public synchronized void removeArrow(Arrow arrow) {
+        if(this.arrows != null){
+            this.arrows.remove(arrow);
+        }
     }
 }
