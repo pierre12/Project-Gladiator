@@ -1,29 +1,36 @@
-package de.twins.gladiator.domain;
+package de.twins.equipment.domain;
 
+/**
+ * Ein Projektil wird von einer Waffe aus abgefeuert
+ * und übernimmt Werte dieser Waffe
+ */
+public abstract class Projectile implements IsWeapon {
 
-public class Arrow implements Ortable {
+    protected IsWeapon source;
 
+    protected int x;
 
-    private final AbstractFighter owner;
+    protected int y;
 
-    private int x;
+    protected int width;
 
-    private int y;
+    protected int height;
 
-    private int width;
+    protected int ySpeed;
 
-    private int height;
+    protected int xSpeed;
 
-    private int ySpeed;
-
-    private int xSpeed;
-
-    public Arrow(AbstractFighter owner) {
-        this.owner = owner;
+    public Projectile(IsWeapon weapon){
+        this.source = weapon;
     }
 
-    public AbstractFighter getOwner() {
-        return owner;
+
+    public void setY(int y){
+        this.y = y;
+    }
+
+    public void setX(int x){
+        this.x = x;
     }
 
     @Override
@@ -31,18 +38,13 @@ public class Arrow implements Ortable {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
+
 
     @Override
     public int getY() {
         return y;
     }
 
-    public void setY(int y) {
-        this.y = y;
-    }
 
     @Override
     public int getWidth() {
@@ -76,5 +78,10 @@ public class Arrow implements Ortable {
 
     public void setXSpeed(int xSpeed) {
         this.xSpeed = xSpeed;
+    }
+
+
+    public IsWeapon getSource() {
+        return source;
     }
 }

@@ -6,18 +6,18 @@ import java.math.BigDecimal;
 public interface Fightable {
 
     /**
-     * Reduces enemy attack power by own defense value. The reduced attack power
+     * Reduces enemy doAttackMove power by own defense value. The reduced doAttackMove power
      * substracts directly the hp.
      *
-     * @param attack The attack power which reduces the hp.
+     * @param attack The doAttackMove power which reduces the hp.
      * @return true falls der Schaden durchkam
      */
     BigDecimal defend(BigDecimal attack);
 
     /**
-     * Returns the base attack which is originated from the {@link Fightable}.
+     * Returns the base doAttackMove which is originated from the {@link Fightable}.
      *
-     * @return the base attack which is originated from the {@link Fightable}.
+     * @return the base doAttackMove which is originated from the {@link Fightable}.
      */
     BigDecimal getBaseAttack();
 
@@ -50,26 +50,26 @@ public interface Fightable {
     String getName();
 
     /**
-     * Return the total attack of the {@link Fightable} .Which is the sum of the
-     * equipment and base attack.
+     * Return the total doAttackMove of the {@link Fightable} .Which is the sum of the
+     * equipment and base doAttackMove.
      *
-     * @return the total attack of the {@link Fightable}.
+     * @return the total doAttackMove of the {@link Fightable}.
      */
     BigDecimal getTotalAttack();
 
     /**
-     * Return the total attack of the {@link Fightable} .Which is the sum of the
+     * Return the total doAttackMove of the {@link Fightable} .Which is the sum of the
      * equipment and base defense.
      *
-     * @return the total attack of the {@link Fightable}.
+     * @return the total doAttackMove of the {@link Fightable}.
      */
     BigDecimal getTotalDefense();
 
     /**
-     * Return the total attack of the {@link Fightable} .Which is the sum of the
+     * Return the total doAttackMove of the {@link Fightable} .Which is the sum of the
      * equipment and base health points.
      *
-     * @return the total attack of the {@link Fightable}.
+     * @return the total doAttackMove of the {@link Fightable}.
      */
     BigDecimal getTotalHealthPoints();
 
@@ -81,16 +81,16 @@ public interface Fightable {
     boolean isAlive();
 
     /**
-     * Sets the base attack of the {@link Fightable}.
+     * Sets the base doAttackMove of the {@link Fightable}.
      *
-     * @param baseAttack base attack which should be set.
+     * @param baseAttack base doAttackMove which should be set.
      */
     void setBaseAttack(BigDecimal baseAttack);
 
     /**
-     * Sets the base attack of the {@link Fightable}.
+     * Sets the base doAttackMove of the {@link Fightable}.
      *
-     * @param baseAttack base attack which should be set.
+     * @param baseAttack base doAttackMove which should be set.
      */
     void setBaseDefense(BigDecimal baseDefense);
 
@@ -102,7 +102,7 @@ public interface Fightable {
     void setBaseHealthPoints(BigDecimal healthPoints);
 
     /**
-     * Sets the base attack of the {@link Fightable}
+     * Sets the base doAttackMove of the {@link Fightable}
      *
      * @param healthPoints current health points which should be set.
      */

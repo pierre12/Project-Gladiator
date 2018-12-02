@@ -1,5 +1,6 @@
 package de.twins.equipment.domain;
 
+import de.twins.gladiator.domain.AbstractFighter;
 import de.twins.gladiator.domain.Ortable;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -14,6 +15,7 @@ public class Sword implements IsWeapon {
     private int y;
 
     private double strength;
+    private AbstractFighter owner;
 
     public Sword(){
 
@@ -47,6 +49,15 @@ public class Sword implements IsWeapon {
 
     public double getStrength() {
         return strength;
+    }
+
+    @Override
+    public void setOwner(AbstractFighter abstractFighter) {
+        this.owner = abstractFighter;    }
+
+    @Override
+    public AbstractFighter getOwner() {
+        return null;
     }
 
     public void setStrength(double strength) {

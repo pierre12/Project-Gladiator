@@ -1,27 +1,29 @@
 package de.twins.ui;
 
 import de.twins.gladiator.domain.AbstractFighter;
+import de.twins.util.DegreeHelper;
 
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KeyInput extends KeyAdapter {
-    public final static char UP = 'w';
-    public final static char DOWN = 's';
-    public final static char LEFT = 'a';
-    public final static char RIGHT = 'd';
-    public final static char SHOOT = 'e';
-    public static final char SWING = 'q';
-    public static final char STAB = 'r';
+public class KeyInput extends KeyAdapter implements MouseMotionListener {
 
+
+    private final ControlOption controlOption;
     private GameObjectHandler handler;
 
     private List<Character> keysPressed = new ArrayList<>();
+    private Point mousePosition;
 
     public KeyInput(GameObjectHandler handler) {
+
         this.handler = handler;
+        this.controlOption = new ControlOption();
     }
 
 
@@ -34,8 +36,8 @@ public class KeyInput extends KeyAdapter {
         }
         for (GameObject object : handler.getGameObjects()) {
             if (object instanceof AbstractFighterUI) {
-                if (((AbstractFighterUI) object).getId() == Player.PLAYER) {
-                    setMovement(key, ((AbstractFighterUI) object), 3);
+                if (((AbstractFighterUI) object).getPlayerType() == PlayerType.PLAYER) {
+                    setMovement(key, ((AbstractFighterUI) object), 20);
                 }
             }
         }
@@ -43,17 +45,17 @@ public class KeyInput extends KeyAdapter {
 
 
     private Character getOpposite(char key) {
-        if (key == UP) {
-            return DOWN;
+        if (key == controlOption.getUp()) {
+            return controlOption.getDown();
         }
-        if (key == DOWN) {
-            return UP;
+        if (key == controlOption.getDown()) {
+            return controlOption.getUp();
         }
-        if (key == LEFT) {
-            return RIGHT;
+        if (key == controlOption.getLeft()) {
+            return controlOption.getRight();
         }
-        if (key == RIGHT) {
-            return LEFT;
+        if (key == controlOption.getRight()) {
+            return controlOption.getLeft();
         }
 
         return null;
@@ -70,13 +72,33 @@ public class KeyInput extends KeyAdapter {
             for (GameObject object : handler.getGameObjects()) {
                 if (object instanceof AbstractFighterUI) {
                     AbstractFighterUI abstractFighter = (AbstractFighterUI) object;
-                    if (abstractFighter.getId() == Player.PLAYER) {
+                    if (abstractFighter.getPlayerType() == PlayerType.PLAYER) {
+                        updateWatchDirection(abstractFighter);
                         handlePlayerInput(key, itemsToAdd, abstractFighter);
                     }
                 }
             }
             handler.addObjects(itemsToAdd);
         }
+    }
+
+    private void updateWatchDirection(AbstractFighterUI abstractFighterUI) {
+
+        AbstractFighter fighter = abstractFighterUI.getFighter();
+        int x = fighter.getX();
+        int y = fighter.getY();
+
+        double mouseX = mousePosition.getX();
+        double mouseY = mousePosition.getY();
+
+        double xRelativeToPlayer = mouseX - x;
+        double yRelativeToPlayer = mouseY - y;
+
+        System.out.println(String.format("x %s y %s",xRelativeToPlayer,yRelativeToPlayer));
+
+        double watchDirection = DegreeHelper.calculateDegree(xRelativeToPlayer, yRelativeToPlayer);
+        System.out.println("Degree " + watchDirection);
+        fighter.setWatchDirectionInDegree(watchDirection);
     }
 
     private void handlePlayerInput(char key, List<GameObject> itemsToAdd, AbstractFighterUI abstractFighter) {
@@ -94,37 +116,43 @@ public class KeyInput extends KeyAdapter {
     }
 
     private GameObject doAction(char key, AbstractFighterUI object) {
-        if (key == SHOOT) {
-            this.handler.shootArrow(object.getFighter());
-        } else if (key == SWING) {
-            return new SwordUI(50, 50, object);
-        } else if (key == STAB) {
-            return new LanceUI(60, 60, object);
+        if (key == controlOption.getAttack()) {
+            this.handler.doAttackMove(object.getFighter());
         }
         return null;
     }
 
     private boolean isAction(char key) {
-        return key == SHOOT || key == SWING || key == STAB;
+        return key == controlOption.getAttack();
     }
 
     private boolean isMovement(char key) {
-        return key == UP || key == DOWN || key == LEFT || key == RIGHT;
+        return key == controlOption.getUp() || key == controlOption.getDown()|| key == controlOption.getLeft()|| key == controlOption.getRight();
     }
 
     private void setMovement(int key, AbstractFighterUI object, int velocity) {
         AbstractFighter fighter = object.getFighter();
-        if (key == UP) {
+        if (key == controlOption.getUp()) {
             fighter.setYSpeed(-velocity);
         }
-        if (key == LEFT) {
+        if (key == controlOption.getLeft()) {
             fighter.setXSpeed(-velocity);
         }
-        if (key == DOWN) {
+        if (key == controlOption.getDown()) {
             fighter.setYSpeed(velocity);
         }
-        if (key == RIGHT) {
+        if (key == controlOption.getRight()) {
             fighter.setXSpeed(velocity);
         }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        this.mousePosition = e.getPoint();
     }
 }

@@ -25,6 +25,9 @@ public abstract class AbstractFighter implements Fightable, Ortable {
     protected int xSpeed;
     protected int ySpeed;
 
+    //zwischen 0 und 360 gibt die Richtung in Grad an in die der Character guckt
+    protected double watchDirectionInDegree =0;
+
 
     /**
      * Default-Konstruktor
@@ -60,9 +63,6 @@ public abstract class AbstractFighter implements Fightable, Ortable {
 
     }
 
-    /**
-     * @see de.twins.gladiator.domain.Equipable#defend(java.math.BigDecimal)
-     */
     @Override
     public BigDecimal defend(BigDecimal attack) {
         double dmgRes = getDMGResistant();
@@ -124,9 +124,6 @@ public abstract class AbstractFighter implements Fightable, Ortable {
         return currentHealthPoints.compareTo(BigDecimal.ZERO) > 0;
     }
 
-    /**
-     * @see de.twins.gladiator.domain.Equipable#setBaseAttack(java.math.BigDecimal)
-     */
     @Override
     public void setBaseAttack(BigDecimal baseAttack) {
         checkIfNullOrNegativeValue(baseAttack);
@@ -245,6 +242,7 @@ public abstract class AbstractFighter implements Fightable, Ortable {
     }
 
     public void setWeapon(IsWeapon weapon) {
+        weapon.setOwner(this);
         this.weapon = weapon;
     }
 
@@ -264,5 +262,13 @@ public abstract class AbstractFighter implements Fightable, Ortable {
 
     public void setYSpeed(int ySpeed) {
         this.ySpeed = ySpeed;
+    }
+
+    public double getWatchDirectionInDegree() {
+        return watchDirectionInDegree;
+    }
+
+    public void setWatchDirectionInDegree(double watchDirectionInDegree) {
+        this.watchDirectionInDegree = watchDirectionInDegree;
     }
 }

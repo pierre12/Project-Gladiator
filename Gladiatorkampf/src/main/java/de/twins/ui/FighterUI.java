@@ -14,17 +14,17 @@ import java.awt.*;
 public class FighterUI extends AbstractFighterUI {
 
 
-    public FighterUI(Player id, AbstractFighter fighter, int x, int y) {
+    public FighterUI(PlayerType id, AbstractFighter fighter, int x, int y) {
         super(id, fighter, x, y);
     }
 
-    public FighterUI(Player id, Gladiator gladiator) {
+    public FighterUI(PlayerType id, Gladiator gladiator) {
         super(id, gladiator, gladiator.getX(), gladiator.getY());
     }
 
     @Override
     public void render(Graphics g) {
-        if (getId() == Player.PLAYER) {
+        if (getPlayerType() == PlayerType.PLAYER) {
             g.setColor(Color.WHITE);
         }
 

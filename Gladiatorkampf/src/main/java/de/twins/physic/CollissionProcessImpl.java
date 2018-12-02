@@ -7,10 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -45,7 +42,15 @@ public class CollissionProcessImpl implements CollissionProcess {
 
     @Override
     public List<Collission> determineCollissions(Ortable one, List<? extends Ortable> ortables) {
-        return ortables.stream().map(ortable -> this.determineCollission(one, ortable))
+        return this.determineCollissions(one,ortables,null);
+    }
+
+    @Override
+    public List<Collission> determineCollissions(Ortable ortable, List<? extends Ortable> ortables, List<? extends Ortable> ignores) {
+        List<? extends Ortable>  saveIgnores= ignores != null?ignores: Collections.emptyList();
+        return ortables.stream()
+                .filter(it -> !saveIgnores.contains(it))
+                .map(it -> this.determineCollission(ortable, it))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());

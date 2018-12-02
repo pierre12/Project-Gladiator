@@ -31,4 +31,6 @@ public class Collission {
     public void setOrtable2(Ortable ortable2) {
         this.ortable2 = ortable2;
     }
+
+
 }

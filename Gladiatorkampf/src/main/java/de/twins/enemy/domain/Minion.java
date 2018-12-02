@@ -18,6 +18,10 @@ public class Minion extends AbstractFighter {
         currentHealthPoints = totalHealthPoints;
     }
 
+    public Minion(String name, Double healthPoints, Double attack, Double defense) {
+        this(name,new BigDecimal(healthPoints),new BigDecimal(attack),new BigDecimal(defense));
+    }
+
     public AbstractFighter getTarget() {
         return target;
     }

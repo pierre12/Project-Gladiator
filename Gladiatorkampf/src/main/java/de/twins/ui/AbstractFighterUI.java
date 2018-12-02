@@ -4,21 +4,21 @@ import de.twins.gladiator.domain.AbstractFighter;
 
 public abstract class AbstractFighterUI extends GameObject {
 
-    private Player id;
+    private PlayerType playerType;
     private AbstractFighter fighter;
 
-    public Player getId() {
-        return id;
+    public PlayerType getPlayerType() {
+        return playerType;
     }
 
-    public void setId(Player id) {
-        this.id = id;
+    public void setPlayerType(PlayerType playerType) {
+        this.playerType = playerType;
     }
 
 
-    public AbstractFighterUI(Player id, AbstractFighter fighter, int x, int y) {
+    public AbstractFighterUI(PlayerType id, AbstractFighter fighter, int x, int y) {
         super(x, y);
-        this.id = id;
+        this.playerType = id;
         this.fighter = fighter;
         this.width = fighter.getWidth();
         this.height = fighter.getHeight();

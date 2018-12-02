@@ -41,6 +41,17 @@ public interface CollissionProcess {
     List<Collission> determineCollissions(Ortable ortable, List<? extends Ortable> ortables);
 
     /**
+     * Ermittelt sämtliche Collissionen die zwischen ortable und einer Liste
+     * von Ortables auftreten.
+     *
+     * @param ortable
+     * @param ortables
+     * @param ignores Ortables die ignoriert werden sollen
+     * @return ein Optional einer {@link Collission}
+     */
+    List<Collission> determineCollissions(Ortable ortable, List<? extends Ortable> ortables,List<? extends Ortable> ignores);
+
+    /**
      * Ermittelt die Position die der Ortable besitzen darf um nicht mit den anderen Ortables zu kollidieren,
      * sollte eine Collision vorhanden sein.
      *

@@ -30,7 +30,7 @@ public class SimpleEquipFactoryComponentTest {
 
     @Test
     public void shouldLoadPropertiesForEquipment() {
-        String[] baseProperties = {"healthpoints", "defense", "attack"};
+        String[] baseProperties = {"healthpoints", "defense", "doAttackMove"};
 
         HashMap<Rarity, Integer> baseValues = new HashMap<>();
         baseValues.put(Rarity.COMMON, 20);

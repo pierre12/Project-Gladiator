@@ -56,7 +56,7 @@ public class SimpleEquipFactory implements EquipmentFactory {
     }
 
     private BigDecimal randomAttack(Rarity rarity) {
-        int attack = getProperty("attack", rarity);
+        int attack = getProperty("doAttackMove", rarity);
         return new BigDecimal(randomizeValue(attack));
     }
 

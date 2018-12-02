@@ -4,6 +4,8 @@ import de.twins.arena.domain.Arena;
 import de.twins.arena.process.ArenaProcess;
 import de.twins.arena.process.ArenaProcessImpl;
 import de.twins.enemy.domain.Minion;
+import de.twins.equipment.domain.IsWeapon;
+import de.twins.equipment.domain.RangeWeapon;
 import de.twins.gladiator.domain.AbstractFighter;
 import de.twins.gladiator.domain.Gladiator;
 
@@ -44,15 +46,16 @@ public class GameObjectHandler {
             for (AbstractFighter abstractFighter : abstractFighters) {
                 if (abstractFighter instanceof Gladiator) {
                     Gladiator gladiator = (Gladiator) abstractFighter;
-                    FighterUI fighterUI = new FighterUI(Player.PLAYER, gladiator);
+                    FighterUI fighterUI = new FighterUI(PlayerType.PLAYER, gladiator);
                     gameObjects.add(fighterUI);
                 } else if (abstractFighter instanceof Minion) {
-                    MinionUI minionUI = new MinionUI(Player.ENEMY, ((Minion) abstractFighter));
+                    MinionUI minionUI = new MinionUI(PlayerType.ENEMY, ((Minion) abstractFighter));
                     gameObjects.add(minionUI);
                 }
             }
 
             arena.getObstacles().forEach(obstacle -> gameObjects.add(new ObstacleUI(obstacle)) );
+            //TODO UI für Projektile generisch gestalten
             arena.getArrows().forEach(arrow -> gameObjects.add(new ArrowUI(arrow)));
         }
     }
@@ -79,8 +82,15 @@ public class GameObjectHandler {
         return new ArrayList<>(gameObjects);
     }
 
-    public void shootArrow(AbstractFighter shooter){
-        this.arena.shootArrow(shooter.getX()+ shooter.getWidth() + 1,shooter.getY(),(int) (Math.random() * 10),(int) (Math.random() * 10));
+    public void doAttackMove(AbstractFighter attacker){
+        IsWeapon weapon = attacker.getWeapon();
+        if(weapon instanceof RangeWeapon){
+            this.arena.shootProjectile(attacker);
+
+        }else{
+            //Melee Weapon
+        }
+
     }
     public void setArena(Arena arena) {
         this.arena = arena;

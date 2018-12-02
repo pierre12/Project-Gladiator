@@ -1,7 +1,10 @@
 package de.twins.arena.domain;
 
+import de.twins.equipment.domain.IsWeapon;
+import de.twins.equipment.domain.Projectile;
+import de.twins.equipment.domain.RangeWeapon;
 import de.twins.gladiator.domain.AbstractFighter;
-import de.twins.gladiator.domain.Arrow;
+import de.twins.equipment.domain.Arrow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +18,7 @@ public class Arena {
     private List<Obstacle> obstacles = new ArrayList<>();
     private int width;
     private int heigth;
-    private List<Arrow> arrows = new ArrayList<>();
+    private List<Projectile> projectiles = new ArrayList<>();
 
     public Arena(int width, int heigth) {
         this.width = width;
@@ -62,22 +65,29 @@ public class Arena {
         this.obstacles.add(obstacle);
     }
 
-    public List<Arrow> getArrows() {
-        return arrows;
+    public List<Projectile> getArrows() {
+        return projectiles;
     }
 
-    public void shootArrow(int x, int y, int xSpeed, int ySpeed) {
-        Arrow arrow = new Arrow(null);
-        arrow.setX(x);
-        arrow.setY(y);
-        arrow.setYSpeed(ySpeed);
-        arrow.setXSpeed(xSpeed);
-        this.arrows.add(arrow);
+    public void shootProjectile(AbstractFighter abstractFighter) {
+        IsWeapon rangeWeapon = abstractFighter.getWeapon();
+        if(rangeWeapon instanceof RangeWeapon){
+            Projectile projectile = ((RangeWeapon) rangeWeapon).createProjectile();
+            this.projectiles.add(projectile);
+        }
+        //Keine RangeWeapon es wird nicht gefeuert.
     }
 
     public synchronized void removeArrow(Arrow arrow) {
-        if(this.arrows != null){
-            this.arrows.remove(arrow);
+        if(this.projectiles != null){
+            this.projectiles.remove(arrow);
         }
     }
+
+    public void addArrow(Arrow arrow) {
+        if(arrow != null){
+            this.projectiles.add(arrow);
+        }
+    }
+
 }

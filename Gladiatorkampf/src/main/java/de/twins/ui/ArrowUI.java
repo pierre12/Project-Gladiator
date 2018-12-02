@@ -1,7 +1,9 @@
 package de.twins.ui;
 
 
-import de.twins.gladiator.domain.Arrow;
+import de.twins.equipment.domain.Arrow;
+import de.twins.equipment.domain.Projectile;
+import de.twins.util.DegreeHelper;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -11,7 +13,7 @@ public class ArrowUI extends GameObject {
 
     private int arrowLength;
 
-    public ArrowUI(Arrow arrow) {
+    public ArrowUI(Projectile arrow) {
         super(arrow.getX(),arrow.getY());
         setVelx(arrow.getXSpeed());
         setVely(arrow.getYSpeed());
@@ -23,9 +25,9 @@ public class ArrowUI extends GameObject {
         g.setColor(Color.BLACK);
         Graphics2D g1 = (Graphics2D) g;
 
-        double degree = calculateDegree(getVelx(), getVely());
+        double degree = DegreeHelper.calculateDegree(getVelx(), getVely());
         AffineTransform transform = g1.getTransform();
-        g1.rotate(degree, x, y);
+        g1.rotate(  Math.toRadians(degree), x, y);
         g.drawLine(x, y, x + arrowLength, y);
         //feathers
         g.drawLine(x, y, x - 2, y - 2);
@@ -35,8 +37,5 @@ public class ArrowUI extends GameObject {
         g1.setTransform(transform);
     }
 
-    private double calculateDegree(int velx, int vely) {
-        // -------------------------- 0
-        return Math.tan((double) vely / (double) velx);
-    }
+
 }

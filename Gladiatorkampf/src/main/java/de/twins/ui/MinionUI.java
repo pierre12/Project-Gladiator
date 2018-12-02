@@ -7,13 +7,13 @@ import java.awt.*;
 public class MinionUI extends AbstractFighterUI {
 
 
-    public MinionUI(Player id, Minion minion, int x, int y) {
+    public MinionUI(PlayerType id, Minion minion, int x, int y) {
         super(id, minion, x, y);
         setVely(5);
         setVelx(5);
     }
 
-    public MinionUI(Player id, Minion minion) {
+    public MinionUI(PlayerType id, Minion minion) {
         super(id, minion, minion.getX(), minion.getY());
         setVely(5);
         setVelx(5);

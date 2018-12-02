@@ -3,10 +3,13 @@ package de.twins.ui;
 import de.twins.arena.domain.Arena;
 import de.twins.arena.domain.Obstacle;
 import de.twins.enemy.domain.Minion;
+import de.twins.equipment.domain.Bow;
 import de.twins.gladiator.domain.Gladiator;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -28,8 +31,15 @@ public class Game extends Canvas implements Runnable {
         Gladiator conan = new Gladiator("CONAN", new BigDecimal(10000), new BigDecimal(10000), new BigDecimal(10000), null);
         conan.setHeight(30);
         conan.setWidth(30);
-        conan.setXSpeed(3);
+        conan.setXSpeed(0);
         conan.setX(100);
+        conan.setY(100);
+        conan.setWeapon(new Bow(10,20));
+        Gladiator conan2 = new Gladiator("CONAN2", new BigDecimal(10000), new BigDecimal(10000), new BigDecimal(10000), null);
+        conan.setHeight(30);
+        conan.setWidth(30);
+        conan.setXSpeed(20);
+        conan.setX(200);
         conan.setY(100);
         Minion snake = new Minion("Snake", new BigDecimal(10000), new BigDecimal(10000), new BigDecimal(10000));
         snake.setHeight(30);
@@ -38,12 +48,13 @@ public class Game extends Canvas implements Runnable {
         snake.setTarget(conan);
         Arena arena = new Arena(WIDTH, HEIGHT);
         arena.addFighter(conan);
-//        arena.addFighter(snake);
-        arena.addFighter(snake);
+        arena.addFighter(conan2);
         arena.addObstacle(new Obstacle(100, 200, 200, 50));
         handler = new GameObjectHandler();
         handler.setArena(arena);
-        addKeyListener(new KeyInput(handler));
+        KeyInput gameListener = new KeyInput(handler);
+        addKeyListener(gameListener);
+        addMouseMotionListener(gameListener);
         new Window(WIDTH, HEIGHT, "Working title: Gladiators", this);
     }
 
